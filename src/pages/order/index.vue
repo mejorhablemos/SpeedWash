@@ -13,7 +13,6 @@ const tabs = [
   { title: t("routes.order.index.tabs.2"), value: 2 },
   { title: t("routes.order.index.tabs.3"), value: 3 },
   { title: t("routes.order.index.tabs.4"), value: 4 },
-  { title: t("routes.order.index.tabs.5"), value: 5 },
 ];
 
 const activeTab = ref(

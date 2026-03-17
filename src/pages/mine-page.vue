@@ -2,7 +2,6 @@
 import IconInProgress from "@/assets/order/icon_in_progress.png";
 import IconPendingPayment from "@/assets/order/icon_pending_payment.png";
 import IconCompleted from "@/assets/order/icon_completed.png";
-import IconRefund from "@/assets/order/icon_refund.png";
 
 const { t } = useI18n();
 const userInfo = ref(null);
@@ -77,12 +76,6 @@ watchEffect(() => {
             <van-icon name="passed" size="22" color="#2ecc71" />
           </div>
           <span class="order-item__text">{{ t('routes.mine.orders.status.completed') }}</span>
-        </router-link>
-        <router-link to="/orders?status=5" class="order-item">
-          <div class="order-item__icon order-item__icon--refund">
-            <van-icon name="refund-o" size="22" color="#e74c3c" />
-          </div>
-          <span class="order-item__text">{{ t('routes.mine.orders.status.refund') }}</span>
         </router-link>
       </div>
     </div>
@@ -254,7 +247,7 @@ watchEffect(() => {
   border-radius: 16px;
   padding: 16px 8px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
@@ -285,8 +278,6 @@ watchEffect(() => {
 .order-item__icon--progress { background: rgba(0, 180, 230, 0.1); }
 .order-item__icon--pending { background: rgba(247, 148, 29, 0.1); }
 .order-item__icon--completed { background: rgba(46, 204, 113, 0.1); }
-.order-item__icon--refund { background: rgba(231, 76, 60, 0.1); }
-
 .order-item__text {
   font-size: 12px;
   color: #1A2B3C;
