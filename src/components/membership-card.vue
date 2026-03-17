@@ -44,8 +44,8 @@ const emit = defineEmits(["click"]);
     <div
       class="membership-card w-full h-full rounded-b-[var(--van-cell-group-inset-radius)] transition-all duration-300 hover:shadow-md pos-relative"
       :class="{
-        'bg-gradient-to-r from-[#FFEBDF] to-[#FFCBA1]': !card?.isOnlyMembership,
-        'bg-gradient-to-r from-[#FFF3F2] to-[#FCCBCC]': card?.isOnlyMembership,
+        'bg-gradient-to-r from-[#E0F4FD] to-[#B3E5FC]': !card?.isOnlyMembership,
+        'bg-gradient-to-r from-[#FFF3E0] to-[#FFE0B2]': card?.isOnlyMembership,
       }"
     >
       <van-cell

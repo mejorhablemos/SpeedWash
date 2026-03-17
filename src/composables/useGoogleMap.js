@@ -10,22 +10,22 @@ export function useGoogleMap(options = {}) {
   const markers = ref([])
   const currentPosition = ref(null)
 
-  // 新加坡中心坐标
-  const center = computed(() => options.center || { lat: 1.3521, lng: 103.8198 })
-  
-  // 新加坡边界
-  const SINGAPORE_BOUNDS = {
-    north: 1.4504,
-    south: 1.2500,
-    east: 104.0300,
-    west: 103.6000
+  // Funes, Santa Fe, Argentina
+  const center = computed(() => options.center || { lat: -32.9175, lng: -60.8137 })
+
+  // Argentina bounds (zona Rosario/Funes)
+  const ARGENTINA_BOUNDS = {
+    north: -32.5,
+    south: -33.5,
+    east: -60.0,
+    west: -61.5
   }
 
   // 地图配置
   const mapOptions = {
     zoom: options.zoom || 11,
     restriction: {
-      latLngBounds: SINGAPORE_BOUNDS,
+      latLngBounds: ARGENTINA_BOUNDS,
       strictBounds: false
     },
     mapTypeControl: false,

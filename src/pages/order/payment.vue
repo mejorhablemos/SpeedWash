@@ -189,7 +189,7 @@ function onBalanceClick() {
 }
 
 :deep(.van-radio__icon--checked .van-icon) {
-  background-color: #ff6b6b;
-  border-color: #ff6b6b;
+  background-color: #00B4E6;
+  border-color: #00B4E6;
 }
 </style>

@@ -159,7 +159,7 @@ defineExpose({
 
 <style scoped>
 .password-page {
-  background: #f7f8fa;
+  background: var(--background-color);
 }
 
 .verify-step {

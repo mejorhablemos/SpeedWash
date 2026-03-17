@@ -17,7 +17,7 @@ defineProps({
 
 <template>
   <van-cell-group inset>
-    <van-cell class="bg-#FFF79A!" :title="title" :value="value" :is-link="isLink">
+    <van-cell class="bg-#E0F4FD!" :title="title" :value="value" :is-link="isLink">
       <template #title v-if="$slots.title">
         <slot name="title" />
       </template>

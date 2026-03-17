@@ -19,8 +19,8 @@ const {
   locateCurrentPosition,
   createInfoContent
 } = useGoogleMap({
-  center: { lat: 1.3521, lng: 103.8198 },
-  zoom: 11
+  center: { lat: -32.9175, lng: -60.8137 },
+  zoom: 13
 })
 
 // 获取店铺列表数据

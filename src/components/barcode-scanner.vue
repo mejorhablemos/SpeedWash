@@ -87,7 +87,7 @@ const drawPositions = (points) => {
   // 绘制填充圆
   ctx.beginPath();
   ctx.arc(centerX, centerY, 14, 0, Math.PI * 2);
-  ctx.fillStyle = '#3478f6';
+  ctx.fillStyle = '#00B4E6';
   ctx.fill();
 };
 
@@ -182,7 +182,7 @@ const drawPositions1 = (points) => {
   // 绘制填充圆
   ctx.beginPath()
   ctx.arc(centerX, centerY, 14, 0, Math.PI * 2)
-  ctx.fillStyle = '#3478f6' // primary color
+  ctx.fillStyle = '#00B4E6' // primary color
   ctx.fill()
 }
 
@@ -264,7 +264,7 @@ const handleScanResult = (result) => {
       // 绘制填充圆
       ctx.beginPath()
       ctx.arc(centerX, centerY, 28, 0, Math.PI * 2)
-      ctx.fillStyle = '#3478f6'
+      ctx.fillStyle = '#00B4E6'
       ctx.fill()
     }
     

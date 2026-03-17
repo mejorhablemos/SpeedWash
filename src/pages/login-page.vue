@@ -62,8 +62,8 @@ const guestLogin = () => {
   <wave />
 
   <van-space direction="vertical" fill class="pt-20% z-10 relative">
-    <div class="flex justify-center text-4xl text-white w-full h-100px">
-      Smart Car Wash
+    <div class="flex justify-center text-4xl text-white w-full h-100px font-bold">
+      SpeedWash
     </div>
 
     <van-form @submit="onSubmit" ref="formRef">
@@ -86,9 +86,9 @@ const guestLogin = () => {
     </van-form>
 
     <!-- 辅助链接 -->
-    <div class="flex justify-center items-center gap-4 h-44px text-26 text-[#4080FF]">
+    <div class="flex justify-center items-center gap-4 h-44px text-26 text-[#00B4E6]">
       <router-link to="/register">{{ t('routes.login.register') }}</router-link>
-      <div class="w-2 h-28 bg-[#4080FF]"></div>
+      <div class="w-2 h-28 bg-[#00B4E6]"></div>
       <router-link to="/forgot-password">{{ t('routes.login.forgotPassword') }}</router-link>
     </div>
 

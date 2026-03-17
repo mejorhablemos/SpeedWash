@@ -124,10 +124,10 @@ const onSubmit = async () => {
 
           <van-cell :title="t('routes.order.refund.amount.title')">
             <template #label>
-              <div class="text-[#FF4B33] text-24px font-bold py-5">
+              <div class="text-[#e74c3c] text-24px font-bold py-5">
                 <price-tag :price="data?.finalPrice" />
               </div>
-              <div class="text-[#FF4B33] text-14px mt-2">
+              <div class="text-[#e74c3c] text-14px mt-2">
                 {{ t('routes.order.refund.amount.notice') }}
               </div>
               <div class="text-gray-400 text-14px mt-1">
