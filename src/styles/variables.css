@@ -1,0 +1,32 @@
+:root {
+  --primary-color: #00B4E6;
+  --primary-dark: #0090B8;
+  --primary-light: #33C4EC;
+  --accent-color: #F7941D;
+  --accent-light: #FFAD4D;
+  --surface-color: #FFFFFF;
+  --background-color: #F0F4F8;
+  --text-primary: #1A2B3C;
+  --text-secondary: #6B7D8E;
+  --primary-color-rgb: 0, 180, 230;
+  --accent-color-rgb: 247, 148, 29;
+}
+
+:root:root {
+  --van-button-primary-background: var(--primary-color);
+  --van-button-primary-border-color: var(--primary-color);
+  --van-tag-primary-color: var(--primary-color);
+  --van-button-primary-background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+  --van-nav-bar-icon-color: #fff;
+  --van-nav-bar-text-color: #fff;
+  --van-nav-bar-title-text-color: #fff;
+  --van-tabbar-item-active-color: var(--primary-color);
+}
+
+/* 字体大小 */
+/* :root:root {
+  --van-font-size-xs: calc(10 * var(--vw));
+  --van-font-size-sm: calc(12 * var(--vw));
+  --van-font-size-md: calc(14 * var(--vw));
+  --van-font-size-lg: calc(16 * var(--vw));
+} */

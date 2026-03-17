@@ -1,0 +1,33 @@
+<svg id="scan-icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  viewBox="0 0 750 308">
+  <defs>
+    <style>
+      .cls-1 {
+        opacity: 0.75;
+        fill: url(#gradient-radial-red);
+      }
+
+      .cls-2 {
+        fill: url(#gradient-linear-red);
+      }
+    </style>
+    <radialGradient id="gradient-radial-red" cx="375" cy="178" r="298.56" 
+      gradientTransform="translate(0 138.08) scale(1 0.22)"
+      gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fd5c57" />
+      <stop offset="0.21" stop-color="#fd7c78" stop-opacity="0.8" />
+      <stop offset="0.7" stop-color="#fecccb" stop-opacity="0.31" />
+      <stop offset="1" stop-color="#fd5c57" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="gradient-linear-red" y1="181.22" x2="750" y2="181.22" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fd5c57" stop-opacity="0" />
+      <stop offset="0.11" stop-color="#ffdfde" stop-opacity="0.2" />
+      <stop offset="0.35" stop-color="#fe8f8b" stop-opacity="0.69" />
+      <stop offset="0.5" stop-color="#fd5c57" />
+      <stop offset="0.87" stop-color="#fed5d4" stop-opacity="0.26" />
+      <stop offset="1" stop-color="#fed5d4" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+  <path class="cls-1" d="M375,99.33c-204.53,0-370.33,35.52-370.33,79.34H745.33C745.33,134.85,579.53,99.33,375,99.33Z" />
+  <rect class="cls-2" y="178.67" width="750" height="5.11" />
+</svg>
