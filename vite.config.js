@@ -174,7 +174,7 @@ export default defineConfig({
         ws: true, // 支持websocket
       },
       "/user": {
-        target: "http://localhost:8080/api", // API服务器地址
+        target: "https://argentina-user.cheyoudaren.com/api", // API服务器地址
         changeOrigin: true, // 支持跨域
         // rewrite: path => path.replace(/^\/api/, ''), // 如果后端没有/api前缀,则需要重写
         ws: true, // 支持websocket
