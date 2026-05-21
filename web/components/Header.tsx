@@ -29,14 +29,14 @@ export default function Header() {
       }`}
     >
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-10">
-        <Link href="/" className="flex items-center gap-3" aria-label="Speed Wash Funes — inicio">
+        <Link href="/" className="flex items-center" aria-label="Speed Wash Funes — inicio">
           <Image
-            src="/brand/logo.png"
+            src="/brand/logo-wordmark.png"
             alt="Speed Wash"
-            width={132}
-            height={88}
+            width={472}
+            height={60}
             priority
-            className="h-11 w-auto"
+            className="h-6 w-auto sm:h-7"
           />
         </Link>
 

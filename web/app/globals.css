@@ -6,9 +6,11 @@
   --color-graphite-2: #121215;
   --color-card: #141418;
   --color-line: #232328;
-  --color-led: #5cc9ec;
-  --color-led-bright: #8fdef7;
-  --color-led-deep: #1f9fce;
+  --color-led: #00bbfc;
+  --color-led-bright: #5ed2fd;
+  --color-led-deep: #0090cc;
+  --color-spark: #ff8c00;
+  --color-wash: #cccece;
   --color-mist: #9a9aa3;
   --color-snow: #f4f4f6;
 
@@ -38,7 +40,7 @@ body {
 }
 
 ::selection {
-  background: #5cc9ec;
+  background: #00bbfc;
   color: #000;
 }
 
@@ -53,7 +55,7 @@ body {
   font-weight: 500;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: #5cc9ec;
+  color: #00bbfc;
 }
 
 .display {
@@ -75,13 +77,13 @@ body {
 /* ---- Tech detailing ---- */
 .tech-grid {
   background-image:
-    linear-gradient(to right, rgba(92, 201, 236, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(92, 201, 236, 0.05) 1px, transparent 1px);
+    linear-gradient(to right, rgba(0, 187, 252, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 187, 252, 0.05) 1px, transparent 1px);
   background-size: 64px 64px;
 }
 
 .tech-dots {
-  background-image: radial-gradient(rgba(92, 201, 236, 0.16) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(0, 187, 252, 0.16) 1px, transparent 1px);
   background-size: 26px 26px;
 }
 
@@ -89,19 +91,19 @@ body {
   background: linear-gradient(
     90deg,
     transparent,
-    #5cc9ec 35%,
-    #8fdef7 50%,
-    #5cc9ec 65%,
+    #00bbfc 35%,
+    #5ed2fd 50%,
+    #00bbfc 65%,
     transparent
   );
 }
 
 .led-glow {
-  box-shadow: 0 0 40px -8px rgba(92, 201, 236, 0.6);
+  box-shadow: 0 0 40px -8px rgba(0, 187, 252, 0.6);
 }
 
 .text-glow {
-  text-shadow: 0 0 30px rgba(92, 201, 236, 0.4);
+  text-shadow: 0 0 30px rgba(0, 187, 252, 0.4);
 }
 
 .hairline {

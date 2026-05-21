@@ -9,13 +9,13 @@ export default function Footer() {
         <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr]">
           <div>
             <Image
-              src="/brand/logo.png"
+              src="/brand/logo-wordmark.png"
               alt="Speed Wash"
-              width={150}
-              height={100}
-              className="h-14 w-auto"
+              width={472}
+              height={60}
+              className="h-8 w-auto"
             />
-            <p className="mt-5 max-w-xs text-sm leading-relaxed text-mist">
+            <p className="mt-6 max-w-xs text-sm leading-relaxed text-mist">
               El primer lavadero automático digitalizado de la región.
               Tecnología, velocidad y experiencia premium en {site.ecosystem}.
             </p>
