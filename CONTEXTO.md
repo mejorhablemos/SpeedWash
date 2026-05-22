@@ -48,11 +48,11 @@ self-service. **Abre el 1 de julio de 2026.**
 | Costos fijos | **USD 6.480/mes** (gerente 1.714 · sueldo 1.086 · comercial 1.000 · varios 500 · alquiler 1.400 · servicios 380) |
 | Costo variable por lavado | **USD 0,76** (cera, shampoo, energía) |
 | Impuestos sobre facturación | ~3,7% (IIBB 2,5% + DREI 1,2%) |
-| Precios | Lavado USD 15 · Abono 4 USD 54 · Abono 8 USD 96 · Aspirado USD 4 |
-| Punto de equilibrio | **~15 autos/día** a precio pleno |
+| Precios | Lavado **USD 18** · Aspirado **USD 4** · Packs en ARS (ver brochure de membresías) |
+| Punto de equilibrio | **~12 autos/día** a precio pleno |
 | Rampa de volumen jul–dic | 36 / 42 / 48 / 54 / 58 / 64 autos/día |
-| EBITDA jul–dic 2026 | **~USD 78.700** · margen ~60% |
-| Recupero total | **~12 meses** (~mediados 2027) |
+| EBITDA jul–dic 2026 | **~USD 103.000** · margen ~67% |
+| Recupero total | **~10 meses** (~principios 2027) |
 
 **El insight más fuerte del plan:** regalar/abaratar un primer lavado cuesta solo
 USD 0,76 de insumos. La prueba es el marketing más barato y poderoso que existe.
