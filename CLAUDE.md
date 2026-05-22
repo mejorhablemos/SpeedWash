@@ -2,6 +2,13 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+> **⚡ Contexto completo del proyecto:** este repo tiene varios subproyectos
+> (la PWA Vue en `src/`, el sitio Next.js en `web/`, los brochures en
+> `Brochures/`, el plan de negocio en `Plan/`). Para tener todo el contexto
+> del negocio, el plan, los datos financieros, el sistema de diseño y los
+> pipelines de generación de PDF, **leer `CONTEXTO.md` en la raíz del repo.**
+> Esta sección describe la **PWA Vue (src/)** únicamente.
+
 ## Project Overview
 
 SpeedWash is a mobile-first car wash service PWA built with Vue 3 (Composition API + `<script setup>`), targeting the Argentine market. Users can scan washing machines, pay via Mercado Pago or wallet balance, track orders, manage VIP memberships, and find stores on a map. The app supports English and Simplified Chinese.
