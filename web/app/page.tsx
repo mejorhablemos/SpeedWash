@@ -18,6 +18,7 @@ const servicios = [
     code: "S—01",
     name: "Touchless",
     time: "7 minutos",
+    img: "/renders/detalle.jpg",
     desc: "Lavado contactless de alta presión. Sin contacto físico con la carrocería: cuida la pintura y los detalles más delicados.",
     points: ["Sin contacto", "Alta presión", "Secado integral"],
   },
@@ -25,6 +26,7 @@ const servicios = [
     code: "S—02",
     name: "Roller",
     time: "8 minutos",
+    img: "/renders/autoservicio.jpg",
     desc: "Lavado con rodillos de microfibra de última generación. Arrastre profundo de suciedad con un acabado impecable.",
     points: ["Microfibra premium", "Limpieza profunda", "Brillo final"],
   },
@@ -48,8 +50,8 @@ export default function Home() {
         <section className="relative flex min-h-screen flex-col justify-center overflow-hidden">
           <div className="absolute inset-0">
             <Image
-              src="/renders/local.jpg"
-              alt="Lavadero Speed Wash Funes"
+              src="/renders/exterior.jpg"
+              alt="Speed Wash Funes — fachada de noche"
               fill
               priority
               sizes="100vw"
@@ -225,8 +227,8 @@ export default function Home() {
                 <div className="relative">
                   <div className="relative aspect-[4/5] overflow-hidden border border-line">
                     <Image
-                      src="/renders/local.jpg"
-                      alt="Instalaciones de Speed Wash Funes"
+                      src="/renders/lavado.jpg"
+                      alt="Lavado automático en Speed Wash Funes"
                       fill
                       sizes="(max-width: 1024px) 100vw, 50vw"
                       className="object-cover"
@@ -270,28 +272,38 @@ export default function Home() {
             <div className="mt-14 grid gap-px border border-line bg-line lg:grid-cols-2">
               {servicios.map((s, i) => (
                 <Reveal key={s.name} delay={i * 120} as="article">
-                  <div className="group h-full bg-graphite p-9 transition-colors hover:bg-graphite-2 lg:p-12">
-                    <div className="flex items-center justify-between">
-                      <span className="micro">{s.code}</span>
-                      <span className="font-display text-sm font-semibold text-led">
-                        {s.time}
-                      </span>
-                    </div>
-                    <h3 className="display mt-8 text-4xl lg:text-5xl">
-                      {s.name}
-                    </h3>
-                    <p className="mt-5 max-w-md text-sm leading-relaxed text-mist">
-                      {s.desc}
-                    </p>
-                    <div className="mt-8 flex flex-wrap gap-2">
-                      {s.points.map((p) => (
-                        <span
-                          key={p}
-                          className="border border-line px-3 py-1.5 font-display text-[0.72rem] tracking-wide text-mist"
-                        >
-                          {p}
+                  <div className="group relative h-full overflow-hidden bg-graphite transition-colors hover:bg-graphite-2">
+                    <Image
+                      src={s.img}
+                      alt=""
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      className="object-cover opacity-[0.16] transition-opacity duration-500 group-hover:opacity-30"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-graphite via-graphite/85 to-graphite/45" />
+                    <div className="relative p-9 lg:p-12">
+                      <div className="flex items-center justify-between">
+                        <span className="micro">{s.code}</span>
+                        <span className="font-display text-sm font-semibold text-led">
+                          {s.time}
                         </span>
-                      ))}
+                      </div>
+                      <h3 className="display mt-8 text-4xl lg:text-5xl">
+                        {s.name}
+                      </h3>
+                      <p className="mt-5 max-w-md text-sm leading-relaxed text-mist">
+                        {s.desc}
+                      </p>
+                      <div className="mt-8 flex flex-wrap gap-2">
+                        {s.points.map((p) => (
+                          <span
+                            key={p}
+                            className="border border-line px-3 py-1.5 font-display text-[0.72rem] tracking-wide text-mist"
+                          >
+                            {p}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </Reveal>
@@ -476,6 +488,14 @@ export default function Home() {
           id="contacto"
           className="relative scroll-mt-20 overflow-hidden border-t border-line bg-graphite"
         >
+          <Image
+            src="/renders/interior.jpg"
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover opacity-20"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-graphite via-graphite/90 to-graphite/50" />
           <div className="tech-grid absolute inset-0 opacity-70" />
           <div className="relative mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-36">
             <Reveal>

@@ -1,6 +1,6 @@
 // Datos de marca y contacto de Speed Wash Funes.
-// NOTA: los datos de contacto provienen del manual de marca y pueden ser
-// placeholders — confirmar con el cliente antes de publicar.
+// NOTA: email e Instagram confirmados por el cliente.
+// WhatsApp sigue siendo placeholder — falta el número real.
 
 export const site = {
   name: "Speed Wash",
@@ -10,12 +10,12 @@ export const site = {
   slogan: "Tecnología · Innovación · Comunidad · 24 hs",
   location: "Funes, Santa Fe — Argentina",
   ecosystem: "Calmo Funes",
-  // Contacto — confirmar datos reales
-  email: "speedwash@gmail.com",
-  whatsapp: "3410123456",
-  whatsappDisplay: "341 012-3456",
-  instagram: "speedwash",
-  instagramUrl: "https://instagram.com/speedwash",
+  // Contacto
+  email: "info@speedwash.com.ar",
+  whatsapp: "3410123456", // PLACEHOLDER — reemplazar por el número real
+  whatsappDisplay: "341 012-3456", // PLACEHOLDER
+  instagram: "speedwash.funes",
+  instagramUrl: "https://instagram.com/speedwash.funes",
   // Coordenadas aproximadas de Funes (microtexto tech)
   coords: "-32.9176, -60.9314",
 };

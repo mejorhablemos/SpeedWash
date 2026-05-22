@@ -1,24 +1,26 @@
+/* Optimiza los renders IA para el sitio: recorta el watermark, redimensiona y
+   comprime a JPG. Ejecutar desde web/:  node scripts/optimize-assets.mjs       */
 import sharp from "sharp";
-import { mkdirSync } from "node:fs";
 
-const G = "../Graficas/";
-const OUT = "./public/renders/";
-mkdirSync(OUT, { recursive: true });
+const DIR = "./public/renders/";
+const CROP_BOTTOM = 0.12; // recorta el watermark de la esquina inferior derecha
 
 const jobs = [
-  // Render diurno del local (4K) -> hero / proyecto
-  { in: G + "Presentacion de Marca/Recursos/mejor resolucion.jpg", out: "local.jpg", w: 2560, q: 82 },
-  // Mockups premium oscuros -> mosaico experiencia
-  { in: G + "Mockups/3.2.png", out: "banner.jpg", w: 1600, q: 80 },
-  { in: G + "Mockups/4.2.png", out: "merch.jpg", w: 1600, q: 80 },
-  { in: G + "Mockups/5.2.png", out: "cards.jpg", w: 1600, q: 80 },
-  { in: G + "Mockups/Banner.jpg", out: "billboard.jpg", w: 1600, q: 80 },
+  { in: "speedwast exterior render.png",   out: "exterior.jpg",     w: 2400 },
+  { in: "Speedwash car with cawrwash.png", out: "lavado.jpg",       w: 2000 },
+  { in: "Speedwash Car detail.png",        out: "detalle.jpg",      w: 1800 },
+  { in: "Speedwash vacuum machine.png",    out: "autoservicio.jpg", w: 1800 },
+  { in: "interior car speedwash.png",      out: "interior.jpg",     w: 2200 },
 ];
 
 for (const j of jobs) {
-  await sharp(j.in)
+  const src = DIR + j.in;
+  const meta = await sharp(src).metadata();
+  const h = Math.round(meta.height * (1 - CROP_BOTTOM));
+  await sharp(src)
+    .extract({ left: 0, top: 0, width: meta.width, height: h })
     .resize({ width: j.w, withoutEnlargement: true })
-    .jpeg({ quality: j.q, mozjpeg: true })
-    .toFile(OUT + j.out);
+    .jpeg({ quality: 82, mozjpeg: true })
+    .toFile(DIR + j.out);
   console.log("ok ->", j.out);
 }
