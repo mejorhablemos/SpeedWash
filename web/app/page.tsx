@@ -2,7 +2,8 @@ import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
-import { packs, site } from "@/lib/site";
+import LeadForm from "@/components/LeadForm";
+import { packs, site, contactHref, CONTACT_CHANNEL } from "@/lib/site";
 
 /* ---------------------------------------------------------------- */
 
@@ -105,10 +106,10 @@ export default function Home() {
             <Reveal delay={260}>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                 <a
-                  href="#membresias"
+                  href="#lista"
                   className="group flex items-center justify-center gap-2.5 bg-led px-8 py-4 font-display text-sm font-semibold tracking-wide text-black transition-all hover:bg-led-bright"
                 >
-                  Ver membresías
+                  Sumate a la lista
                   <span className="transition-transform group-hover:translate-x-1">
                     →
                   </span>
@@ -313,6 +314,39 @@ export default function Home() {
           </div>
         </section>
 
+        {/* ===================== LISTA DE APERTURA ===================== */}
+        <section
+          id="lista"
+          className="relative scroll-mt-20 overflow-hidden border-y border-line bg-black"
+        >
+          <div className="tech-grid absolute inset-0 opacity-50" />
+          <div className="relative mx-auto max-w-3xl px-6 py-24 text-center lg:px-10 lg:py-32">
+            <Reveal>
+              <div className="mb-6 flex items-center justify-center gap-4">
+                <span className="led-line h-px w-12" />
+                <span className="eyebrow">Lista de apertura</span>
+              </div>
+            </Reveal>
+            <Reveal delay={80}>
+              <h2 className="display text-4xl sm:text-5xl lg:text-[3.4rem]">
+                Sé de los <span className="text-led text-glow">primeros</span>.
+              </h2>
+            </Reveal>
+            <Reveal delay={140}>
+              <p className="mx-auto mt-6 max-w-md text-base leading-relaxed text-mist">
+                Estamos por abrir en Funes. Dejanos tu contacto y te avisamos
+                primero — además te guardamos tu{" "}
+                <span className="text-snow">lavado gratis de inauguración</span>.
+              </p>
+            </Reveal>
+            <Reveal delay={200}>
+              <div className="mx-auto mt-10 max-w-xl text-left">
+                <LeadForm />
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
         {/* ===================== MEMBRESÍAS ===================== */}
         <section id="membresias" className="relative scroll-mt-20 bg-graphite">
           <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10 lg:py-32">
@@ -379,9 +413,9 @@ export default function Home() {
                       {p.note}
                     </p>
                     <a
-                      href={`https://wa.me/54${site.whatsapp}?text=${encodeURIComponent(
+                      href={contactHref(
                         `Hola Speed Wash, quiero info del pack ${p.name}.`,
-                      )}`}
+                      )}
                       target="_blank"
                       rel="noopener noreferrer"
                       className={`mt-7 flex items-center justify-center gap-2 py-3 font-display text-[0.78rem] font-semibold tracking-wide transition-all ${
@@ -512,20 +546,20 @@ export default function Home() {
             </Reveal>
             <Reveal delay={160}>
               <p className="mt-7 max-w-lg text-base leading-relaxed text-mist">
-                Escribinos por WhatsApp y reservá tu lavado o tu membresía.
-                Respondemos al instante.
+                Escribinos y sumate a la lista de apertura o consultanos lo que
+                quieras. Respondemos al instante.
               </p>
             </Reveal>
 
             <Reveal delay={220}>
               <div className="mt-11 flex flex-col gap-3 sm:flex-row">
                 <a
-                  href={`https://wa.me/54${site.whatsapp}`}
+                  href={contactHref("Hola Speed Wash! Quiero sumarme a la lista de apertura.")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group flex items-center justify-center gap-2.5 bg-led px-8 py-4 font-display text-sm font-semibold tracking-wide text-black transition-all hover:bg-led-bright"
                 >
-                  WhatsApp · {site.whatsappDisplay}
+                  Escribinos por {CONTACT_CHANNEL}
                   <span className="transition-transform group-hover:translate-x-1">
                     →
                   </span>

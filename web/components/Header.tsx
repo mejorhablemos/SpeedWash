@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { nav, site } from "@/lib/site";
+import { nav, contactHref } from "@/lib/site";
+import { trackContactClick } from "@/lib/analytics";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -54,9 +55,10 @@ export default function Header() {
 
         <div className="hidden items-center gap-4 lg:flex">
           <a
-            href={`https://wa.me/54${site.whatsapp}`}
+            href={contactHref("Hola Speed Wash! Quiero reservar un lavado.")}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => trackContactClick("header")}
             className="group flex items-center gap-2.5 bg-led px-5 py-2.5 font-display text-[0.8rem] font-semibold tracking-wide text-black transition-all hover:bg-led-bright"
           >
             Reservá tu lavado
@@ -108,9 +110,13 @@ export default function Header() {
             </a>
           ))}
           <a
-            href={`https://wa.me/54${site.whatsapp}`}
+            href={contactHref("Hola Speed Wash! Quiero reservar un lavado.")}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => {
+              trackContactClick("header_mobile");
+              setOpen(false);
+            }}
             className="mt-5 bg-led px-5 py-3.5 text-center font-display text-sm font-semibold tracking-wide text-black"
           >
             Reservá tu lavado →

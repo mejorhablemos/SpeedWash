@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { nav, site } from "@/lib/site";
+import { nav, site, contactHref, CONTACT_CHANNEL } from "@/lib/site";
 
 export default function Footer() {
   return (
@@ -42,12 +42,12 @@ export default function Footer() {
             <ul className="space-y-3 text-sm text-mist">
               <li>
                 <a
-                  href={`https://wa.me/54${site.whatsapp}`}
+                  href={contactHref("Hola Speed Wash! Quiero info.")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="transition-colors hover:text-led"
                 >
-                  WhatsApp · {site.whatsappDisplay}
+                  Escribinos por {CONTACT_CHANNEL}
                 </a>
               </li>
               <li>

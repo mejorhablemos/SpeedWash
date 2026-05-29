@@ -25,8 +25,28 @@ export const nav = [
   { label: "Servicios", href: "/#servicios" },
   { label: "Membresías", href: "/#membresias" },
   { label: "Partners", href: "/#partners" },
-  { label: "Contacto", href: "/#contacto" },
+  { label: "Lista de apertura", href: "/#lista" },
 ];
+
+// ── Canal de contacto ─────────────────────────────────────────────
+// Mientras no esté cargado el WhatsApp real, todos los CTAs caen al DM
+// de Instagram (canal real y vivo). Cuando exista el número, poner el
+// valor real en `site.whatsapp` y cambiar este flag a true: se propaga
+// solo a los 8 CTAs del sitio.
+export const WHATSAPP_READY = false;
+
+/** Link de contacto. Usa WhatsApp (con mensaje pre-cargado) si está listo,
+ *  o el DM de Instagram como fallback. */
+export function contactHref(message?: string): string {
+  if (WHATSAPP_READY) {
+    const q = message ? `?text=${encodeURIComponent(message)}` : "";
+    return `https://wa.me/54${site.whatsapp}${q}`;
+  }
+  return `https://ig.me/m/${site.instagram}`;
+}
+
+/** Etiqueta del canal activo, para los textos de los botones. */
+export const CONTACT_CHANNEL = WHATSAPP_READY ? "WhatsApp" : "Instagram";
 
 export type Pack = {
   id: string;

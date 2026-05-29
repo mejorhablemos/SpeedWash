@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import { site } from "@/lib/site";
+import Analytics from "@/components/Analytics";
+import ContactFab from "@/components/ContactFab";
 import "./globals.css";
 
 const inter = Inter({
@@ -101,6 +103,8 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         {children}
+        <ContactFab />
+        <Analytics />
       </body>
     </html>
   );

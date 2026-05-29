@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { site } from "@/lib/site";
+import { contactHref } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Propuesta comercial B2B",
@@ -26,9 +26,9 @@ export default function B2B() {
             reunión.
           </p>
           <a
-            href={`https://wa.me/54${site.whatsapp}?text=${encodeURIComponent(
+            href={contactHref(
               "Hola Speed Wash, quiero coordinar una reunión por la propuesta B2B.",
-            )}`}
+            )}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-9 inline-flex items-center gap-2.5 bg-led px-8 py-4 font-display text-sm font-semibold tracking-wide text-black transition-all hover:bg-led-bright"
