@@ -47,7 +47,7 @@ export default function Home() {
       <Header />
       <main>
         {/* ===================== HERO ===================== */}
-        <section className="relative flex min-h-screen flex-col justify-center overflow-hidden">
+        <section className="relative flex min-h-svh flex-col justify-start overflow-hidden lg:justify-center">
           <div className="absolute inset-0">
             <Image
               src="/renders/exterior.jpg"
@@ -67,7 +67,7 @@ export default function Home() {
 
           {/* microtexto esquinas */}
           <div className="pointer-events-none absolute inset-0 z-10">
-            <span className="micro absolute left-6 top-28 lg:left-10">
+            <span className="micro absolute left-6 top-28 hidden lg:block lg:left-10">
               01 — Speed Wash Funes
             </span>
             <span className="micro absolute right-6 top-28 hidden lg:block lg:right-10">
