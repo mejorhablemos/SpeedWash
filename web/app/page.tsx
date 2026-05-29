@@ -235,7 +235,7 @@ export default function Home() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                     <span className="micro absolute bottom-5 left-5">
-                      [ Render — fachada Speed Wash Funes ]
+                      [ Speed Wash · Funes ]
                     </span>
                   </div>
                   <div className="led-glow led-line absolute -bottom-px left-8 right-8 h-px" />
@@ -277,6 +277,7 @@ export default function Home() {
                       src={s.img}
                       alt=""
                       fill
+                      quality={35}
                       sizes="(max-width: 1024px) 100vw, 50vw"
                       className="object-cover opacity-[0.16] transition-opacity duration-500 group-hover:opacity-30"
                     />
@@ -492,6 +493,7 @@ export default function Home() {
             src="/renders/interior.jpg"
             alt=""
             fill
+            quality={35}
             sizes="100vw"
             className="object-cover opacity-20"
           />

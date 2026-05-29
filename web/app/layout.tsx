@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
+import { site } from "@/lib/site";
 import "./globals.css";
 
 const inter = Inter({
@@ -29,6 +30,9 @@ export const metadata: Metadata = {
     "Speed Wash",
     "lavado de autos 24 horas",
   ],
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "Speed Wash Funes — Lavadero automático 24 hs",
     description:
@@ -38,10 +42,52 @@ export const metadata: Metadata = {
     locale: "es_AR",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Speed Wash Funes — Lavadero automático 24 hs",
+    description:
+      "El primer lavadero automático digitalizado de la región. Autoservicio 24 hs en Funes, Santa Fe.",
+  },
 };
 
 export const viewport: Viewport = {
   themeColor: "#000000",
+  // Permite que el contenido use el área completa y respete los safe-area insets (notch/home bar de iOS).
+  viewportFit: "cover",
+};
+
+// Schema de negocio local — clave para aparecer en Google Maps / Local Pack.
+const [lat, lng] = site.coords.split(",").map((n) => Number(n.trim()));
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "AutoWash",
+  name: site.fullName,
+  url: `https://${site.domain}`,
+  image: `https://${site.domain}/opengraph-image`,
+  description:
+    "Lavadero automático digitalizado, autoservicio 24 hs en Funes, Santa Fe.",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Funes",
+    addressRegion: "Santa Fe",
+    addressCountry: "AR",
+  },
+  geo: { "@type": "GeoCoordinates", latitude: lat, longitude: lng },
+  openingHoursSpecification: {
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ],
+    opens: "00:00",
+    closes: "23:59",
+  },
+  sameAs: [site.instagramUrl],
 };
 
 export default function RootLayout({
@@ -49,7 +95,13 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="es-AR" className={`${inter.variable} ${spaceGrotesk.variable}`}>
-      <body>{children}</body>
+      <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        {children}
+      </body>
     </html>
   );
 }

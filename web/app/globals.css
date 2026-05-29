@@ -11,7 +11,7 @@
   --color-led-deep: #0090cc;
   --color-spark: #ff8c00;
   --color-wash: #cccece;
-  --color-mist: #9a9aa3;
+  --color-mist: #acacb6;
   --color-snow: #f4f4f6;
 
   --font-display: var(--font-space-grotesk);
@@ -127,6 +127,13 @@ body {
   html { scroll-behavior: auto; }
   .reveal { opacity: 1; transform: none; transition: none; }
   .marquee-track { animation: none; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }
 
 /* ---- Marquee ---- */

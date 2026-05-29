@@ -22,7 +22,7 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${
+      className={`fixed inset-x-0 top-0 z-50 pt-[env(safe-area-inset-top)] transition-colors duration-500 ${
         scrolled || open
           ? "bg-black/85 backdrop-blur-xl border-b border-line"
           : "bg-transparent border-b border-transparent"
@@ -66,7 +66,7 @@ export default function Header() {
 
         <button
           onClick={() => setOpen((v) => !v)}
-          className="flex h-10 w-10 flex-col items-center justify-center gap-[5px] lg:hidden"
+          className="-mr-2 flex h-11 w-11 flex-col items-center justify-center gap-[5px] lg:hidden"
           aria-label="Menú"
           aria-expanded={open}
         >
@@ -90,11 +90,13 @@ export default function Header() {
 
       {/* Mobile menu */}
       <div
-        className={`overflow-hidden border-t border-line bg-black/95 backdrop-blur-xl transition-[max-height] duration-500 lg:hidden ${
-          open ? "max-h-96" : "max-h-0 border-t-transparent"
+        className={`border-t border-line bg-black/95 backdrop-blur-xl transition-[max-height] duration-500 lg:hidden ${
+          open
+            ? "max-h-[85vh] overflow-y-auto"
+            : "max-h-0 overflow-hidden border-t-transparent"
         }`}
       >
-        <nav className="flex flex-col px-6 py-5">
+        <nav className="flex flex-col px-6 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-5">
           {nav.map((item) => (
             <a
               key={item.href}

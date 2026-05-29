@@ -13,7 +13,7 @@ export default function B2B() {
   return (
     <>
       <Header />
-      <main className="relative flex min-h-screen items-center overflow-hidden bg-black">
+      <main className="relative flex min-h-svh items-center overflow-hidden bg-black">
         <div className="tech-grid absolute inset-0 opacity-60" />
         <div className="relative mx-auto max-w-3xl px-6 py-40 text-center lg:px-10">
           <span className="eyebrow">Propuesta comercial B2B</span>
