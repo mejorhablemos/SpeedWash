@@ -2,6 +2,7 @@
 import { BrowserMultiFormatReader } from '@zxing/library'
 import FlashlightSvg from '@/assets/icons/flashlight.svg'
 import PictureSvg from '@/assets/icons/picture-album.svg'
+import CameraSwitchSvg from '@/assets/icons/camera-switch.svg'
 
 
 const videoRef = ref(null)
@@ -91,43 +92,84 @@ const drawPositions = (points) => {
   ctx.fill();
 };
 
+// 根据设备 label 识别后置摄像头
+const pickRearCamera = (devices) => {
+  if (!devices.length) return { deviceId: undefined, index: 0 }
+
+  const isFrontCamera = (label) =>
+    /front|user|face|selfie|前置|前面|前摄|facing front|camera.*1.*front/i.test(label)
+  const isRearCamera = (label) =>
+    /back|rear|environment|后置|背面|后摄|facing back|camera.*0.*back|traseir|wide angle/i.test(label)
+    && !isFrontCamera(label)
+
+  for (let i = 0; i < devices.length; i++) {
+    const label = devices[i].label || ''
+    if (isRearCamera(label)) {
+      return { deviceId: devices[i].deviceId, index: i }
+    }
+  }
+
+  return { }
+}
+
+const syncActiveCamera = () => {
+  const video = document.getElementById('qrcode-scanner')
+  const track = video?.srcObject?.getVideoTracks?.()[0]
+  const activeDeviceId = track?.getSettings?.()?.deviceId
+  if (!activeDeviceId) return
+
+  deviceId.value = activeDeviceId
+  const index = cameras.value.findIndex((camera) => camera.deviceId === activeDeviceId)
+  if (index >= 0) {
+    currentCameraIndex.value = index
+  }
+}
+
 // 开始扫描
-const openScan = async () => {
+const openScan = async (useCurrentDevice = false) => {
   try {
     isScanning.value = true
     const videoInputDevices = await codeReader.listVideoInputDevices()
-    
-    if (videoInputDevices.length) {
-      cameras.value = videoInputDevices
-      // 优先使用后置摄像头
-      deviceId.value = videoInputDevices[0]?.deviceId
-      if (videoInputDevices.length > 1) {
-        deviceId.value = videoInputDevices[1]?.deviceId
-        currentCameraIndex.value = 1
-      }
-      
-      // 设置视频约束，要求较高的分辨率
-      const constraints = {
-        video: {
-          deviceId: deviceId.value,
-          width: { ideal: 1920 },  // 理想宽度
-          height: { ideal: 1080 }, // 理想高度
-          facingMode: 'environment', // 优先使用后置摄像头
-          aspectRatio: { ideal: 1.7777777778 }, // 16:9
-        }
-      }
-      
-      // 使用自定义约束进行解码
-      await codeReader.decodeFromConstraints(constraints, 'qrcode-scanner', (result, error) => {
-        if (result) {
-          handleScanResult(result)
-        }
-        if (error && !(error instanceof TypeError)) {
-          const ctx = overlayRef.value?.getContext('2d')
-          ctx?.clearRect(0, 0, overlayRef.value.width, overlayRef.value.height)
-        }
-      })
+
+    if (!videoInputDevices.length) {
+      showToast('未找到摄像头')
+      isScanning.value = false
+      return
     }
+
+    cameras.value = videoInputDevices
+
+    if (!useCurrentDevice) {
+      const picked = pickRearCamera(videoInputDevices)
+      currentCameraIndex.value = picked.index
+      deviceId.value = picked.deviceId || ''
+    }
+
+    const constraints = {
+      video: {
+        ...(useCurrentDevice && deviceId.value
+          ? { deviceId: { exact: deviceId.value } }
+          : {
+              facingMode: { ideal: 'environment' },
+              ...(deviceId.value ? { deviceId: { ideal: deviceId.value } } : {}),
+            }),
+        width: { ideal: 1920 },
+        height: { ideal: 1080 },
+        aspectRatio: { ideal: 1.7777777778 },
+      },
+    }
+
+    await codeReader.decodeFromConstraints(constraints, 'qrcode-scanner', (result, error) => {
+      if (result) {
+        handleScanResult(result)
+      }
+      if (error && !(error instanceof TypeError)) {
+        const ctx = overlayRef.value?.getContext('2d')
+        ctx?.clearRect(0, 0, overlayRef.value.width, overlayRef.value.height)
+      }
+    })
+
+    syncActiveCamera()
   } catch (error) {
     console.error('初始化失败:', error)
     showToast('初始化失败，请检查摄像头权限')
@@ -297,12 +339,17 @@ const stopScan = () => {
 
 // 切换摄像头
 const switchCamera = async () => {
+  if (cameras.value.length <= 1) return
+
   await stopScan()
-  lastResult.value = '' // 重置上一次的扫描结果
+  lastResult.value = ''
+  isTorchOn.value = false
   currentCameraIndex.value = (currentCameraIndex.value + 1) % cameras.value.length
   deviceId.value = cameras.value[currentCameraIndex.value].deviceId
-  await openScan()
+  await openScan(true)
 }
+
+const hasMultipleCameras = computed(() => cameras.value.length > 1)
 
 // 切换手电筒
 const toggleTorch = async () => {
@@ -486,6 +533,16 @@ const restartScan = () => {
           <FlashlightSvg class="w-24px h-24px" :class="{ 'text-yellow-400': isTorchOn }"></FlashlightSvg>
 
           <!-- <div class="i-carbon-flash text-24px text-white" :class="{ 'text-yellow-400': isTorchOn }"></div> -->
+        </button>
+
+        <!-- 切换摄像头 -->
+        <button
+          v-if="hasMultipleCameras"
+          type="button"
+          class="w-44px h-44px rounded-full bg-white/20 hover:bg-white/30 active:bg-white/40 transition-colors duration-300 flex items-center justify-center cursor-pointer"
+          @click="switchCamera"
+        >
+          <CameraSwitchSvg class="w-24px h-24px"></CameraSwitchSvg>
         </button>
 
         <!-- 相册 -->

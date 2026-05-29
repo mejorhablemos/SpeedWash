@@ -13,29 +13,22 @@ const onScanSuccess = ({ text }) => {
 
   try {
     const url = new URL(text);
-    // 检查是否是后台地址
-    if (url.origin === import.meta.env.VITE_BACKGROUND_URL) {
-      // 直接打开后台地址
-      window.location.href = url;
-      return;
+    // 检查地址后跳转
+    if (url.origin === import.meta.env.VITE_USER_SCAN_URL) {
+      router.replace(url.pathname);
+      return
     }
 
-    console.log('url', url)
-
   } catch (e) {
-
     console.log('e', e)
-
-    router.replace({
-      path: '/scan-result',
-      query: { result: text }
-    })
   }
 
+  showToast(t("routes.scan.scanFailed"));
+
   // // 跳转到结果页
-  // router.push({
+  // router.replace({
   //   path: '/scan-result',
-  //   query: { result }
+  //   query: { result: text }
   // })
 };
 
