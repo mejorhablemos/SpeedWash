@@ -35,7 +35,7 @@ const handleClick = () => {
 </script>
 
 <template>
-  <div class="fixed left-0 right-0 bottom-0 pb-safe bg-white">
+  <div class="fixed left-0 right-0 bottom-0 pb-safe bg-surface b-t-1 b-t-solid b-line">
     <slot name="tip" />
     
     <div class="p-4">

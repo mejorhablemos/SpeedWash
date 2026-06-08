@@ -194,7 +194,7 @@ const goToLogin = () => {
   </van-form>
 
   <!-- 登录入口 -->
-  <div class="text-center mt-30px text-gray-600 text-xl">
+  <div class="text-center mt-30px text-text-secondary text-xl">
     {{ t("routes.register.hasAccount") }}
     <span class="text-primary cursor-pointer" @click="goToLogin">
       {{ t("routes.register.login") }}

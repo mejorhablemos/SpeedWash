@@ -115,14 +115,14 @@ watchEffect(() => {
 <template>
   <div class="topup-page">
     <!-- Carga -->
-    <div v-if="isLoading" class="absolute inset-0 flex-center bg-white/80">
+    <div v-if="isLoading" class="absolute inset-0 flex-center bg-ink/80">
       <van-loading size="24px" vertical>{{ t("common.loading") }}</van-loading>
     </div>
 
     <!-- Error -->
-    <van-empty v-if="error" :description="error" class="absolute inset-0 flex-center bg-white">
+    <van-empty v-if="error" :description="error" class="absolute inset-0 flex-center bg-ink">
       <template #image>
-        <van-icon name="warning-o" size="48" class="text-gray-400" />
+        <van-icon name="warning-o" size="48" class="text-text-dim" />
       </template>
     </van-empty>
 
@@ -185,14 +185,14 @@ watchEffect(() => {
 .topup-title {
   font-size: 18px;
   font-weight: 700;
-  color: #1A2B3C;
+  color: var(--text-primary);
   margin: 8px 0 20px;
 }
 
 .topup-option__amount {
   font-size: 28px;
   font-weight: 800;
-  color: #1A2B3C;
+  color: var(--text-primary);
 }
 
 .topup-option__currency {
@@ -201,7 +201,7 @@ watchEffect(() => {
 
 .topup-option__pay {
   font-size: 12px;
-  color: #6B7D8E;
+  color: var(--text-secondary);
   margin-top: 6px;
 }
 
@@ -212,23 +212,24 @@ watchEffect(() => {
 .topup-custom__label {
   font-size: 14px;
   font-weight: 600;
-  color: #1A2B3C;
+  color: var(--text-primary);
   margin: 20px 0 10px;
 }
 
 .topup-custom__field {
-  background: #fff;
+  background: var(--surface-color);
+  border: 1px solid var(--line-color);
   border-radius: 12px;
   transition: box-shadow 0.2s;
 }
 
 .topup-custom__field--focused {
-  box-shadow: 0 0 0 2px #00B4E6;
+  box-shadow: 0 0 0 2px #00BBFC;
 }
 
 :deep(.van-field) {
-  --van-field-input-text-color: #1A2B3C;
-  --van-field-placeholder-text-color: #C0C4C8;
+  --van-field-input-text-color: var(--text-primary);
+  --van-field-placeholder-text-color: var(--text-dim);
   padding: 14px 16px;
   border-radius: 12px;
 }
@@ -251,7 +252,7 @@ watchEffect(() => {
 }
 
 :deep(.van-button--primary) {
-  background: linear-gradient(135deg, #00B4E6 0%, #0090B8 100%);
+  background: linear-gradient(135deg, #00BBFC 0%, #0090CC 100%);
   border: none;
   font-weight: 700;
 }

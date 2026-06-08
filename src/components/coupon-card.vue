@@ -40,8 +40,8 @@ const props = defineProps({
 
 <template>
   <div
-    class="h-full py-xl bg-white flex items-center shadow-[0px_2px_12px_0px_rgba(153,153,153,0.1)] cursor-pointer"
-    :class="{ '!selected-card': active, 'hover:bg-primary/5': hoverable, '!normal-card': !disabled, '!disable-card': disabled }"
+    class="h-full py-xl bg-surface flex items-center shadow-[0px_8px_24px_-16px_rgba(0,0,0,0.8)] cursor-pointer"
+    :class="{ '!selected-card': active, 'hover:bg-primary/10': hoverable, '!normal-card': !disabled, '!disable-card': disabled }"
   >
     <!-- 左侧VIP文字 -->
     <div
@@ -66,10 +66,10 @@ const props = defineProps({
       <div class="flex items-center">
         <div class="flex flex-col gap-lg w-full">
           <div class="flex gap-lg justify-between">
-            <div class="text-black text-3xl">{{ cardInfo.cardName }}</div>
-            <div class="text-[#999999] text-2xl">{{ markName }}</div>
+            <div class="text-text-primary text-3xl">{{ cardInfo.cardName }}</div>
+            <div class="text-text-secondary text-2xl">{{ markName }}</div>
           </div>
-          <div class="text-[#999999] text-2xl mt-1">
+          <div class="text-text-secondary text-2xl mt-1">
             {{ t('components.couponCard.expiryDate') }}: {{ cardInfo.expiryDate }}
           </div>
         </div>

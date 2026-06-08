@@ -84,10 +84,11 @@ const slots = useSlots();
 .voucher-card {
   display: flex;
   align-items: center;
-  background: #fff;
+  background: var(--surface-color);
+  border: 1px solid var(--line-color);
   border-radius: 16px;
   padding: 16px 0;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 8px 24px -16px rgba(0, 0, 0, 0.8);
   position: relative;
   overflow: hidden;
   cursor: pointer;
@@ -99,8 +100,8 @@ const slots = useSlots();
 }
 
 .voucher-card--active {
-  border: 2px solid #00B4E6;
-  box-shadow: 0 4px 16px rgba(0, 180, 230, 0.15);
+  border: 2px solid #00BBFC;
+  box-shadow: 0 4px 18px rgba(0, 187, 252, 0.25);
 }
 
 .voucher-card--disabled {
@@ -121,12 +122,12 @@ const slots = useSlots();
 .voucher-card__vip-text {
   font-size: 22px;
   font-weight: 800;
-  color: #00B4E6;
+  color: #00BBFC;
   line-height: 1;
 }
 
 .voucher-card__tag {
-  background: linear-gradient(135deg, #00B4E6 0%, #0090B8 100%) !important;
+  background: linear-gradient(135deg, #00BBFC 0%, #0090CC 100%) !important;
   border: none !important;
   color: #fff !important;
   font-weight: 600;
@@ -136,7 +137,7 @@ const slots = useSlots();
 .voucher-card__divider {
   width: 1px;
   height: 60px;
-  border-left: 1px dashed #E0E4E8;
+  border-left: 1px dashed var(--line-color);
   flex-shrink: 0;
 }
 
@@ -157,17 +158,17 @@ const slots = useSlots();
 .voucher-card__name {
   font-size: 15px;
   font-weight: 700;
-  color: #1A2B3C;
+  color: var(--text-primary);
 }
 
 .voucher-card__license {
   font-size: 12px;
-  color: #6B7D8E;
+  color: var(--text-secondary);
 }
 
 .voucher-card__expiry {
   font-size: 12px;
-  color: #6B7D8E;
+  color: var(--text-secondary);
 }
 
 .voucher-card__origin {
@@ -177,7 +178,7 @@ const slots = useSlots();
 }
 
 .voucher-card__origin :deep(.van-tag) {
-  background: linear-gradient(135deg, #F7941D 0%, #FFAD4D 100%) !important;
+  background: linear-gradient(135deg, #FF8C00 0%, #FFAB40 100%) !important;
   border: none !important;
   border-radius: 0 16px 0 12px !important;
   padding: 2px 10px;

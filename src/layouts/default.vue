@@ -20,18 +20,18 @@ const pageTitle = computed(() => {
 // 容器样式
 const containerClass = computed(() => ({
   'layout-container min-h-screen flex flex-col': true,
-  'bg-gradient-to-b from-[#00B4E6] from-0% via-[#E8F4FD] via-35% to-[#F0F4F8] to-100%': route.meta.gradientBg,
-  'bg-background': !route.meta.gradientBg
+  'bg-gradient-to-b from-[#0B0B0D] from-0% via-[#080809] via-40% to-[#000000] to-100%': route.meta.gradientBg,
+  'bg-ink': !route.meta.gradientBg
 }))
 
 // 导航栏主题变量
 const themeVars = computed(() => ({
   navBarHeight: '46px',
   navBarArrowSize: '20px',
-  navBarIconColor: '#fff',
-  navBarTextColor: '#fff',
-  navBarTitleTextColor: '#fff',
-  navBarBackground: route.meta.gradientBg ? 'transparent' : 'linear-gradient(135deg, #00B4E6 0%, #0090B8 100%)'
+  navBarIconColor: '#F4F4F6',
+  navBarTextColor: '#F4F4F6',
+  navBarTitleTextColor: '#F4F4F6',
+  navBarBackground: route.meta.gradientBg ? 'transparent' : 'rgba(11, 11, 13, 0.85)'
 }))
 
 function onClickLeft() {
@@ -45,11 +45,11 @@ function goHome() {
 </script>
 
 <template>
-  <van-config-provider :theme-vars="themeVars">
+  <van-config-provider theme="dark" :theme-vars="themeVars">
     <div :class="containerClass">
       <!-- 导航栏 -->
       <van-nav-bar v-if="!route.meta.hideNavBar" left-arrow @click-left="onClickLeft" fixed :z-index="99" placeholder
-        safe-area-inset-top :border="false" :class="{ 'border-b border-gray-100': !route.meta.gradientBg }">
+        safe-area-inset-top :border="false" :class="{ 'nav-hairline': !route.meta.gradientBg }">
         <template #title>
           <slot name="nav-title">{{ pageTitle }}</slot>
         </template>
@@ -103,10 +103,20 @@ function goHome() {
   opacity: 0;
 }
 
+.nav-hairline :deep(.van-nav-bar__content)::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--line-color);
+}
+
 :deep(.tabbar-premium) {
-  background: #1A2B3C;
+  background: #0B0B0D;
   box-shadow: none;
-  border-top: none !important;
+  border-top: 1px solid var(--line-color) !important;
   --van-tabbar-height: 56px;
   --van-tabbar-border-color: transparent;
 }
@@ -130,21 +140,21 @@ function goHome() {
 }
 
 :deep(.tabbar-premium .van-tabbar-item--active) {
-  color: #00B4E6;
+  color: #00BBFC;
   font-weight: 600;
   background: transparent;
 }
 
 :deep(.tabbar-premium .van-tabbar-item--active .van-tabbar-item__icon) {
-  color: #00B4E6;
+  color: #00BBFC;
 }
 
 :deep(.tabbar-premium .tabbar-scan) {
-  color: #F7941D !important;
+  color: #FF8C00 !important;
 }
 
 :deep(.tabbar-premium .tabbar-scan .van-tabbar-item__icon) {
-  background: linear-gradient(135deg, #F7941D 0%, #FFAD4D 100%);
+  background: linear-gradient(135deg, #FF8C00 0%, #FFAB40 100%);
   color: #fff !important;
   width: 46px;
   height: 46px;
@@ -153,16 +163,16 @@ function goHome() {
   align-items: center;
   justify-content: center;
   margin-top: -20px;
-  box-shadow: 0 4px 14px rgba(247, 148, 29, 0.45);
+  box-shadow: 0 4px 14px rgba(255, 140, 0, 0.45);
   font-size: 24px;
 }
 
 :deep(.tabbar-premium .tabbar-scan.van-tabbar-item--active) {
-  color: #F7941D !important;
+  color: #FF8C00 !important;
 }
 
 :deep(.tabbar-premium .tabbar-scan.van-tabbar-item--active .van-tabbar-item__icon) {
-  background: linear-gradient(135deg, #F7941D 0%, #FFAD4D 100%);
+  background: linear-gradient(135deg, #FF8C00 0%, #FFAB40 100%);
   color: #fff !important;
 }
 

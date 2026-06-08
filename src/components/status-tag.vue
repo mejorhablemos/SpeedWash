@@ -18,11 +18,11 @@ const props = defineProps({
 // 状态样式映射
 const statusClass = computed(() => {
   const classMap = {
-    0: 'bg-[#E6F9F3]',      // 空闲
-    1: 'bg-[#FFEBEB]',       // 繁忙
-    2: 'bg-gray-1'      // 维护
+    0: 'bg-[rgba(52,211,153,0.14)]',   // 空闲
+    1: 'bg-[rgba(0,187,252,0.14)]',    // 繁忙
+    2: 'bg-[rgba(255,255,255,0.06)]'   // 维护
   };
-  return classMap[props.status] || 'bg-background';
+  return classMap[props.status] || 'bg-surface-2';
 });
 
 const statusText = computed(() => {
@@ -31,11 +31,11 @@ const statusText = computed(() => {
 
 const statusTextClass = computed(() => {
   const classMap = {
-    0: 'text-[#2ECBA0]',
+    0: 'text-[#34D399]',
     1: 'text-primary',
-    2: 'text-gray-400'
+    2: 'text-text-secondary'
   }
-  return classMap[props.status] || 'text-gray-400'
+  return classMap[props.status] || 'text-text-secondary'
 })
 </script>
 

@@ -1,9 +1,7 @@
 <script setup>
 import { getImageUrl } from "@/utils";
-import IconCall from "@/assets/store/icon_call.png";
 import IconNav from "@/assets/store/icon_nav.png";
-import IconVipBg from "@/assets/icon_vip__bg.png";
-import IconTopUpBg from "@/assets/icon_top-up__bg.png";
+import DefaultBanner from "@/assets/store/store-banner-default.png";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -21,10 +19,9 @@ const { distanceFormatted } = useLocation(computed(() => ({
   lon2: data.value?.lng,
 })));
 
-// 店铺图片
-const storePicture = computed(() => {
-  return getImageUrl(data.value?.mainPic);
-});
+// Banner de la sucursal — usamos siempre el render de marca
+// (el backend devuelve un logo recortado que se ve mal).
+const storePicture = computed(() => DefaultBanner);
 
 // 处理导航
 const handleNavigate = () => {
@@ -34,19 +31,9 @@ const handleNavigate = () => {
   );
 };
 
-// 处理电话
-const handleCall = () => {
-  window.open(`tel:${data.value.telPhone}`);
-};
-
 // 处理扫码洗车
 const handleScan = () => {
   router.push('/scan');
-};
-
-// 处理充值
-const handleTopUp = () => {
-  router.push("/wallet");
 };
 
 // 处理购买VIP卡
@@ -77,65 +64,58 @@ const handleBuyVip = () => {
         <template #title>
           <div class="flex items-center gap-2">
             <span class="text-3xl font-medium">{{ data?.storeName }}</span>
-            <van-tag type="success" round>{{
-              t(`routes.store.status.${Number(data?.opening)}`)
-            }}</van-tag>
+            <div
+              class="status-badge"
+              :class="Number(data?.opening) === 1 ? 'status-badge--open' : 'status-badge--closed'"
+            >
+              <span class="status-badge__dot"></span>
+              {{ t(`routes.store.status.${Number(data?.opening)}`) }}
+            </div>
           </div>
         </template>
       </van-cell>
 
-      <van-cell :title="data?.address" :label="distanceFormatted" center>
+      <van-cell center>
+        <template #title>
+          <div class="text-28 text-text-primary">{{ data?.address }}</div>
+          <div class="text-24 text-text-secondary mt-1">{{ distanceFormatted }}</div>
+        </template>
         <template #value>
-          <van-grid :border="false" class="justify-end">
-            <van-grid-item
-              :icon="IconNav"
-              :text="t('routes.store.detail.navigation')"
-              @click="handleNavigate"
-            />
-            <van-grid-item 
-              :icon="IconCall" 
-              :text="t('routes.store.detail.call')"
-              @click="handleCall" 
-            />
-          </van-grid>
+          <van-button
+            size="small"
+            round
+            class="nav-btn"
+            :icon="IconNav"
+            @click="handleNavigate"
+          >
+            {{ t('routes.store.detail.navigation') }}
+          </van-button>
         </template>
       </van-cell>
     </van-cell-group>
 
-    <!-- 功能按钮 -->
-    <van-cell-group inset :border="false" class="!bg-transparent">
-      <div class="w-full grid grid-cols-2 gap-3 h-120">
-        <div class="pos-relative clickable flex-1" @click="handleTopUp">
-          <van-image
-            class="pos-absolute inset-0"
-            :src="IconTopUpBg"
-          />
-
-          <div class="w-full h-full pos-absolute top-0 left-0 flex items-center justify-between px-6">
-            <span class="fw-medium text-30">
-              {{ t("routes.store.detail.topUp") }}
-            </span>
-          </div>
+    <!-- Comprar Pack -->
+    <div class="px-4">
+      <div class="buy-pack" @click="handleBuyVip">
+        <div class="buy-pack__icon">
+          <van-icon name="award-o" />
         </div>
-        <div class="pos-relative clickable flex-1" @click="handleBuyVip">
-          <van-image
-            class="pos-absolute inset-0"
-            :src="IconVipBg"
-          />
-
-          <div class="w-full h-full pos-absolute top-0 left-0 flex items-center justify-between px-6">
-            <span class="fw-medium text-30">
-              {{ t("routes.store.detail.buyVip") }}
-            </span>
-          </div>
+        <div class="flex-1 min-w-0">
+          <div class="buy-pack__title">{{ t("routes.store.detail.buyVip") }}</div>
+          <div class="buy-pack__sub">Ahorrá con lavados prepagos</div>
         </div>
+        <van-icon name="arrow" class="buy-pack__arrow" />
       </div>
-    </van-cell-group>
+    </div>
 
     <!-- 洗车机列表 -->
-    <template v-for="machine in data?.iotList" :key="machine.iotId">
-      <machine-item :machine="machine" />
-    </template>
+    <div v-if="data?.iotList?.length" class="grid grid-cols-2 gap-3 px-4">
+      <machine-item
+        v-for="machine in data?.iotList"
+        :key="machine.iotId"
+        :machine="machine"
+      />
+    </div>
 
     <!-- 店铺介绍 -->
     <van-cell-group v-if="data?.description" inset :border="false">
@@ -168,7 +148,121 @@ const handleBuyVip = () => {
 }
 
 :deep(.van-button--primary) {
-  background-color: #00B4E6;
-  border-color: #00B4E6;
+  background-color: #00BBFC;
+  border-color: #00BBFC;
+}
+
+.nav-btn {
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  background: rgba(var(--primary-color-rgb), 0.08);
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+/* Botón Comprar Pack */
+.buy-pack {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  cursor: pointer;
+  background:
+    radial-gradient(140% 120% at 100% 0%, rgba(255, 140, 0, 0.16) 0%, transparent 55%),
+    var(--surface-color);
+  border: 1px solid rgba(255, 140, 0, 0.45);
+  box-shadow: 0 10px 28px -16px rgba(255, 140, 0, 0.6);
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.buy-pack:active {
+  transform: scale(0.98);
+}
+
+.buy-pack__icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-light) 100%);
+  box-shadow: 0 6px 16px -6px rgba(255, 140, 0, 0.7);
+}
+
+.buy-pack__title {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.buy-pack__sub {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.buy-pack__arrow {
+  color: var(--accent-color);
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+/* Badge de estado */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  padding: 4px 11px 4px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.status-badge__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-badge--open {
+  color: #34D399;
+  background: rgba(52, 211, 153, 0.12);
+  border: 1px solid rgba(52, 211, 153, 0.32);
+}
+
+.status-badge--open .status-badge__dot {
+  background: #34D399;
+  animation: badge-pulse 2s ease-in-out infinite;
+}
+
+.status-badge--closed {
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line-color);
+}
+
+.status-badge--closed .status-badge__dot {
+  background: var(--text-dim);
+}
+
+@keyframes badge-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.55); }
+  70% { box-shadow: 0 0 0 5px rgba(52, 211, 153, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .status-badge--open .status-badge__dot { animation: none; }
 }
 </style>

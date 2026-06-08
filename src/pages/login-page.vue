@@ -86,9 +86,9 @@ const guestLogin = () => {
     </van-form>
 
     <!-- 辅助链接 -->
-    <div class="flex justify-center items-center gap-4 h-44px text-26 text-[#00B4E6]">
+    <div class="flex justify-center items-center gap-4 h-44px text-26 text-white">
       <router-link to="/register">{{ t('routes.login.register') }}</router-link>
-      <div class="w-2 h-28 bg-[#00B4E6]"></div>
+      <div class="w-2 h-28 bg-white/30"></div>
       <router-link to="/forgot-password">{{ t('routes.login.forgotPassword') }}</router-link>
     </div>
 

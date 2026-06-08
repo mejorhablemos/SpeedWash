@@ -1,11 +1,10 @@
 <script setup>
-import { PAYMENT_FROM, PAYMENT_METHOD } from "@/constants";
-const { t } = useI18n();
+import { PAYMENT_FROM, PAYMENT_METHOD, IOT_STATUS } from "@/constants";
+const { t, tm } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const id = route.params.id;
 
-const { centsToSGD } = useCurrency();
 const { success } = usePaymentResult();
 
 // 加载状态
@@ -21,8 +20,34 @@ const washPlans = computed(() => washerData.value?.schemeList || []);
 // VIP卡列表
 const vipCards = computed(() => washerData.value?.vipCardList || []);
 
-// 充值优惠列表
-const topUpList = computed(() => washerData.value?.rechargeList || []);
+// La máquina solo se puede iniciar si está disponible
+const canWash = computed(
+  () => washerData.value?.iotStatus === IOT_STATUS.AVAILABLE
+);
+
+// Ventajas según el tipo de máquina (heurística por nombre)
+const isTouchless = computed(() =>
+  /sin\s*contacto|touchless/i.test(washerData.value?.name || "")
+);
+const machineBenefits = computed(() => {
+  const key = isTouchless.value ? "touchless" : "rodillos";
+  const list = tm(`routes.washer.benefits.${key}`);
+  return Array.isArray(list) ? list : [];
+});
+
+// Parte el nombre del plan en 2 líneas: "Lavado Plus" -> ["Lavado", "Plus"]
+const splitPlanName = (name = "") => {
+  const idx = name.indexOf(" ");
+  if (idx === -1) return { first: name, rest: "" };
+  return { first: name.slice(0, idx), rest: name.slice(idx + 1) };
+};
+
+// Descripción de qué incluye cada plan (por nombre)
+const planDesc = (name = "") => {
+  if (/premium/i.test(name)) return t("routes.washer.planDesc.premium");
+  if (/plus/i.test(name)) return t("routes.washer.planDesc.plus");
+  return "";
+};
 
 // 其他状态
 const selectedPlan = ref(null);
@@ -67,6 +92,17 @@ const calculatePrice = async () => {
 
 // 创建订单
 const createOrder = async () => {
+  // Bloquear si la máquina no está disponible (mantenimiento / en uso)
+  const status = washerData.value?.iotStatus;
+  if (status === IOT_STATUS.MAINTENANCE) {
+    showToast(t("routes.washer.unavailable.maintenance"));
+    return;
+  }
+  if (status === IOT_STATUS.IN_USE) {
+    showToast(t("routes.washer.unavailable.inUse"));
+    return;
+  }
+
   const { data, error } = await washApi.newOrder({
     iotId: id,
     mark: selectedPlan.value?.mark,
@@ -123,9 +159,9 @@ watch(
 </script>
 
 <template>
-  <div class="bg-gray-50 pb-safe-bottom">
+  <div class="bg-ink min-h-screen pb-safe-bottom">
     <!-- 加载状态 -->
-    <div v-if="isLoading" class="absolute inset-0 flex-center bg-white/80">
+    <div v-if="isLoading" class="absolute inset-0 flex-center bg-ink/80">
       <van-loading size="24px" vertical>{{ t("common.loading") }}</van-loading>
     </div>
 
@@ -133,22 +169,22 @@ watch(
     <van-empty
       v-if="error"
       :description="error"
-      class="absolute inset-0 flex-center bg-white"
+      class="absolute inset-0 flex-center bg-ink"
     >
       <template #image>
-        <van-icon name="warning-o" size="48" class="text-gray-400" />
+        <van-icon name="warning-o" size="48" class="text-text-dim" />
       </template>
     </van-empty>
 
     <!-- 设备信息 -->
     <div class="px-4 py-3">
-      <div class="bg-white rounded-lg p-4">
+      <div class="card p-4">
         <div class="flex items-center justify-between">
           <div>
-            <h2 class="text-black text-32 font-medium">
+            <h2 class="text-text-primary text-32 font-bold font-display">
               {{ washerData?.name }}
             </h2>
-            <p class="text-gray-400 text-26 mt-1">
+            <p class="text-text-secondary text-26 mt-1">
               {{ t("routes.washer.store") }}: {{ washerData?.storeName }}
             </p>
           </div>
@@ -158,33 +194,63 @@ watch(
           />
         </div>
         <div
-          class="mt-3 bg-[#F5F7FA] p-3 rounded-lg h-72 text-gray-600 flex items-center text-28 font-medium"
+          class="mt-3 bg-surface-2 p-3 rounded-lg h-72 text-text-secondary flex items-center text-28 font-medium"
         >
           <span>{{ washerData?.address }}</span>
         </div>
       </div>
     </div>
 
+    <!-- Ventajas de esta máquina -->
+    <div class="px-4 py-3" v-if="machineBenefits.length">
+      <div class="benefits-card">
+        <div class="benefits-card__title">
+          {{ t("routes.washer.benefits.title") }}
+        </div>
+        <div class="benefits-list">
+          <div
+            v-for="(benefit, i) in machineBenefits"
+            :key="i"
+            class="benefit-row"
+          >
+            <span class="benefit-check">
+              <van-icon name="success" />
+            </span>
+            <span class="benefit-text">{{ benefit }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- 洗车方案 -->
     <div class="px-4 py-3">
-      <div class="text-32 fw-bold text-black mb-30">
+      <div class="text-32 fw-bold text-text-primary font-display mb-30 text-center">
         {{ t("routes.washer.selectPlan") }}
       </div>
-      <option-selector
-        v-model="selectedPlan"
-        :items="washPlans"
-        key-field="mark"
-      >
-        <template #default="{ item }">
-          <div class="text-black text-32">{{ item.name }}</div>
+      <div class="grid grid-cols-2 gap-3">
+        <div
+          v-for="item in washPlans"
+          :key="item.mark"
+          class="plan-card"
+          :class="{ 'plan-card--selected': selectedPlan?.mark === item.mark }"
+          @click="selectedPlan = item"
+        >
+          <div class="plan-card__name">
+            <span class="block">{{ splitPlanName(item.name).first }}</span>
+            <span class="block" v-if="splitPlanName(item.name).rest">{{ splitPlanName(item.name).rest }}</span>
+          </div>
           <price-tag
             :price="item.price"
-            currency-class="text-xl text-primary"
+            :thousands="true"
+            :decimals="0"
+            currency-class="text-lg text-primary"
             integer-class="text-3xl font-bold text-primary"
-            decimal-class="text-xl text-primary"
           />
-        </template>
-      </option-selector>
+          <div class="plan-card__desc" v-if="planDesc(item.name)">
+            {{ planDesc(item.name) }}
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- VIP卡 -->
@@ -206,41 +272,20 @@ watch(
       </div> -->
     </group-card>
 
-    <!-- 充值优惠 -->
-    <van-cell-group inset class="mt-20!">
-      <div class="flex justify-between items-center p-4">
-        <van-tag type="danger">{{
-          t("routes.washer.topUp.promotion")
-        }}</van-tag>
-        <div class="text-2xl text-primary">
-          {{ t("routes.washer.topUp.balance") }}
-          <price-tag :price="washerData?.balance" />
+    <!-- Oferta de pago en efectivo (destacada) -->
+    <div class="px-4 py-3">
+      <div class="cash-offer flex items-center gap-3 rounded-2xl px-5 py-4">
+        <span class="cash-offer__peso shrink-0">$</span>
+        <div class="flex-1">
+          <div class="text-30 fw-bold text-white">
+            {{ t("routes.washer.cashOffer.title") }}
+          </div>
+          <div class="text-24 text-white/90 mt-1">
+            {{ t("routes.washer.cashOffer.subtitle") }}
+          </div>
         </div>
       </div>
-
-      <van-cell
-        class="top-up-cell"
-        center
-        :value="t('routes.washer.topUp.title')"
-        is-link
-        url="/wallet/top-up"
-      >
-        <template #title>
-          <van-space direction="vertical" fill v-if="topUpList.length">
-            <template v-for="(item, index) in topUpList" :key="index">
-              {{
-                t("routes.washer.topUp.scheme", {
-                  pay: centsToSGD(item.payAmount),
-                  get: centsToSGD(item.rechargeAmount),
-                })
-              }}
-            </template>
-          </van-space>
-
-          <van-empty :description="t('routes.washer.topUp.empty')" v-else />
-        </template>
-      </van-cell>
-    </van-cell-group>
+    </div>
 
     <!-- 底部结算栏 -->
     <van-action-bar>
@@ -249,15 +294,16 @@ watch(
         <price-tag
           :price="orderAmount"
           :thousands="true"
+          :decimals="0"
           currency-class="text-xl text-primary"
           integer-class="text-3xl font-bold text-primary"
-          decimal-class="text-xl text-primary"
         />
       </van-space>
 
       <div class="flex-1"></div>
       <van-action-bar-button
         type="danger"
+        :disabled="!canWash"
         :text="t('routes.washer.submit')"
         @click="createOrder"
       />
@@ -275,6 +321,126 @@ watch(
 </template>
 
 <style scoped>
+/* Tarjetas de plan de lavado */
+.plan-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  min-height: 168px;
+  padding: 20px 14px 16px;
+  text-align: center;
+  border-radius: 16px;
+  background: var(--surface-color);
+  border: 2px solid var(--line-color);
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.plan-card:active {
+  transform: scale(0.98);
+}
+
+.plan-card--selected {
+  border-color: var(--primary-color);
+  background: rgba(0, 187, 252, 0.08);
+  box-shadow: 0 0 0 1px var(--primary-color), 0 14px 30px -18px rgba(0, 187, 252, 0.5);
+}
+
+.plan-card__name {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.12;
+  color: var(--text-primary);
+}
+
+.plan-card__desc {
+  margin-top: auto;
+  padding-top: 6px;
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--text-secondary);
+}
+
+.cash-offer {
+  background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-light) 100%);
+  box-shadow: 0 8px 20px -8px rgba(var(--accent-color-rgb), 0.6);
+}
+
+.cash-offer__peso {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 800;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.18);
+  border: 2px solid rgba(255, 255, 255, 0.55);
+}
+
+/* Tarjeta de ventajas (premium, cyan) */
+.benefits-card {
+  position: relative;
+  overflow: hidden;
+  padding: 18px 16px;
+  border-radius: 18px;
+  background:
+    radial-gradient(120% 130% at 50% -20%, rgba(0, 187, 252, 0.12) 0%, transparent 60%),
+    var(--surface-color);
+  border: 1px solid var(--line-color);
+  box-shadow: 0 12px 30px -18px rgba(0, 0, 0, 0.85);
+}
+
+.benefits-card__title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.benefits-list {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.benefit-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.benefit-check {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #001016;
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-color) 100%);
+  box-shadow: 0 4px 12px -4px rgba(0, 187, 252, 0.75);
+}
+
+.benefit-text {
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--text-secondary);
+}
+
 :deep(.van-empty__description) {
   padding: 0;
 }

@@ -3,6 +3,7 @@ import { BrowserMultiFormatReader } from '@zxing/library'
 import FlashlightSvg from '@/assets/icons/flashlight.svg'
 import PictureSvg from '@/assets/icons/picture-album.svg'
 
+const { t } = useI18n()
 
 const videoRef = ref(null)
 const overlayRef = ref(null)
@@ -87,7 +88,7 @@ const drawPositions = (points) => {
   // 绘制填充圆
   ctx.beginPath();
   ctx.arc(centerX, centerY, 14, 0, Math.PI * 2);
-  ctx.fillStyle = '#00B4E6';
+  ctx.fillStyle = '#00BBFC';
   ctx.fill();
 };
 
@@ -129,8 +130,8 @@ const openScan = async () => {
       })
     }
   } catch (error) {
-    console.error('初始化失败:', error)
-    showToast('初始化失败，请检查摄像头权限')
+    console.error('Camera init failed:', error)
+    showToast(t('routes.scan.camera.initFailed'))
     isScanning.value = false
   }
 }
@@ -182,7 +183,7 @@ const drawPositions1 = (points) => {
   // 绘制填充圆
   ctx.beginPath()
   ctx.arc(centerX, centerY, 14, 0, Math.PI * 2)
-  ctx.fillStyle = '#00B4E6' // primary color
+  ctx.fillStyle = '#00BBFC' // primary color
   ctx.fill()
 }
 
@@ -213,8 +214,8 @@ const decodeFromInputVideo = async () => {
       }
     )
   } catch (error) {
-    console.error('扫描失败:', error)
-    showToast('扫描失败')
+    console.error('Scan failed:', error)
+    showToast(t('routes.scan.scanFailed'))
     isScanning.value = false
   }
 }
@@ -264,7 +265,7 @@ const handleScanResult = (result) => {
       // 绘制填充圆
       ctx.beginPath()
       ctx.arc(centerX, centerY, 28, 0, Math.PI * 2)
-      ctx.fillStyle = '#00B4E6'
+      ctx.fillStyle = '#00BBFC'
       ctx.fill()
     }
     
@@ -309,7 +310,7 @@ const toggleTorch = async () => {
   try {
     const videoElement = document.getElementById('qrcode-scanner')
     if (!videoElement?.srcObject) {
-      showToast('视频未初始化')
+      showToast(t('routes.scan.camera.notReady'))
       return
     }
 
@@ -317,7 +318,7 @@ const toggleTorch = async () => {
     const track = mediaStream.getVideoTracks()[0]
     
     if (!track) {
-      showToast('未找到视频轨道')
+      showToast(t('routes.scan.camera.noTrack'))
       return
     }
 
@@ -328,11 +329,11 @@ const toggleTorch = async () => {
       })
       isTorchOn.value = !isTorchOn.value
     } else {
-      showToast('设备不支持闪光灯')
+      showToast(t('routes.scan.camera.torchNotSupported'))
     }
   } catch (error) {
-    console.error('闪光灯控制失败:', error)
-    showToast('闪光灯控制失败')
+    console.error('Torch control failed:', error)
+    showToast(t('routes.scan.camera.torchFailed'))
   }
 }
 
@@ -354,8 +355,8 @@ const onFileSelected = async (event) => {
       handleScanResult(result)
     }
   } catch (error) {
-    console.error('图片解码失败:', error)
-    showToast('未识别到二维码')
+    console.error('Image decode failed:', error)
+    showToast(t('routes.scan.camera.noQrInImage'))
   } finally {
     // 清空文件选择，以便重复选择同一文件
     if (fileInputRef.value) {

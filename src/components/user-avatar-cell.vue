@@ -48,7 +48,7 @@ const handleClick = () => {
     >
       <template #icon>
         <div
-          class="flex items-center justify-center rounded-full bg-white w-140 aspect-ratio-1 mr-28"
+          class="flex items-center justify-center rounded-full bg-surface-2 b-1 b-solid b-line w-140 aspect-ratio-1 mr-28"
         >
           <van-image
             class="w-67 aspect-ratio-1 rounded-full"

@@ -55,38 +55,35 @@ function viewShop(id) {
 
     <!-- Banner Carousel -->
     <div class="px-4 mt-4" v-if="banners?.length">
-      <van-swipe class="banner-swipe" :autoplay="3000" indicator-color="#00B4E6" :show-indicators="banners?.length > 1">
+      <van-swipe class="banner-swipe" :autoplay="3000" indicator-color="#00BBFC" :show-indicators="banners?.length > 1">
         <van-swipe-item v-for="banner in banners" :key="banner.name">
           <van-image :src="getImageUrl(banner.picUrl)" class="w-full banner-img" fit="cover" :alt="banner.name" radius="12" />
         </van-swipe-item>
       </van-swipe>
     </div>
 
-    <!-- Service Cards -->
-    <div class="service-cards-section px-4 flex gap-3">
-      <!-- VIP / Packs de lavado -->
-      <div class="service-card service-card--vip" @click="router.push('/vip')">
-        <div class="service-card__icon-wrap service-card__icon-wrap--vip">
-          <van-icon name="award-o" size="24" color="#F7941D" />
+    <!-- Packs de lavado -->
+    <div class="service-cards-section px-4">
+      <div class="pack-card" @click="router.push('/vip')">
+        <div class="pack-card__glow"></div>
+        <div class="pack-card__head">
+          <div class="pack-card__icon">
+            <van-icon name="award-o" size="24" color="#fff" />
+          </div>
+          <div class="flex-1 min-w-0">
+            <h3 class="pack-card__title">{{ t("routes.home.vip.title") }}</h3>
+            <p class="pack-card__desc">{{ t("routes.home.vip.subtitle") }}</p>
+          </div>
         </div>
-        <h3 class="service-card__title">{{ t("routes.home.vip.title") }}</h3>
-        <p class="service-card__desc">{{ t("routes.home.vip.subtitle") }}</p>
-        <div class="service-card__action">
-          {{ t("routes.home.vip.buy") }}
-          <van-icon name="arrow" size="12" />
-        </div>
-      </div>
 
-      <!-- Cargar Saldo -->
-      <div class="service-card service-card--topup" @click="router.push('/wallet/top-up')">
-        <div class="service-card__icon-wrap service-card__icon-wrap--topup">
-          <van-icon name="balance-o" size="24" color="#00B4E6" />
+        <div class="pack-card__feature">
+          <van-icon name="scan" size="16" />
+          <span>{{ t("routes.home.vip.plate") }}</span>
         </div>
-        <h3 class="service-card__title">{{ t("routes.home.topUp.title") }}</h3>
-        <p class="service-card__desc">{{ t("routes.home.topUp.subtitle") }}</p>
-        <div class="service-card__action service-card__action--topup">
-          {{ t("routes.home.topUp.button") }}
-          <van-icon name="arrow" size="12" />
+
+        <div class="pack-card__action">
+          {{ t("routes.home.vip.buy") }}
+          <van-icon name="arrow" size="13" />
         </div>
       </div>
     </div>
@@ -96,14 +93,14 @@ function viewShop(id) {
       <h2 class="stores-title">{{ t("routes.home.stores.title") }}</h2>
 
       <!-- Store from API -->
-      <van-cell-group v-if="shops?.length" class="stores-list">
+      <div v-if="shops?.length" class="flex flex-col gap-3">
         <shop-list-item
           v-for="shop in shops"
           :key="shop.storeId"
           :shop="{ ...shop, status: shop.opening ? 'open' : 'closed' }"
           @view="viewShop"
         />
-      </van-cell-group>
+      </div>
 
       <!-- Fallback: SpeedWash Funes -->
       <div v-else class="store-card">
@@ -113,11 +110,11 @@ function viewShop(id) {
             <div class="store-card__status">Abierto</div>
           </div>
           <div class="store-card__address">
-            <van-icon name="location-o" size="14" color="#6B7D8E" />
+            <van-icon name="location-o" size="14" color="#ACACB6" />
             <span>Médicos de Funes 1682, Barrio Calmo</span>
           </div>
           <div class="store-card__address">
-            <van-icon name="map-marked" size="14" color="#6B7D8E" />
+            <van-icon name="map-marked" size="14" color="#ACACB6" />
             <span>Funes, Santa Fe</span>
           </div>
         </div>
@@ -134,7 +131,7 @@ function viewShop(id) {
       class="order-notification"
     >
       <div class="order-notification__pulse"></div>
-      <van-icon name="info-o" size="18" color="#F7941D" />
+      <van-icon name="info-o" size="18" color="#FF8C00" />
       <span class="order-notification__text">{{ t("routes.home.orderNotification.message") }}</span>
       <van-button type="primary" round size="small" class="order-notification__btn" @click="viewOrder">
         {{ t("routes.home.orderNotification.view") }}
@@ -154,30 +151,32 @@ function viewShop(id) {
 .hero-bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(160deg, #1A2B3C 0%, #2D3436 100%);
+  background:
+    radial-gradient(120% 90% at 50% -10%, rgba(0, 187, 252, 0.18) 0%, transparent 55%),
+    linear-gradient(160deg, #0B0B0D 0%, #000000 100%);
   z-index: 0;
 }
 
 .hero-bg::after {
   content: '';
   position: absolute;
-  bottom: -2px;
-  left: 0;
-  right: 0;
-  height: 24px;
-  background: var(--background-color);
-  border-radius: 24px 24px 0 0;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(0, 187, 252, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 187, 252, 0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(120% 80% at 50% 0%, #000 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(120% 80% at 50% 0%, #000 30%, transparent 75%);
 }
 
 .hero-bg::before {
   content: '';
   position: absolute;
-  top: -30px;
-  right: -20px;
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 180, 230, 0.12) 0%, transparent 70%);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 187, 252, 0.7) 50%, transparent);
 }
 
 .hero-content {
@@ -211,16 +210,16 @@ function viewShop(id) {
   align-items: center;
   gap: 14px;
   padding: 16px 20px;
-  background: linear-gradient(135deg, #F7941D 0%, #FFAD4D 100%);
+  background: linear-gradient(135deg, #FF8C00 0%, #FFAB40 100%);
   border-radius: 16px;
   cursor: pointer;
-  box-shadow: 0 8px 24px rgba(247, 148, 29, 0.35);
+  box-shadow: 0 8px 28px rgba(255, 140, 0, 0.4);
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .scan-cta:active {
   transform: scale(0.98);
-  box-shadow: 0 4px 12px rgba(247, 148, 29, 0.25);
+  box-shadow: 0 4px 12px rgba(255, 140, 0, 0.28);
 }
 
 .scan-cta__icon {
@@ -257,88 +256,124 @@ function viewShop(id) {
 .banner-swipe {
   border-radius: 12px;
   overflow: hidden;
-}
-
-.banner-img {
   height: 140px;
 }
 
-/* Service Cards Section */
+.banner-img {
+  height: 140px !important;
+}
+
+.banner-img :deep(.van-image__img) {
+  height: 140px !important;
+  object-fit: cover;
+}
+
+/* Packs de lavado */
 .service-cards-section {
   margin-top: 30px !important;
 }
 
-/* Service Cards */
-.service-card {
-  flex: 1;
-  background: #fff;
-  border-radius: 16px;
-  padding: 18px 16px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+.pack-card {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(130% 120% at 100% 0%, rgba(255, 140, 0, 0.14) 0%, transparent 55%),
+    var(--surface-color);
+  border: 1px solid rgba(255, 140, 0, 0.4);
+  border-radius: 18px;
+  padding: 16px 16px 14px;
   cursor: pointer;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.04);
-  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 12px 30px -18px rgba(255, 140, 0, 0.5);
+  transition: transform 0.2s;
 }
 
-.service-card:active {
-  transform: scale(0.97);
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+.pack-card:active {
+  transform: scale(0.98);
 }
 
-.service-card__icon-wrap {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
+.pack-card__glow {
+  position: absolute;
+  top: -50px;
+  right: -40px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 140, 0, 0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.pack-card__head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+}
+
+.pack-card__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: linear-gradient(135deg, #FF8C00 0%, #FFAB40 100%);
+  box-shadow: 0 8px 18px -6px rgba(255, 140, 0, 0.7);
 }
 
-.service-card__icon-wrap--vip {
-  background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
-}
-
-.service-card__icon-wrap--topup {
-  background: linear-gradient(135deg, #E0F4FD 0%, #B3E5FC 100%);
-}
-
-.service-card__title {
-  font-size: 15px;
+.pack-card__title {
+  font-family: var(--font-display);
+  font-size: 17px;
   font-weight: 700;
-  color: #1A2B3C;
-  margin: 4px 0 0;
-}
-
-.service-card__desc {
-  font-size: 11px;
-  color: #6B7D8E;
-  line-height: 1.4;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
   margin: 0;
-  min-height: 30px;
 }
 
-.service-card__action {
+.pack-card__desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin: 2px 0 0;
+}
+
+.pack-card__feature {
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #F7941D;
-  margin-top: 4px;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(0, 187, 252, 0.08);
+  border: 1px solid rgba(0, 187, 252, 0.22);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--primary-light);
+  line-height: 1.35;
 }
 
-.service-card__action--topup {
-  color: #00B4E6;
+.pack-card__feature .van-icon {
+  flex-shrink: 0;
+}
+
+.pack-card__action {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #FF8C00;
+  margin-top: 12px;
 }
 
 /* Stores Section */
 .stores-title {
+  font-family: var(--font-display);
   font-size: 17px;
   font-weight: 700;
-  color: #1A2B3C;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
   margin: 0 0 12px;
 }
 
@@ -349,11 +384,11 @@ function viewShop(id) {
 
 /* Store Card */
 .store-card {
-  background: #fff;
+  background: var(--surface-color);
   border-radius: 14px;
   padding: 16px 18px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 8px 24px -16px rgba(0, 0, 0, 0.8);
+  border: 1px solid var(--line-color);
 }
 
 .store-card__top {
@@ -364,9 +399,10 @@ function viewShop(id) {
 }
 
 .store-card__name {
+  font-family: var(--font-display);
   font-size: 16px;
   font-weight: 700;
-  color: #1A2B3C;
+  color: var(--text-primary);
   margin: 0;
 }
 
@@ -375,8 +411,8 @@ function viewShop(id) {
   font-weight: 600;
   padding: 2px 10px;
   border-radius: 20px;
-  background: rgba(46, 204, 113, 0.12);
-  color: #2ecc71;
+  background: rgba(46, 204, 113, 0.14);
+  color: #34d399;
 }
 
 .store-card__address {
@@ -384,7 +420,7 @@ function viewShop(id) {
   align-items: center;
   gap: 6px;
   font-size: 13px;
-  color: #6B7D8E;
+  color: var(--text-secondary);
   margin-bottom: 3px;
 }
 
@@ -394,11 +430,11 @@ function viewShop(id) {
   gap: 4px;
   font-size: 13px;
   font-weight: 600;
-  color: #00B4E6;
+  color: #00BBFC;
   text-decoration: none;
   margin-top: 10px;
   padding-top: 10px;
-  border-top: 1px solid #F0F4F8;
+  border-top: 1px solid var(--line-color);
 }
 
 /* Order Notification */
@@ -411,10 +447,10 @@ function viewShop(id) {
   align-items: center;
   gap: 10px;
   padding: 12px 16px;
-  background: #fff;
+  background: var(--surface-2);
   border-radius: 14px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
-  border: 1px solid rgba(247, 148, 29, 0.15);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 140, 0, 0.35);
   z-index: 50;
 }
 
@@ -422,7 +458,7 @@ function viewShop(id) {
   flex: 1;
   font-size: 13px;
   font-weight: 500;
-  color: #1A2B3C;
+  color: var(--text-primary);
 }
 
 .order-notification__btn {

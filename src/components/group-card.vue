@@ -17,7 +17,7 @@ defineProps({
 
 <template>
   <van-cell-group inset>
-    <van-cell class="bg-#E0F4FD!" :title="title" :value="value" :is-link="isLink">
+    <van-cell class="group-card-head" :title="title" :value="value" :is-link="isLink">
       <template #title v-if="$slots.title">
         <slot name="title" />
       </template>
@@ -26,4 +26,12 @@ defineProps({
   </van-cell-group>
 </template>
 
-<style scoped></style>
+<style scoped>
+.group-card-head {
+  background: rgba(0, 187, 252, 0.08) !important;
+}
+.group-card-head :deep(.van-cell__title),
+.group-card-head :deep(.van-cell__value) {
+  color: var(--primary-light);
+}
+</style>

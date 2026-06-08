@@ -1,6 +1,7 @@
 <script setup>
 import { inviteRewardApi } from '@/api'
 
+const { t } = useI18n()
 
 const { data, error, isFetching, execute } = inviteRewardApi.inviteLogList()
   const onRefresh = () => {
@@ -8,7 +9,9 @@ const { data, error, isFetching, execute } = inviteRewardApi.inviteLogList()
   }
 
   function progress(item) {
-    return item.inviteStatus === 1 ? '已领取未使用' : '已领取已使用'
+    return item.inviteStatus === 1
+      ? t('routes.invite.record.status.unused')
+      : t('routes.invite.record.status.used')
   }
 
 </script>
@@ -17,13 +20,13 @@ const { data, error, isFetching, execute } = inviteRewardApi.inviteLogList()
   <van-pull-refresh class="h-screen" :model-value="isFetching" @refresh="onRefresh">
 
     <div class="flex justify-between px-16px py-4 lh-snug text-26 font-bold">
-      <span>用户</span>
-      <span>用户进度</span>
+      <span>{{ t('routes.invite.record.columns.user') }}</span>
+      <span>{{ t('routes.invite.record.columns.progress') }}</span>
     </div>
     <div class="flex flex-col gap-4" v-if="data?.length > 0">
-      <van-cell v-for="(item, index) in data" :key="index" :title="item.newUserPhoneNum" :value="progress(item)" :value-class="item.inviteStatus === 2 ? 'text-primary' : 'text-gray-500'" />
+      <van-cell v-for="(item, index) in data" :key="index" :title="item.newUserPhoneNum" :value="progress(item)" :value-class="item.inviteStatus === 2 ? 'text-primary' : 'text-text-secondary'" />
     </div>
-    <van-empty v-else class="mt-16px" description="暂无数据" />
+    <van-empty v-else class="mt-16px" :description="t('routes.invite.record.empty')" />
   </van-pull-refresh>
 </template>
 

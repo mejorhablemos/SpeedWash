@@ -1,5 +1,5 @@
 <script setup>
-import { compile } from "vue";
+import StoreThumb from "@/assets/store/store-thumb.png";
 
 const { t } = useI18n();
 const props = defineProps({
@@ -11,18 +11,11 @@ const props = defineProps({
 
 const emit = defineEmits(["view"]);
 
-// 获取商铺图片
-const shopImage = computed(() => {
-  return (
-    props.shop.image ||
-    new URL("/src/assets/icon_store.png", import.meta.url).href
-  );
-});
+// Imagen de la sucursal — usamos el render de marca (el backend manda una imagen genérica)
+const shopImage = computed(() => StoreThumb);
 
-const lazyLoad = computed(() => !!props.shop.image);
-
-// 获取状态文本
-const statusText = computed(() => 
+// Texto de estado
+const statusText = computed(() =>
   t(`components.shopListItem.status.${props.shop.status}`)
 );
 
@@ -32,73 +25,197 @@ const handleView = () => {
 </script>
 
 <template>
-  <van-cell hover class="shop-list-item">
-    <template #title>
-      <div class="flex items-start gap-4 h-155">
-        <!-- 商铺图片 -->
-        <van-image
-          :src="shopImage"
-          class="w-232 rounded bg-gray-100"
-          :lazy-load="lazyLoad"
-          loading="skeleton"
-          :alt="shop.name"
-          error-icon="photo-fail"
-        />
+  <div class="shop-card" @click="handleView">
+    <!-- Foto a sangre -->
+    <div class="shop-card__media">
+      <van-image
+        :src="shopImage"
+        class="shop-card__img"
+        fit="cover"
+        :alt="shop.storeName"
+        error-icon="photo-fail"
+      />
+    </div>
 
-        <!-- 商铺信息 -->
-        <div class="flex-1 flex flex-col justify-between h-full">
-          <!-- 商铺名称 -->
-          <div class="font-bold truncate mt-10">{{ shop.storeName }}</div>
+    <!-- Info -->
+    <div class="shop-card__info">
+      <div class="shop-card__name">{{ shop.storeName }}</div>
+      <div class="shop-card__addr">{{ shop.address }}</div>
+    </div>
 
-          <!-- 商铺地址 -->
-          <div class="text-gray-500 text-sm line-clamp-1">
-            {{ shop.address }}
-          </div>
+    <!-- Estado (esquina superior derecha) -->
+    <div
+      class="status-badge status-badge--corner"
+      :class="shop.status === 'open' ? 'status-badge--open' : 'status-badge--closed'"
+    >
+      <span class="status-badge__dot"></span>
+      {{ statusText }}
+    </div>
 
-          <!-- 营业状态 -->
-          <div
-            :class="[
-              'px-2 py-1 rounded text-sm inline-block w-fit',
-              props.shop.status === 'open'
-                ? 'bg-green-100/80 text-green-600'
-                : 'bg-red-100/80 text-red-600',
-            ]"
-          >
-            {{ statusText }}
-          </div>
-        </div>
-      </div>
-    </template>
-
-    <!-- 查看按钮 -->
-    <template #right-icon>
-      <div class="flex flex-col justify-end">
-        <van-button 
-          class="!pl-37 !pr-37" 
-          type="primary" 
-          round 
-          size="small" 
-          block 
-          @click="handleView"
-        >
-          {{ t('components.shopListItem.view') }}
-        </van-button>
-      </div>
-    </template>
-  </van-cell>
+    <!-- CTA -->
+    <button class="shop-card__btn" type="button" @click.stop="handleView">
+      {{ t('components.shopListItem.view') }}
+      <van-icon name="arrow" />
+    </button>
+  </div>
 </template>
 
 <style scoped>
-.test {
-  height: calc(155.85 * var(--vw));
+.shop-card {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  min-height: 96px;
+  background: var(--surface-color);
+  border: 1px solid var(--line-color);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 10px 28px -18px rgba(0, 0, 0, 0.85);
+  transition: transform 0.2s, border-color 0.2s;
 }
 
-.shop-list-item {
-  --van-cell-vertical-padding: 20px;
+.shop-card:active {
+  transform: scale(0.99);
 }
 
-/* :deep(.van-button--small) {
-  padding: 0 20px;
-} */
+/* Foto: llena el alto de la tarjeta, sin margen */
+.shop-card__media {
+  width: 132px;
+  flex-shrink: 0;
+  align-self: stretch;
+}
 
+.shop-card__img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.shop-card__img :deep(.van-image__img) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Info */
+.shop-card__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  padding: 14px 12px 14px 14px;
+}
+
+.shop-card__name {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.shop-card__addr {
+  font-size: 13.5px;
+  color: var(--text-secondary);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.shop-card__btn {
+  align-self: flex-end;
+  flex-shrink: 0;
+  margin: 0 14px 14px 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 34px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #001016;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-color) 55%, var(--primary-dark) 100%);
+  box-shadow: 0 8px 20px -8px rgba(0, 187, 252, 0.7);
+  transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+}
+
+.shop-card__btn:active {
+  transform: scale(0.95);
+  filter: brightness(1.05);
+  box-shadow: 0 4px 12px -6px rgba(0, 187, 252, 0.6);
+}
+
+.shop-card__btn .van-icon {
+  font-size: 13px;
+}
+
+/* Badge de estado */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  padding: 4px 11px 4px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.status-badge--corner {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  z-index: 2;
+}
+
+.status-badge__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-badge--open {
+  color: #34D399;
+  background: rgba(52, 211, 153, 0.12);
+  border: 1px solid rgba(52, 211, 153, 0.32);
+}
+
+.status-badge--open .status-badge__dot {
+  background: #34D399;
+  animation: badge-pulse 2s ease-in-out infinite;
+}
+
+.status-badge--closed {
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line-color);
+}
+
+.status-badge--closed .status-badge__dot {
+  background: var(--text-dim);
+}
+
+@keyframes badge-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.55); }
+  70% { box-shadow: 0 0 0 5px rgba(52, 211, 153, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .status-badge--open .status-badge__dot { animation: none; }
+}
 </style>

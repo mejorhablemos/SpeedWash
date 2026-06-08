@@ -64,9 +64,9 @@ const parts = computed(() => {
   // 分离整数和小数
   let [integer, decimal = ""] = absAmount.toFixed(props.decimals).split(".");
 
-  // 添加千分位分隔
+  // 添加千分位分隔 (formato AR: punto como separador de miles)
   if (props.thousands) {
-    integer = integer.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    integer = integer.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   }
 
   // 处理正负号

@@ -54,6 +54,23 @@ export const PAYMENT_METHOD = {
 };
 
 
+// Estado de la lavadora (iotStatus)
+export const IOT_STATUS = {
+  AVAILABLE: 0, // Disponible
+  IN_USE: 1, // En uso
+  MAINTENANCE: 2, // En mantenimiento
+};
+
+// Precio de referencia (retail) de cada modo de lavado, en centavos.
+// Se usa para calcular el ahorro % de las tarjetas VIP (la API no lo devuelve).
+// Editar acá si cambian los precios de lista de los lavados.
+//   mark 1 = Lavado estándar | 2 = Lavado premium | 3 = Lavado Premium con cera (coating)
+export const REFERENCE_WASH_PRICE_CENTS = {
+  1: 2300000, // $23.000
+  2: 2500000, // $25.000
+  3: 2500000, // $25.000
+};
+
 export const INVITE_ROLE = {
   // 邀请方
   INVITER: 1,

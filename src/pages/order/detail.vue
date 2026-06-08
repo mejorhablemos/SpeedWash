@@ -57,7 +57,7 @@ onMounted(() => {
 <template>
 
   <div>
-    <van-cell-group inset :border="false" class="!mt-20 !bg-gradient-to-b from-primary from-90% to-white to-90%">
+    <van-cell-group inset :border="false" class="!mt-20 !bg-gradient-to-b from-primary from-90% to-surface to-90%">
       <!-- 红色卡片区域 -->
       <div class="p-4 text-white">
         <div class="text-18px">
@@ -67,7 +67,7 @@ onMounted(() => {
       </div>
 
       <!-- 订单信息 -->
-      <div class="bg-white rounded-lg -mt-2 text-26 overflow-hidden">
+      <div class="bg-surface rounded-lg -mt-2 text-26 overflow-hidden">
         <van-cell :title="t('routes.order.detail.order_number')" :value="data?.orderNo" />
         <van-cell :title="t('routes.order.detail.store')" :value="data?.storeName" />
         <van-cell :title="t('routes.order.detail.device')" :value="data?.iotName" />

@@ -9,11 +9,12 @@
       },
       "scanButton": {
         "title": "Escanear máquina",
-        "subtitle": "Escaneá el QR, pagá y listo"
+        "subtitle": "Escaneá el QR para iniciar"
       },
       "vip": {
         "title": "Packs de lavado",
-        "subtitle": "Comprá packs de lavados prepagos y ahorrá en cada visita",
+        "subtitle": "Lavados prepagos: ahorrá en cada visita.",
+        "plate": "Activación automática por patente: no perdés tiempo, tu patente inicia el lavado.",
         "buy": "Ver planes"
       },
       "invite": {
@@ -228,7 +229,7 @@
         "navigate": "Cómo llegar",
         "call": "Llamar",
         "topUp": "Cargar saldo",
-        "buyVip": "Comprar VIP",
+        "buyVip": "Comprar Pack",
         "wash": "Lavar",
         "introduction": "Descripción de la sucursal",
         "scanToWash": "Escaneá para lavar",
@@ -248,7 +249,11 @@
         "1": "En uso",
         "2": "En mantenimiento"
       },
-      "selectPlan": "Elegí tu plan de lavado",
+      "selectPlan": "Elegí tu lavado",
+      "planDesc": {
+        "plus": "Espuma activa + shampoo antiadherente",
+        "premium": "Plus + capa de cera SpeedWash Premium"
+      },
       "vipCard": {
         "title": "Tarjeta VIP",
         "count": "{count} tarjetas VIP disponibles",
@@ -261,6 +266,28 @@
         "empty": "No hay ofertas de carga disponibles",
         "promotion": "Cargá saldo y ahorrá más",
         "confirmButton": "Confirmar carga"
+      },
+      "cashOffer": {
+        "title": "Pagá en efectivo y ahorrá más",
+        "subtitle": "Consultá el precio en efectivo en la sucursal"
+      },
+      "benefits": {
+        "title": "Ventajas de esta máquina",
+        "rodillos": [
+          "Limpieza profunda con rodillos de microfibra",
+          "Ideal para barro y suciedad intensa",
+          "Secado incluido, salís listo para andar",
+          "Lavado rápido y a buen precio"
+        ],
+        "touchless": [
+          "Lavá tu auto sin que te lo toquen",
+          "Alta presión y espuma activa que cuida la pintura",
+          "Mantiene el encerado por más tiempo"
+        ]
+      },
+      "unavailable": {
+        "maintenance": "Esta máquina está en mantenimiento. Probá con otra.",
+        "inUse": "Esta máquina está en uso en este momento."
       },
       "total": "Total",
       "submit": "Iniciar lavado"
@@ -306,7 +333,15 @@
       "scanAgain": "Escanear de nuevo",
       "scannedContent": "Contenido escaneado",
       "securityTip": "El siguiente contenido no es provisto por esta aplicación. Usalo con precaución. Si lo necesitás, copialo con el botón.",
-      "scanFailed": "Error al escanear, intentá de nuevo"
+      "scanFailed": "Error al escanear, intentá de nuevo",
+      "camera": {
+        "initFailed": "No se pudo iniciar la cámara. Revisá los permisos.",
+        "notReady": "La cámara no está lista todavía",
+        "noTrack": "No se encontró la cámara",
+        "torchNotSupported": "Tu dispositivo no tiene linterna",
+        "torchFailed": "No se pudo controlar la linterna",
+        "noQrInImage": "No se reconoció ningún código QR en la imagen"
+      }
     },
     "settings": {
       "changePassword": {
@@ -591,7 +626,10 @@
     },
     "machineItem": {
       "actions": {
-        "goWash": "Elegir modo de lavado"
+        "goWash": "Elegir modo de lavado",
+        "choosePrefix": "Elegir Máquina",
+        "chooseGeneric": "Elegir máquina",
+        "moreInfo": "Más información"
       }
     },
     "voucherCard": {
@@ -607,7 +645,10 @@
       "validPeriod": "Vigencia: {days} días",
       "allUserCanBuy": "Disponible para todos",
       "specialPrice": "Precio especial: primeras {count} tarjetas, {price} ARS",
-      "specialStock": "Stock promocional: {count}"
+      "specialStock": "Stock promocional: {count}",
+      "perWash": "Te queda a ${price} por lavado",
+      "savings": "Ahorrás {percent}%",
+      "regularPrice": "Precio normal: ${price}"
     },
     "invitePageStatus": {
       "notExist": "Promoción no disponible",
@@ -688,6 +729,6 @@
   "washMode": {
     "1": "Lavado estándar",
     "2": "Lavado premium",
-    "3": "Lavado con coating"
+    "3": "Lavado Premium con cera"
   }
 }

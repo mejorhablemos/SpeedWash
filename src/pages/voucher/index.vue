@@ -110,16 +110,16 @@ const bindLicenseNo = async (licenseNo) => {
 }
 
 :deep(.voucher-tabs .van-tabs__nav) {
-  background: #fff;
+  background: var(--surface-color);
 }
 
 :deep(.voucher-tabs .van-tab--active) {
-  color: #00B4E6;
+  color: #00BBFC;
   font-weight: 600;
 }
 
 :deep(.voucher-tabs .van-tabs__line) {
-  background: #00B4E6;
+  background: #00BBFC;
   width: 24px;
   border-radius: 2px;
 }
@@ -144,12 +144,12 @@ const bindLicenseNo = async (licenseNo) => {
 
 .empty-state__text {
   font-size: 14px;
-  color: #6B7D8E;
+  color: var(--text-secondary);
   margin: 0 0 20px;
 }
 
 .empty-state__btn {
-  background: linear-gradient(135deg, #00B4E6 0%, #0090B8 100%);
+  background: linear-gradient(135deg, #00BBFC 0%, #0090CC 100%);
   color: #fff;
   border: none;
   padding: 0 24px;

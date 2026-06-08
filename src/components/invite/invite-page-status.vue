@@ -96,7 +96,7 @@ const emit = defineEmits(["bannerClick"]);
     </template>
     <div class="pt-200" v-else>
       <div
-        class="relative ml-30 h-280 mr-30 bg-white rounded-xl shadow-[0_0_20px_rgba(0,0,0,0.1)] text-3xl font-bold text-black text-center lh-normal">
+        class="relative ml-30 h-280 mr-30 bg-surface b-1 b-solid b-line rounded-xl shadow-[0_0_20px_rgba(0,0,0,0.5)] text-3xl font-bold text-text-primary text-center lh-normal">
         <img v-if="statusImage" :src="statusImage" :class="[
             emptyStatus ? 'h-141 w-226 invite-empty-img' : 'h-165 w-126 invite-fail-img',
             'absolute left-1/2 -translate-x-1/2 z-10'

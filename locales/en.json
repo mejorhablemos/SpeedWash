@@ -686,8 +686,8 @@
     "kilometers": "{value} km"
   },
   "washMode": {
-    "1": "Garment Wash",
-    "2": "Fine Wash",
-    "3": "Coating Wash"
+    "1": "Standard Wash",
+    "2": "Premium Wash",
+    "3": "Premium Wash with Wax"
   }
 }

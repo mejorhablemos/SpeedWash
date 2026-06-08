@@ -22,7 +22,7 @@ const handleTopUp = () => {
       <div class="wallet-header__bg"></div>
       <div class="wallet-header__content">
         <div class="wallet-avatar">
-          <van-icon name="user-o" size="28" color="#00B4E6" />
+          <van-icon name="user-o" size="28" color="#00BBFC" />
         </div>
         <div class="wallet-user-info">
           <h2 class="wallet-user-name">{{ userInfo?.nickName || 'Usuario' }}</h2>
@@ -82,7 +82,9 @@ const handleTopUp = () => {
 .wallet-header__bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(160deg, #1A2B3C 0%, #2D3436 100%);
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(0, 187, 252, 0.16) 0%, transparent 55%),
+    linear-gradient(160deg, #0B0B0D 0%, #000000 100%);
 }
 
 .wallet-header__content {
@@ -98,7 +100,7 @@ const handleTopUp = () => {
   height: 56px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.12);
-  border: 2px solid rgba(0, 180, 230, 0.3);
+  border: 2px solid rgba(0, 187, 252, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -132,10 +134,11 @@ const handleTopUp = () => {
 }
 
 .wallet-balance-card {
-  background: #fff;
+  background: var(--surface-color);
+  border: 1px solid var(--line-color);
   border-radius: 16px;
   padding: 24px 20px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 12px 30px -18px rgba(0, 0, 0, 0.85);
 }
 
 .wallet-balance-card__top {
@@ -145,7 +148,7 @@ const handleTopUp = () => {
 
 .wallet-balance-card__label {
   font-size: 13px;
-  color: #6B7D8E;
+  color: var(--text-secondary);
   display: block;
   margin-bottom: 8px;
 }
@@ -156,18 +159,18 @@ const handleTopUp = () => {
   justify-content: center;
   font-size: 40px;
   font-weight: 800;
-  color: #1A2B3C;
+  color: var(--text-primary);
 }
 
 .wallet-balance-card__currency {
   font-size: 20px;
   font-weight: 600;
   margin-right: 2px;
-  color: #6B7D8E;
+  color: var(--text-secondary);
 }
 
 .wallet-topup-btn {
-  background: linear-gradient(135deg, #00B4E6 0%, #0090B8 100%) !important;
+  background: linear-gradient(135deg, #00BBFC 0%, #0090CC 100%) !important;
   color: #fff !important;
   border: none !important;
   font-size: 15px;
@@ -192,7 +195,7 @@ const handleTopUp = () => {
 .wallet-transactions__title {
   font-size: 16px;
   font-weight: 700;
-  color: #1A2B3C;
+  color: var(--text-primary);
   margin: 0;
 }
 
@@ -201,7 +204,7 @@ const handleTopUp = () => {
   align-items: center;
   gap: 2px;
   font-size: 13px;
-  color: #00B4E6;
+  color: #00BBFC;
   text-decoration: none;
   font-weight: 500;
 }

@@ -65,9 +65,9 @@ const onConfirm = ({ selectedValues }) => {
 }
 
 .balance-filter__btn {
-  background: #fff !important;
-  color: #00B4E6 !important;
-  border: 1px solid rgba(0, 180, 230, 0.2) !important;
+  background: var(--surface-2) !important;
+  color: #00BBFC !important;
+  border: 1px solid rgba(0, 187, 252, 0.3) !important;
   font-weight: 600;
   font-size: 13px;
   display: flex;

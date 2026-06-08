@@ -118,7 +118,7 @@ watch(
       {{ t('routes.payment.result.countdown', { seconds: current.seconds }) }}
     </p>
 
-    <p class="text-black text-xl mb-4" v-if="orderNo">
+    <p class="text-text-primary text-xl mb-4" v-if="orderNo">
       {{ t('routes.payment.result.orderNo', { no: orderNo }) }}
     </p>
 

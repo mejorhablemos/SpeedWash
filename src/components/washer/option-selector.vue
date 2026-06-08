@@ -15,12 +15,12 @@ const selectedItem = defineModel();
 </script>
 
 <template>
-  <div class="grid grid-cols-3 gap-4">
+  <div class="flex flex-wrap justify-center gap-4">
     <div
       v-for="item in items"
       :key="item[keyField]"
-      :class="{ 'border-primary bg-primary/5': selectedItem && selectedItem[keyField] === item[keyField] }"
-      class="b-2 b-rd-lg b-solid b-white text-center aspect-[7/6] flex flex-col justify-center items-center gap-4xl cursor-pointer"
+      :class="selectedItem && selectedItem[keyField] === item[keyField] ? 'border-primary bg-primary/10' : 'border-line bg-surface'"
+      class="b-2 b-rd-lg b-solid text-center aspect-[7/6] flex flex-col justify-center items-center gap-4xl cursor-pointer basis-[calc((100%-2rem)/3)] grow-0 shrink-0"
       @click="selectedItem = item"
     >
       <slot v-bind:item="item" />

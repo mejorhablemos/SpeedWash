@@ -22,9 +22,9 @@ defineProps({
 <template>
   <template v-if="overlay">
     <!-- 加载状态 -->
-    <div 
-      v-if="isLoading" 
-      class="fixed inset-0 z-10 flex-center bg-white"
+    <div
+      v-if="isLoading"
+      class="fixed inset-0 z-10 flex-center bg-ink"
     >
       <van-loading :size="loadingSize" vertical>
         {{ t("common.loading") }}
@@ -32,9 +32,9 @@ defineProps({
     </div>
 
     <!-- 错误提示 -->
-    <div 
+    <div
       v-if="error"
-      class="fixed inset-0 z-50 flex-center bg-white"
+      class="fixed inset-0 z-50 flex-center bg-ink"
     >
       <van-empty :description="error" image="error">
         <!-- <template #image>

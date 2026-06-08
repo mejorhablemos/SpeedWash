@@ -1,25 +1,50 @@
 :root {
-  --primary-color: #00B4E6;
-  --primary-dark: #0090B8;
-  --primary-light: #33C4EC;
-  --accent-color: #F7941D;
-  --accent-light: #FFAD4D;
-  --surface-color: #FFFFFF;
-  --background-color: #F0F4F8;
-  --text-primary: #1A2B3C;
-  --text-secondary: #6B7D8E;
-  --primary-color-rgb: 0, 180, 230;
-  --accent-color-rgb: 247, 148, 29;
+  /* Paleta SpeedWash — tech oscuro (alineado a speedwash.com.ar) */
+  --primary-color: #00BBFC;        /* LED cyan */
+  --primary-dark: #0090CC;
+  --primary-light: #5ED2FD;
+  --accent-color: #FF8C00;         /* spark */
+  --accent-light: #FFAB40;
+
+  --ink: #000000;                  /* fondo base */
+  --graphite: #0B0B0D;
+  --surface-color: #141418;        /* tarjetas */
+  --surface-2: #1B1B20;            /* tarjetas elevadas */
+  --background-color: #000000;
+  --line-color: #232328;           /* hairlines */
+
+  --text-primary: #F4F4F6;         /* snow */
+  --text-secondary: #ACACB6;       /* mist */
+  --text-dim: #6B6B73;
+
+  --primary-color-rgb: 0, 187, 252;
+  --accent-color-rgb: 255, 140, 0;
 }
 
 :root:root {
-  --van-button-primary-background: var(--primary-color);
-  --van-button-primary-border-color: var(--primary-color);
-  --van-tag-primary-color: var(--primary-color);
+  /* Tokens Vant (tema oscuro) */
+  --van-background: var(--ink);
+  --van-background-2: var(--surface-color);
+  --van-background-3: var(--surface-2);
+  --van-text-color: var(--text-primary);
+  --van-text-color-2: var(--text-secondary);
+  --van-text-color-3: var(--text-dim);
+  --van-border-color: var(--line-color);
+  --van-cell-background: var(--surface-color);
+  --van-cell-text-color: var(--text-primary);
+  --van-cell-value-color: var(--text-secondary);
+  --van-cell-group-background: var(--surface-color);
+  --van-action-bar-background: var(--surface-color);
+  --van-nav-bar-background: transparent;
+  --van-nav-bar-icon-color: var(--text-primary);
+  --van-nav-bar-text-color: var(--text-primary);
+  --van-nav-bar-title-text-color: var(--text-primary);
+
   --van-button-primary-background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-  --van-nav-bar-icon-color: #fff;
-  --van-nav-bar-text-color: #fff;
-  --van-nav-bar-title-text-color: #fff;
+  --van-button-primary-border-color: var(--primary-color);
+  --van-button-danger-background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-light) 100%);
+  --van-button-danger-border-color: var(--accent-color);
+  --van-tag-primary-color: var(--primary-color);
   --van-tabbar-item-active-color: var(--primary-color);
 }
 

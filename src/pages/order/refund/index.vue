@@ -89,7 +89,7 @@ const onSubmit = async () => {
             </template>
 
             <template #label>
-              <div class="bg-[#F7F8FA] rounded-lg">
+              <div class="bg-surface-2 rounded-lg">
                 <van-field
                   name="reason"
                   v-model="reason"

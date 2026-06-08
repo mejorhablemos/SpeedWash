@@ -16,8 +16,8 @@ const emit = defineEmits(["contact", "refund", "pay", "detail", "click"]);
 const getStatusStyle = (status) => {
   const styleMap = {
     completed: "text-[#07c160]",
-    pending: "text-[#F7941D]",
-    processing: "text-[#00B4E6]",
+    pending: "text-[#FF8C00]",
+    processing: "text-[#00BBFC]",
     refund: "text-[#e74c3c]",
   };
   return styleMap[status] || "";
@@ -158,7 +158,7 @@ const showRefundButton = computed(() => {
 }
 
 .detail-link {
-  color: #00B4E6;
+  color: #00BBFC;
   font-size: 14px;
 }
 

@@ -64,7 +64,7 @@ const copyResult = () => {
     </van-cell-group>
 
     <!-- 安全提示 -->
-    <div v-if="!isBackgroundUrl && scanResult" class="text-xl text-gray-500 mb-4 px-4 text-center fixed bottom-safe-50">
+    <div v-if="!isBackgroundUrl && scanResult" class="text-xl text-text-secondary mb-4 px-4 text-center fixed bottom-safe-50">
       {{ t('routes.scan.securityTip') }}
     </div>
 

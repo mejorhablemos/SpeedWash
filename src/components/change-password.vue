@@ -80,7 +80,7 @@ defineExpose({
 
 <template>
   <div class="password-page">
-    <div class="w-full bg-white px-4 py-5 mb-12px">
+    <div class="w-full bg-surface px-4 py-5 mb-12px">
       <van-steps :active="active">
         <van-step>{{
           t("routes.settings.changePassword.steps.phoneVerify")

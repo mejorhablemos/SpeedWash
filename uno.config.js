@@ -17,17 +17,21 @@ export default defineConfig({
     //   "2xl": "1536px",
     // },
     colors: {
-      primary: "#00B4E6",
-      "primary-dark": "#0090B8",
-      "primary-light": "#33C4EC",
-      accent: "#F7941D",
-      "accent-light": "#FFAD4D",
-      secondary: "#C0C4C8",
-      background: "#F0F4F8",
-      surface: "#FFFFFF",
-      "text-primary": "#1A2B3C",
-      "text-secondary": "#6B7D8E",
-      dark: "#2D3436",
+      primary: "#00BBFC",
+      "primary-dark": "#0090CC",
+      "primary-light": "#5ED2FD",
+      accent: "#FF8C00",
+      "accent-light": "#FFAB40",
+      secondary: "#ACACB6",
+      ink: "#000000",
+      background: "#000000",
+      surface: "#141418",
+      "surface-2": "#1B1B20",
+      line: "#232328",
+      "text-primary": "#F4F4F6",
+      "text-secondary": "#ACACB6",
+      "text-dim": "#6B6B73",
+      dark: "#0B0B0D",
     },
     animation: {
       keyframes: {
@@ -130,13 +134,14 @@ export default defineConfig({
     "absolute-center":
       "absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2",
     "gradient-bg":
-      "bg-gradient-to-b from-[#00B4E6] from-0% via-[#E8F4FD] via-35% to-[#F0F4F8] to-100%",
+      "bg-gradient-to-b from-[#0B0B0D] from-0% via-[#080809] via-40% to-[#000000] to-100%",
 
-    "normal-card": "b-2 b-rd-lg b-solid b-white",
-    "selected-card": "b-primary bg-primary/5",
-    "disable-card": "opacity-50 pointer-events-none select-none cursor-not-allowed bg-gray-100",
+    "card": "bg-surface b-1 b-solid b-line rounded-2xl",
+    "normal-card": "b-2 b-rd-lg b-solid b-line bg-surface",
+    "selected-card": "b-primary bg-primary/10",
+    "disable-card": "opacity-50 pointer-events-none select-none cursor-not-allowed bg-surface-2",
     clickable:
-      "cursor-pointer bg-gray-100/80 active:(opacity-70 scale-98) transition-all duration-200 select-none",
+      "cursor-pointer bg-surface-2/80 active:(opacity-70 scale-98) transition-all duration-200 select-none",
 
     "pb-safe-bottom": "pb-safe-80",
   },

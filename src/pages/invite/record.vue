@@ -26,7 +26,7 @@ function progress(item) {
     </div>
     <div class="flex flex-col gap-4" v-if="data?.length > 0">
       <van-cell v-for="(item, index) in data" :key="index" :title="item.newUserPhoneNum" :value="progress(item)"
-        :value-class="item.inviteStatus === 2 ? 'text-primary' : 'text-gray-500'" />
+        :value-class="item.inviteStatus === 2 ? 'text-primary' : 'text-text-secondary'" />
     </div>
     <van-empty v-else class="mt-16px" :description="t('routes.invite.record.empty')" />
   </van-pull-refresh>
