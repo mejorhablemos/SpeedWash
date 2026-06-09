@@ -80,3 +80,8 @@ coverage
 .cache
 .temp
 .tmp
+.vercel
+
+# Meta Ads — token de acceso (NO commitear)
+meta/.token
+meta/*.token
