@@ -22,8 +22,8 @@ export default function Privacidad() {
       <p>
         El responsable del tratamiento de los datos personales recolectados a
         través del sitio <strong>{site.domain}</strong> y de la aplicación
-        móvil es <strong>{site.legalName}</strong> (CUIT: {site.cuit}), con
-        domicilio en {site.fiscalAddress}. Para consultas, reclamos o
+        móvil es <strong>{site.legalName}</strong>, con domicilio en{" "}
+        {site.fiscalAddress}. Para consultas, reclamos o
         ejercicio de derechos:{" "}
         <a href={`mailto:${site.email}`}>{site.email}</a>.
       </p>
@@ -59,6 +59,21 @@ export default function Privacidad() {
           <strong>Datos técnicos:</strong> dirección IP, tipo de dispositivo,
           sistema operativo y datos de navegación, con fines analíticos y
           de seguridad.
+        </li>
+        <li>
+          <strong>Datos de geolocalización aproximada</strong> inferida de la
+          dirección IP, con fines analíticos y de seguridad. No accedemos a la
+          geolocalización precisa del dispositivo salvo autorización explícita
+          del usuario.
+        </li>
+        <li>
+          <strong>Imágenes de patente del vehículo:</strong> cuando el usuario
+          asocia una patente a un pack, nuestras cámaras capturan la imagen de
+          la patente al momento del lavado y la procesan mediante
+          reconocimiento óptico de caracteres (OCR) para validar la asociación
+          con un pack activo. Las imágenes se utilizan exclusivamente para esta
+          finalidad y se conservan por un plazo máximo de 90 días con fines de
+          auditoría operativa.
         </li>
       </ul>
 
@@ -120,11 +135,20 @@ export default function Privacidad() {
           contraseña.
         </li>
         <li>
-          <strong>Autoridades competentes</strong>, cuando exista una
-          obligación legal de informar (por ejemplo, requerimiento judicial
-          o fiscal).
+          <strong>Autoridades competentes:</strong> cuando exista una
+          obligación legal de informar (orden judicial, requerimiento fiscal
+          de AFIP, investigaciones policiales). Compartimos únicamente lo
+          estrictamente requerido y, cuando la ley lo permite, notificamos al
+          usuario afectado.
         </li>
       </ul>
+      <p>
+        Algunos de nuestros proveedores pueden estar ubicados fuera de la
+        República Argentina. En esos casos, garantizamos que el tratamiento se
+        realiza con niveles de protección equivalentes a los exigidos por la
+        legislación argentina, mediante acuerdos de confidencialidad y
+        cláusulas contractuales adecuadas.
+      </p>
 
       <h2>5. Derechos del titular de los datos</h2>
       <p>
@@ -148,6 +172,10 @@ export default function Privacidad() {
         <li>
           <strong>Oposición:</strong> oponerte al tratamiento con fines
           promocionales en cualquier momento.
+        </li>
+        <li>
+          <strong>Portabilidad:</strong> solicitar una copia de tus datos en
+          formato electrónico común.
         </li>
       </ul>
       <p>
@@ -203,9 +231,14 @@ export default function Privacidad() {
 
       <h2>9. Menores de edad</h2>
       <p>
-        El servicio está dirigido a mayores de 18 años. Si sos menor de
-        edad, necesitás autorización de tu padre, madre o tutor legal para
-        crear cuenta y utilizar el servicio.
+        El servicio está dirigido a mayores de 18 años. No recolectamos
+        intencionalmente datos personales de menores. Si tomamos conocimiento
+        de que un usuario menor de 18 años se ha registrado sin autorización
+        de su representante legal, procederemos a dar de baja la cuenta. Si sos
+        padre, madre o tutor y detectás que un menor a tu cargo se registró sin
+        tu autorización, escribinos a{" "}
+        <a href={`mailto:${site.email}`}>{site.email}</a> para que procedamos a
+        la baja inmediata.
       </p>
 
       <h2>10. Ley aplicable</h2>

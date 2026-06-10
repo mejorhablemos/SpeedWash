@@ -21,8 +21,8 @@ export default function Terminos() {
       <h2>1. Datos de la empresa</h2>
       <p>
         El servicio Speed Wash es prestado por{" "}
-        <strong>{site.legalName}</strong> (CUIT: {site.cuit}), con domicilio en{" "}
-        {site.fiscalAddress}. Para consultas o reclamos, escribinos a{" "}
+        <strong>{site.legalName}</strong>, con domicilio en {site.fiscalAddress}.
+        Para consultas o reclamos, escribinos a{" "}
         <a href={`mailto:${site.email}`}>{site.email}</a>.
       </p>
 
@@ -75,6 +75,13 @@ export default function Terminos() {
         automáticamente y no son reintegrables ni transferibles a un nuevo
         pack.
       </p>
+      <p>
+        En caso de no haber utilizado todos los lavados dentro del plazo, el
+        usuario puede solicitar la extensión del pack escribiendo a{" "}
+        <a href={`mailto:${site.email}`}>{site.email}</a> dentro de los 30 días
+        posteriores al vencimiento. La extensión queda sujeta a evaluación de
+        Speed Wash.
+      </p>
 
       <h2>5. Política de reembolso</h2>
       <p>
@@ -101,8 +108,10 @@ export default function Terminos() {
         vincularse a un único vehículo.
       </p>
       <p>
-        Si el usuario no asocia patente, puede iniciar el lavado escaneando
-        el código QR de la máquina desde la app, en cualquier vehículo.
+        Si el usuario no asocia una patente, puede iniciar el lavado
+        escaneando el código QR de la máquina desde la app, sin restricción de
+        vehículo. Los lavados se descuentan del pack independientemente de la
+        patente del auto que ingrese al lavadero.
       </p>
 
       <h2>7. Política de uso</h2>
@@ -160,6 +169,15 @@ export default function Terminos() {
           Demoras o interrupciones del servicio por mantenimiento
           programado, cortes de luz o agua, o causas de fuerza mayor.
         </li>
+        <li>
+          Vehículos con problemas mecánicos que impidan su circulación normal
+          por el túnel de lavado (frenos, dirección, transmisión, etc.).
+        </li>
+        <li>
+          Daños indirectos derivados del uso del servicio, incluyendo lucro
+          cesante, pérdida de tiempo o cualquier daño no relacionado
+          directamente con el lavado del vehículo.
+        </li>
       </ul>
 
       <h2>9. Modificación de precios</h2>
@@ -195,6 +213,31 @@ export default function Terminos() {
         momento. La fecha de última actualización se indica al inicio del
         documento. El uso continuado del servicio luego de una modificación
         implica la aceptación de los nuevos términos.
+      </p>
+
+      <h2>13. Suspensión de cuenta</h2>
+      <p>
+        Speed Wash se reserva el derecho de suspender o cancelar cuentas de
+        usuarios que incurran en uso fraudulento del servicio, intentos de
+        evasión de cobro, uso de patentes que no sean propiedad del usuario, o
+        cualquier conducta que perjudique la operación del lavadero o a
+        terceros usuarios. En caso de fraude detectado, los packs activos
+        pueden ser cancelados sin derecho a reembolso.
+      </p>
+
+      <h2>14. Resolución de conflictos</h2>
+      <p>
+        Conforme a la Ley Nacional 26.993, el usuario puede iniciar reclamos
+        ante el Servicio de Conciliación Previa en las Relaciones de Consumo
+        (COPREC) antes de acudir a la vía judicial. Más información en:{" "}
+        <a
+          href="https://www.argentina.gob.ar/produccion/defensadelconsumidor"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          www.argentina.gob.ar/produccion/defensadelconsumidor
+        </a>
+        .
       </p>
     </LegalLayout>
   );
