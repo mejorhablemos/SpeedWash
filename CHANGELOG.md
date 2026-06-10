@@ -134,7 +134,64 @@ Se sumó la key `routes.home.hero.tagline` en ambos locales. Se mantuvieron
 las keys viejas (`subtitle`, `brand`, `welcome`) sin uso por si las
 referencia algún componente que no detecté en el grep — son inertes.
 
-### 1.8 vConsole eliminado del bundle de producción
+### 1.8 Flujo de registro con jerarquía secuencial
+**Archivos:** `src/pages/register-page.vue`, `locales/es-AR.json`, `locales/en.json`
+
+Antes los 5 campos del registro aparecían amontonados sin pistas del orden
+en que hay que llenarlos (teléfono → SMS → código → contraseña → confirm
+→ invitación → términos). El usuario no entendía cuándo se "pide el SMS".
+
+Se rediseñó como **un solo formulario con jerarquía visual en dos pasos**:
+
+**Paso 1 — Verificá tu teléfono**
+- Badge numérico "1" + título.
+- Solo el campo de teléfono visible.
+- Botón "Enviarme código" *grande, full-width, abajo del input*. Arranca
+  deshabilitado y se habilita cuando el teléfono tiene 8+ dígitos
+  (validación local con computed `isPhoneValid`, sin disparar las rules de
+  van-form que pintarían el input de rojo).
+
+**Paso 2 — Completá tus datos**
+- Badge numérico "2" (grisado mientras el código no fue enviado).
+- Aviso "Te enviamos un código a +54 XXX XXX XXXX" con el número
+  formateado (`phoneDisplay` computed) — visible solo después de obtener
+  el SMS.
+- Bloque entero (código + contraseña + confirm + invitación + términos)
+  con `opacity: 0.45; pointer-events: none` hasta que `codeSent` (que
+  refleja `smsRequestId`) sea true. Las rules de validación se ignoran
+  mientras esté en estado "no enviado" para que no muestre errores
+  prematuros.
+- Botón "Crear cuenta" deshabilitado hasta `codeSent && agreement`.
+
+**Código de invitación colapsado**
+- Si el usuario llegó con `?inviteCode=XYZ` en la URL → el campo arranca
+  visible y precargado (como antes).
+- Si no, aparece un link "¿Tenés código de invitación?" que despliega el
+  campo solo cuando se necesita. Reduce ruido visual para el 95% de los
+  usuarios que registran sin invitación.
+
+**Logo más chico en mobile**
+- El wordmark pasó de `max-w-[280px]` a `max-w-[200px]` con `py-6` en vez
+  de `py-10` para liberar viewport vertical al form (ahora son 2 bloques
+  + aviso + 4 campos visibles + checkbox + botón).
+- **Si más adelante hay un isotipo "S" cuadrado**, reemplazar el src y
+  poner `max-w-[72px]` — el wordmark ya no escala bien con tanto
+  contenido debajo.
+
+**Strings i18n nuevos** (es-AR + en):
+- `routes.register.step1Title` — "1. Verificá tu teléfono"
+- `routes.register.step2Title` — "2. Completá tus datos"
+- `routes.register.sendCode` — "Enviarme código"
+- `routes.register.codeSentTo` — "Te enviamos un código a {phone}"
+- `routes.register.inviteToggle` — "¿Tenés código de invitación?"
+
+**Nota sobre `/login`:** no usa SMS — es teléfono + contraseña directo.
+No requiere este rediseño.
+**Pantallas con flujo SMS similar:** `/forgot-password` y
+`/settings/change-password`. Se pueden aplicar las mismas pautas en un
+commit aparte si se quiere consistencia.
+
+### 1.9 vConsole eliminado del bundle de producción
 **Archivo:** `src/main.js` (líneas 1-13)
 
 El botón verde "vConsole" del debugger aparecía en producción. El gate

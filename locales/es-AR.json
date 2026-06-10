@@ -101,7 +101,12 @@
       "hasAccount": "¿Ya tenés cuenta? ",
       "login": "Iniciá sesión",
       "inviteKeyPlaceholder": "Código de invitación (opcional)",
-      "getCodeFirst": "Primero obtené el código de verificación"
+      "getCodeFirst": "Primero obtené el código de verificación",
+      "step1Title": "1. Verificá tu teléfono",
+      "step2Title": "2. Completá tus datos",
+      "sendCode": "Enviarme código",
+      "codeSentTo": "Te enviamos un código a {phone}",
+      "inviteToggle": "¿Tenés código de invitación?"
     },
     "order": {
       "index": {

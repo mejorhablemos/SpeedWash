@@ -100,7 +100,12 @@
       "hasAccount": "Already have an account? ",
       "login": "Login now",
       "inviteKeyPlaceholder": "Enter invite code (optional)",
-      "getCodeFirst": "Please get the verification code first"
+      "getCodeFirst": "Please get the verification code first",
+      "step1Title": "1. Verify your phone",
+      "step2Title": "2. Complete your details",
+      "sendCode": "Send me a code",
+      "codeSentTo": "We sent a code to {phone}",
+      "inviteToggle": "Have an invite code?"
     },
     "order": {
       "index": {
