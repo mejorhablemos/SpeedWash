@@ -326,9 +326,9 @@
         },
         "form": {
           "verifyCode": "Enter verification code",
-          "newPassword": "Enter new password",
+          "newPassword": "Min 6 characters",
           "newPasswordLabel": "New password",
-          "confirmPassword": "Confirm new password",
+          "confirmPassword": "Repeat the password",
           "confirmPasswordLabel": "Confirm your new password",
           "next": "Next",
           "confirm": "Confirm",

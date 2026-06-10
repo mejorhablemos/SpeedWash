@@ -361,9 +361,9 @@
         },
         "form": {
           "verifyCode": "Ingresá el código",
-          "newPassword": "Ingresá la nueva contraseña",
+          "newPassword": "Mínimo 6 caracteres",
           "newPasswordLabel": "Nueva contraseña",
-          "confirmPassword": "Confirmá la nueva contraseña",
+          "confirmPassword": "Repetí la contraseña",
           "confirmPasswordLabel": "Confirmá tu nueva contraseña",
           "next": "Siguiente",
           "confirm": "Confirmar",
