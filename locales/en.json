@@ -682,7 +682,19 @@
     "networkError": "Network error, please try again later",
     "unknownError": "Unknown error, please try again later",
     "serviceError": "Service error, please try again later",
-    "locationError": "Location service error, please check location permissions"
+    "locationError": "Location service error, please check location permissions",
+    "backend": {
+      "phoneAlreadyExists": "This number already has an account. Please sign in.",
+      "phoneNotRegistered": "This number is not registered. Would you like to create an account?",
+      "passwordMismatch": "Passwords do not match.",
+      "sessionExpired": "Your session expired. Please sign in again.",
+      "smsCodeInvalid": "The verification code is not valid.",
+      "passwordIncorrect": "Incorrect password. Please try again.",
+      "insufficientBalance": "Insufficient balance for this operation.",
+      "forbidden": "You do not have permission for this action.",
+      "notFound": "We could not find what you were looking for.",
+      "unknown": "Something went wrong. Please try again in a few seconds."
+    }
   },
   "validations": {},
   "notifications": {},

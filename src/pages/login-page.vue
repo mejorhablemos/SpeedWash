@@ -54,7 +54,7 @@ const onSubmit = async () => {
     router.replace(redirectUrl.value);
   } catch (err) {
     console.error("登录失败:", err);
-    showToast(t("routes.login.failed"));
+    showToast(err?.message || t("routes.login.failed"));
   }
 };
 
@@ -67,12 +67,9 @@ const guestLogin = () => {
 </script>
 
 <template>
-  <!-- 水波纹背景 -->
-  <wave />
-
-  <van-space direction="vertical" fill class="pt-20% z-10 relative">
+  <van-space direction="vertical" fill class="z-10 relative">
     <!-- Isotipo Speed Wash, mismo tratamiento que /register -->
-    <div class="flex justify-center items-center w-full pt-8 pb-4">
+    <div class="flex justify-center items-center w-full pt-12 pb-6">
       <img
         src="@/assets/speedwash-iso.png"
         alt="Speed Wash"

@@ -1,6 +1,7 @@
 import { createFetch } from "@vueuse/core";
 import router from "@/router";
 import { getLocale } from "@/utils";
+import { translateBackendError } from "@/utils/backendErrors";
 import { TIMEOUT } from "@/constants";
 
 const fetchAPI = createFetch({
@@ -21,13 +22,14 @@ const fetchAPI = createFetch({
     },
     async afterFetch(ctx) {
       if (ctx.data && ctx.data.code !== 0) {
-        // const message = window.$message;
-        // message.error(ctx.data.msg);
-
         if (ctx.data.code === 999) {
           router.replace("/login");
         }
-        const customError = new Error(ctx.data.msg);
+        // Traducimos el msg del backend a español acá, en la capa
+        // central, así todos los `showToast(error)` del repo muestran
+        // mensajes en español sin tener que tocar cada pantalla.
+        const translated = translateBackendError(ctx.data.msg);
+        const customError = new Error(translated);
         throw customError;
       }
       ctx.data = ctx.data.data || {};

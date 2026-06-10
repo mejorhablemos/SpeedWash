@@ -66,7 +66,7 @@ export const availableLocales = Object.keys(localesMap).filter(
 const loadedLanguages = [];
 
 // 创建 i18n 实例
-const i18n = createI18n({
+export const i18n = createI18n({
   legacy: false,
   locale: "",
   messages: {},
