@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { nav, contactHref } from "@/lib/site";
-import { trackContactClick } from "@/lib/analytics";
+import { nav, BUY_APP_URL } from "@/lib/site";
+import { trackBuyAppClick } from "@/lib/analytics";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -55,13 +55,13 @@ export default function Header() {
 
         <div className="hidden items-center gap-4 lg:flex">
           <a
-            href={contactHref("Hola Speed Wash! Quiero reservar un lavado.")}
+            href={BUY_APP_URL}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => trackContactClick("header")}
+            onClick={() => trackBuyAppClick("header")}
             className="group flex items-center gap-2.5 bg-led px-5 py-2.5 font-display text-[0.8rem] font-semibold tracking-wide text-black transition-all hover:bg-led-bright"
           >
-            Reservá tu lavado
+            Comprá tu pack
             <span className="transition-transform group-hover:translate-x-0.5">→</span>
           </a>
         </div>
@@ -110,16 +110,16 @@ export default function Header() {
             </a>
           ))}
           <a
-            href={contactHref("Hola Speed Wash! Quiero reservar un lavado.")}
+            href={BUY_APP_URL}
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => {
-              trackContactClick("header_mobile");
+              trackBuyAppClick("header_mobile");
               setOpen(false);
             }}
             className="mt-5 bg-led px-5 py-3.5 text-center font-display text-sm font-semibold tracking-wide text-black"
           >
-            Reservá tu lavado →
+            Comprá tu pack →
           </a>
         </nav>
       </div>

@@ -21,3 +21,11 @@ export function trackContactClick(source: string) {
   window.gtag?.("event", "contact_click", { source });
   window.fbq?.("track", "Contact", { source });
 }
+
+/** Click en un CTA que envía al usuario a la app de compra
+ *  (lavar.speedwash.com.ar). Es el evento clave de conversión. */
+export function trackBuyAppClick(source: string) {
+  if (typeof window === "undefined") return;
+  window.gtag?.("event", "buy_app_click", { source });
+  window.fbq?.("track", "InitiateCheckout", { source });
+}

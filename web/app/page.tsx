@@ -3,6 +3,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
 import LeadForm from "@/components/LeadForm";
+import BuyAppLink from "@/components/BuyAppLink";
 import {
   packs,
   foundersPack,
@@ -10,7 +11,6 @@ import {
   site,
   contactHref,
   CONTACT_CHANNEL,
-  BUY_APP_URL,
   SINGLE_WASH_PRICE_FROM,
   FOUNDERS_SEATS_LEFT,
   FOUNDERS_TOTAL_SEATS,
@@ -115,7 +115,7 @@ export default function Home() {
             </Reveal>
 
             <Reveal delay={260}>
-              <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+              <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <a
                   href="#lista"
                   className="group flex items-center justify-center gap-2.5 bg-led px-8 py-4 font-display text-sm font-semibold tracking-wide text-black transition-all hover:bg-led-bright"
@@ -131,6 +131,15 @@ export default function Home() {
                 >
                   Cómo funciona
                 </a>
+                <BuyAppLink
+                  source="hero"
+                  className="group flex items-center justify-center gap-2.5 border border-gold/50 bg-gold/10 px-8 py-4 font-display text-sm font-semibold tracking-wide text-gold transition-all hover:border-gold hover:bg-gold/20"
+                >
+                  Ya quiero comprar
+                  <span className="transition-transform group-hover:translate-x-1">
+                    →
+                  </span>
+                </BuyAppLink>
               </div>
             </Reveal>
           </div>
@@ -510,17 +519,15 @@ export default function Home() {
                       </p>
                     </div>
 
-                    <a
-                      href={BUY_APP_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <BuyAppLink
+                      source="pack_founders"
                       className="group flex items-center justify-center gap-2 bg-gold py-3.5 font-display text-[0.82rem] font-semibold tracking-wide text-black transition-all hover:bg-gold-bright"
                     >
                       Lo quiero
                       <span className="transition-transform group-hover:translate-x-1">
                         →
                       </span>
-                    </a>
+                    </BuyAppLink>
                   </div>
                 </div>
               </div>
@@ -569,10 +576,8 @@ export default function Home() {
                     <p className="mt-6 flex-1 text-xs leading-relaxed text-mist">
                       {p.note}
                     </p>
-                    <a
-                      href={BUY_APP_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <BuyAppLink
+                      source={`pack_${p.id}`}
                       className={`mt-7 flex items-center justify-center gap-2 py-3 font-display text-[0.78rem] font-semibold tracking-wide transition-all ${
                         p.featured
                           ? "bg-led text-black hover:bg-led-bright"
@@ -580,22 +585,33 @@ export default function Home() {
                       }`}
                     >
                       Lo quiero →
-                    </a>
+                    </BuyAppLink>
                   </div>
                 </Reveal>
               ))}
             </div>
 
-            {/* Nota al pie: cera incluida en todos los packs */}
+            {/* Nota al pie: cera incluida en todos los packs + acceso a la app */}
             <Reveal delay={140}>
-              <p className="mt-5 text-xs leading-relaxed text-mist">
-                <span className="text-led">✦</span>{" "}
-                Todos los packs incluyen{" "}
-                <span className="font-display font-semibold text-snow">
-                  Lavado Premium con cera
-                </span>
-                .
-              </p>
+              <div className="mt-5 flex flex-col gap-3 text-xs leading-relaxed text-mist sm:flex-row sm:items-center sm:justify-between">
+                <p>
+                  <span className="text-led">✦</span>{" "}
+                  Todos los packs incluyen{" "}
+                  <span className="font-display font-semibold text-snow">
+                    Lavado Premium con cera
+                  </span>
+                  .
+                </p>
+                <p>
+                  ¿Ya tenés cuenta?{" "}
+                  <BuyAppLink
+                    source="membresias_login"
+                    className="font-display font-semibold text-led underline-offset-4 transition-colors hover:text-led-bright hover:underline"
+                  >
+                    Ingresá a la app →
+                  </BuyAppLink>
+                </p>
+              </div>
             </Reveal>
 
             <Reveal delay={120}>
