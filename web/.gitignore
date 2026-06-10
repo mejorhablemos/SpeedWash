@@ -42,3 +42,4 @@ next-env.d.ts
 
 # screenshots de QA (no deployar)
 /shots
+.env*.local
