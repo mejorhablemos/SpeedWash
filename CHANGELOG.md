@@ -10,6 +10,24 @@ Fecha: 2026-06-09
 
 ---
 
+## 📝 Mantenimiento de documentación (2026-06-10)
+
+Sincronización de la documentación con el estado real del código (no toca
+código de la app):
+
+- **CLAUDE.md** — UI Framework: paleta actualizada a la real de Speed Wash
+  (`primary #00BBFC`, `accent #FF9416`, `success #00D97E`, `error #F04438`;
+  antes decía la KIREI `#FD5C57`/`#2ecc71`). i18n: agregado `es-AR.json`
+  (español rioplatense, **default del mercado argentino**) junto a en/zh-CN;
+  header `lang` ahora `ES`/`EN`/`CN`.
+- **CONTEXTO.md** — §12: tokens `--brand-success #00D97E` y `--brand-error
+  #F04438` con sus nombres reales de `variables.css`. §13: nota de branding
+  unificado en la app (pendiente deploy del chino). §19: "Auditoría visual de
+  marca" y páginas legales `/terminos` `/privacidad` movidas a ✅ terminado;
+  sumada sub-sección 🟡 Etapa 2 (grises/azules finos + tipografía).
+
+---
+
 ## 🎨 Branch `fix/brand-colors` — sistema de color Speed Wash (2026-06-10)
 
 Cierre de la auditoría de marca ([BRAND-AUDIT.md](BRAND-AUDIT.md)). Se

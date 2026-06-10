@@ -64,7 +64,7 @@ Single layout wrapper with Vant NavBar (gradient support), bottom Tabbar (Home/S
 - **UnoCSS** — atomic CSS with the Speed Wash dark theme: primary `#00BBFC` (LED blue), accent/spark `#FF9416` (orange, minimal use), success `#00D97E`, error `#F04438`, dark backgrounds (`#000000` base, `#141418` surfaces). Tokens live in [uno.config.js](uno.config.js) + [src/styles/variables.css](src/styles/variables.css) (kept in sync). Custom responsive `vw`-based unit rules for mobile sizing. (The old `#FD5C57`/`#2ecc71` were the inherited KIREI white-label palette — no longer used.)
 
 ### i18n (`locales/`)
-Vue I18n with `en.json` and `zh-CN.json`. Locale detection in `src/utils/locale.js`. API sends `lang` header as `CN` or `EN`.
+Vue I18n with `es-AR.json` (Spanish, Rioplatense — **default for the Argentine market**), `en.json`, and `zh-CN.json`. Locale detection in `src/utils/locale.js`. API sends `lang` header as `ES`, `EN`, or `CN`. Vant's own locale follows suit (es-ES pack for Spanish → "Confirmar"/"Cancelar", etc.), configured in `src/modules/i18n.js`.
 
 ### Path Aliases (vite.config.js)
 `@` → `src/`, `@components`, `@pages`, `@assets`, `@router`, `@store`, `@utils`, `~i18n` → `locales/`

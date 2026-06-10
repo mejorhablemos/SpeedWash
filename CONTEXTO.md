@@ -256,8 +256,9 @@ Aplica a todas las piezas visuales: brochures, presentación, sitio web, app.
 --blue-deep:   #0079B8   /* sombras/gradientes */
 --orange:      #FF9416   /* spark · uso mínimo (acento puntual) */
 
---success: #00D97E   /* verde · estados ok: abierto/online, verificado, pago ok */
---error:   #F04438   /* rojo · errores/danger (diferenciable del spark) */
+--brand-success: #00D97E   /* verde · estados ok: abierto/online, verificado, pago ok */
+--brand-error:   #F04438   /* rojo · errores/danger (diferenciable del spark) */
+/* (nombres de las CSS vars tal cual viven en src/styles/variables.css) */
 
 --black:  #000000
 --g0:     #08090A   /* fondo casi negro de slides */
@@ -319,6 +320,9 @@ Vercel.
 
 - **Stack:** Vue 3 PWA (frontend del proveedor chino)
 - **Control:** SOLO FRONTEND. Backend lo maneja el chino.
+- **Branding visual unificado** con la paleta oficial Speed Wash (tokens
+  `#00BBFC` / `#FF9416` / `#00D97E` / `#F04438`, limpieza de restos KIREI).
+  Mergeado a `main`; **pendiente deploy del chino para producción.**
 - **Limitaciones conocidas:**
   - 1 pack = 1 patente asociada (no múltiples)
   - Mensajes del backend hardcoded en inglés/chino (CHANGELOG documentado)
@@ -495,6 +499,12 @@ node scripts/optimize-assets.mjs
 - Memorias guardadas: `.claude/projects/b--Dev-SpeedWash/memory/`
 - 2 branches de fixes app cerradas: `fix/app-lavar-cleanup` y
   `fix/app-lavar-round2`
+- **Auditoría visual de marca de la app** completada (`BRAND-AUDIT.md`):
+  paleta unificada a tokens oficiales (`#00BBFC` / `#FF9416`), tokens nuevos
+  `--brand-success #00D97E` y `--brand-error #F04438`, restos KIREI limpiados.
+  Branch `fix/brand-colors` mergeada a `main` (pendiente deploy del chino)
+- **Páginas legales** `/terminos` y `/privacidad` creadas en el sitio
+  Next.js (plantilla preliminar; revisión legal final con abogado pendiente)
 
 ### 🔴 Pendientes y decisiones abiertas
 
@@ -502,8 +512,8 @@ node scripts/optimize-assets.mjs
   aparece live en sitio (Header, packs, Contacto, Footer, B2B, Institucional)
 - **Litros por ciclo del equipo:** el "60% menos agua que un lavado manual"
   del institucional es estimación; falta dato exacto del fabricante chino
-- **Páginas legales:** `/terminos` y `/privacidad` dan 404 — crear con
-  plantilla preliminar y pasar a abogado antes de apertura
+- **Revisión legal:** `/terminos` y `/privacidad` ya están publicadas con
+  plantilla preliminar; falta que un abogado las revise antes de apertura
 - **Tema 10% off por efectivo:** decisión comercial abierta. Hoy oculto en
   app detrás de flag `SHOW_CASH_OFFER = false`
 - **Render real del local:** la foto de sucursal en la app es genérica.
@@ -519,6 +529,20 @@ node scripts/optimize-assets.mjs
   rescisión)
 - **Foto épica Founders / paddock F1:** organizar para fin de julio una
   vez cerrados los 50 cupos
+
+### 🟡 Etapa 2 (post-lanzamiento, no visible en demo) — ver `BRAND-AUDIT.md`
+
+Afinado fino de marca de la app, dejado para después del 10/jul porque no se
+nota en demo y tocarlo justo antes arriesga romper algo:
+
+- **Grises/azules secundarios** a los valores exactos del manual §12: surface
+  `#141418`→`#17181B`, líneas sólidas→alpha (`rgba(255,255,255,.085/.16)`),
+  texto `#ACACB6`→`#C9CDD2`/`#9A9CA3`, azul deep `#0090CC`→`#0079B8`
+- **Tipografía:** `letter-spacing` display `-0.02em`→`-0.04em`; eyebrow a
+  Inter 9px (hoy Space Grotesk); sumar estilo "microtexto técnico"
+- **Colores categóricos** aún fuera de token (no son success): pin de mapa
+  `#18C686`, badges de rol `#4CD263`/`#6B7FF7`, amarillo invite `#FFF1AD`,
+  grises sueltos `#969799`/`#C0C4C8`/`#9FB0CB`
 
 ## 20 · Cómo retomar en una nueva sesión
 
