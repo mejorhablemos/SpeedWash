@@ -1,4 +1,6 @@
 <script setup>
+import { getCountryByCode } from "@/constants/countries";
+
 const router = useRouter();
 const { t } = useI18n();
 
@@ -35,11 +37,12 @@ const loading = ref(false); // 提交loading
 const codeSent = computed(() => !!smsRequestId.value);
 
 // Validación local para habilitar el botón "Enviarme código" sin disparar
-// las rules de van-form (que muestran error en rojo si tocás el input).
-// 8 dígitos es el mínimo razonable para un teléfono AR sin código de área.
+// las rules de van-form (que pintarían el input de rojo).
+// Aplica el regex del país seleccionado (AR es /^\d{10}$/, etc).
 const isPhoneValid = computed(() => {
   const digits = String(formData.value.phone || "").replace(/\D/g, "");
-  return digits.length >= 8;
+  const country = getCountryByCode(areaCode.value);
+  return country.pattern.test(digits);
 });
 
 // Mostrar el teléfono formateado en el aviso "Te enviamos un código a…".
@@ -129,7 +132,10 @@ const goToLogin = () => {
   <van-form @submit="onSubmit" ref="formRef">
     <!-- ─────── PASO 1: verificá tu teléfono ─────── -->
     <div class="step-header">
-      <span class="step-badge">1</span>
+      <span class="step-badge" :class="{ 'step-badge--done': codeSent }">
+        <van-icon v-if="codeSent" name="success" />
+        <template v-else>1</template>
+      </span>
       <span class="step-title">{{ t("routes.register.step1Title") }}</span>
     </div>
 
@@ -293,6 +299,13 @@ const goToLogin = () => {
 .step-badge--inactive {
   background: rgba(255, 255, 255, 0.12);
   color: rgba(255, 255, 255, 0.5);
+}
+
+/* Paso completado: badge verde con check */
+.step-badge--done {
+  background: #2ecc71;
+  color: #fff;
+  font-size: 14px;
 }
 
 .step-title {

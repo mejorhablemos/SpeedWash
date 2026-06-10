@@ -227,7 +227,54 @@ Aplicaciones:
 Verificado: `grep -ri logo_trans|logo\.jpg|speedwash-logo` en `src/` no
 devuelve referencias activas (solo en el historial del CHANGELOG).
 
-### 1.10 vConsole eliminado del bundle de producción
+### 1.10 Catálogo de países limítrofes + validación estricta del teléfono
+**Archivos:** `src/constants/countries.js` (nuevo),
+`src/components/phone-number-field.vue`, `src/pages/register-page.vue`,
+`locales/es-AR.json`, `locales/en.json`
+
+El campo de teléfono no tenía `maxlength` ni filtro de caracteres y el
+picker de país listaba **Argentina y China** (heredado del backend chino,
+sin sentido para AR).
+
+**Nuevo módulo `src/constants/countries.js`** con catálogo de Argentina
+y los 4 limítrofes principales. Cada país tiene `code`, `iso`,
+`i18nKey`, `minLength`, `maxLength` y un regex `pattern`:
+
+| País | Prefijo | Dígitos | Regex |
+|---|---|---|---|
+| Argentina | +54 | 10 exactos | `^\d{10}$` |
+| Uruguay | +598 | 8–9 | `^\d{8,9}$` |
+| Chile | +56 | 9 | `^9\d{8}$\|^\d{9}$` |
+| Brasil | +55 | 10–11 | `^\d{10,11}$` |
+| Paraguay | +595 | 9 | `^9\d{8}$\|^\d{9}$` |
+
+**Cambios en `phone-number-field.vue`:**
+- Catálogo importado de `@/constants/countries`. Adiós a `China`.
+- Flag: pasa de mix `"AR"` texto + `🇨🇳` emoji a **código ISO de 2
+  letras en font-display** (AR/UY/CL/BR/PY) — coherente con la UI tech.
+- `inputmode="numeric"`, `:maxlength="currentCountry.maxLength"` que
+  cambia al elegir país.
+- Handler `onInput` filtra todo lo no-numérico y trunca al maxLength del
+  país. El v-model siempre refleja exactamente lo válido.
+- Si el usuario cambia de país y el número cargado excede el nuevo
+  maxLength, se trunca automáticamente.
+
+**Cambios en `register-page.vue`:**
+- `isPhoneValid` ahora usa el regex del país (`country.pattern.test`)
+  en vez del genérico `length >= 8`. Para AR el botón solo se habilita
+  con 10 dígitos exactos.
+- Badge del paso 1 cambia a **verde con ícono de check** cuando el SMS
+  fue enviado (`codeSent === true`), indicando paso completado. CSS:
+  nueva clase `.step-badge--done` con fondo `#2ecc71`.
+
+**Strings i18n nuevos** (es-AR + en):
+- `components.phoneNumberField.country.{argentina|uruguay|chile|brasil|paraguay}`
+
+**Bug bonus eliminado:** antes el campo aceptaba 21 dígitos seguidos
+sin validar (visible en screenshot del usuario:
+`"3411321213121321231321"`). Ahora se trunca a 10 al tocar el input.
+
+### 1.11 vConsole eliminado del bundle de producción
 **Archivo:** `src/main.js` (líneas 1-13)
 
 El botón verde "vConsole" del debugger aparecía en producción. El gate

@@ -609,6 +609,13 @@
       "areaCode": {
         "argentina": "Argentina",
         "china": "China"
+      },
+      "country": {
+        "argentina": "Argentina",
+        "uruguay": "Uruguay",
+        "chile": "Chile",
+        "brasil": "Brasil",
+        "paraguay": "Paraguay"
       }
     },
     "shopListItem": {
