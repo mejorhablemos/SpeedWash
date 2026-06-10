@@ -18,6 +18,13 @@ export const site = {
   instagramUrl: "https://instagram.com/speedwash.funes",
   // Coordenadas aproximadas de Funes (microtexto tech)
   coords: "-32.9176, -60.9314",
+  // Datos societarios para páginas legales y facturación. El CUIT está
+  // pendiente de carga — buscar en grep por "pendiente de carga" para
+  // reemplazar cuando esté disponible.
+  legalName: "Fuxio S.R.L.",
+  cuit: "pendiente de carga",
+  jurisdiction: "Tribunales ordinarios de Rosario, provincia de Santa Fe",
+  fiscalAddress: "Calmo Funes, Funes, provincia de Santa Fe, Argentina",
 };
 
 export const nav = [

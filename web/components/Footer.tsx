@@ -77,9 +77,21 @@ export default function Footer() {
           <p className="micro">
             © {new Date().getFullYear()} {site.fullName}
           </p>
-          <p className="micro">
-            {site.coords} · Funes · SF · AR
-          </p>
+          <div className="flex items-center gap-5">
+            <a
+              href="/terminos"
+              className="micro transition-colors hover:text-led"
+            >
+              Términos
+            </a>
+            <a
+              href="/privacidad"
+              className="micro transition-colors hover:text-led"
+            >
+              Privacidad
+            </a>
+            <span className="micro">{site.coords} · Funes · SF · AR</span>
+          </div>
         </div>
       </div>
     </footer>

@@ -154,3 +154,66 @@ body {
   body { background: #000; }
   .no-print { display: none !important; }
 }
+
+/* ---- Legal prose (Terminos / Privacidad) ---- */
+/* Estilos sobrios para los textos institucionales. Sin diseño elaborado,
+   foco en legibilidad: tipografía clara, jerarquía suave, márgenes amplios. */
+.legal-prose {
+  font-size: 0.95rem;
+  line-height: 1.75;
+}
+
+.legal-prose h2 {
+  margin-top: 2.5rem;
+  margin-bottom: 0.9rem;
+  font-family: var(--font-space-grotesk), system-ui, sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #f4f4f6;
+}
+
+.legal-prose h3 {
+  margin-top: 1.75rem;
+  margin-bottom: 0.6rem;
+  font-family: var(--font-space-grotesk), system-ui, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #f4f4f6;
+}
+
+.legal-prose p {
+  margin-bottom: 1.1rem;
+}
+
+.legal-prose ul {
+  margin: 0.6rem 0 1.3rem 0;
+  padding-left: 1.5rem;
+  list-style: disc;
+}
+
+.legal-prose ul li {
+  margin-bottom: 0.5rem;
+}
+
+.legal-prose strong {
+  color: #f4f4f6;
+  font-weight: 600;
+}
+
+.legal-prose a {
+  color: #00bbfc;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.legal-prose a:hover {
+  color: #5ed2fd;
+}
+
+.legal-prose hr {
+  margin: 2rem 0;
+  border: 0;
+  border-top: 1px solid #232328;
+}
