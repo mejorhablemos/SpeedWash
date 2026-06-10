@@ -6,7 +6,8 @@
         "welcome": "Bienvenido a",
         "brand": "SpeedWash",
         "subtitle": "Lavado automático premium.\nRápido, eficiente y con la última tecnología.",
-        "tagline": "Sin turnos. Sin esperas. En minutos."
+        "tagline": "Sin turnos. Sin esperas. En minutos.",
+        "microbanner": "Lavado desde $23.000 · 8 minutos"
       },
       "scanButton": {
         "title": "Escanear máquina",
@@ -361,7 +362,9 @@
         "form": {
           "verifyCode": "Ingresá el código de verificación",
           "newPassword": "Ingresá la nueva contraseña",
+          "newPasswordLabel": "Nueva contraseña",
           "confirmPassword": "Confirmá la nueva contraseña",
+          "confirmPasswordLabel": "Confirmá tu nueva contraseña",
           "next": "Siguiente",
           "confirm": "Confirmar",
           "getCode": "Obtener código",
@@ -398,7 +401,10 @@
         "submit": "Confirmar"
       },
       "aboutus": {
-        "title": "Sobre nosotros"
+        "title": "Sobre nosotros",
+        "pitch": "Speed Wash es el primer lavadero automático digitalizado de la región. Tu auto listo en minutos, sin turnos, las 24 horas. Calmo Funes, Santa Fe.",
+        "terms": "Términos y condiciones",
+        "privacy": "Política de privacidad"
       },
       "items": {
         "nickname": "Nombre de usuario",

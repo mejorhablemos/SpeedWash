@@ -71,11 +71,12 @@ const guestLogin = () => {
   <wave />
 
   <van-space direction="vertical" fill class="pt-20% z-10 relative">
-    <div class="flex justify-center items-center w-full h-100px">
+    <!-- Isotipo Speed Wash, mismo tratamiento que /register -->
+    <div class="flex justify-center items-center w-full pt-8 pb-4">
       <img
-        src="@/assets/speedwash-wordmark.png"
+        src="@/assets/speedwash-iso.png"
         alt="Speed Wash"
-        class="block h-auto w-full max-w-[240px]"
+        class="block h-80px w-auto"
       />
     </div>
 

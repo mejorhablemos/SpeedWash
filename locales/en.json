@@ -6,7 +6,8 @@
         "welcome": "Welcome to",
         "brand": "SpeedWash",
         "subtitle": "Premium automatic car wash. Fast, efficient, and with the best technology for your vehicle.",
-        "tagline": "No bookings. No waiting. In minutes."
+        "tagline": "No bookings. No waiting. In minutes.",
+        "microbanner": "Wash from $23,000 · 8 minutes"
       },
       "scanButton": {
         "title": "Scan machine",
@@ -326,7 +327,9 @@
         "form": {
           "verifyCode": "Enter verification code",
           "newPassword": "Enter new password",
+          "newPasswordLabel": "New password",
           "confirmPassword": "Confirm new password",
+          "confirmPasswordLabel": "Confirm your new password",
           "next": "Next",
           "confirm": "Confirm",
           "getCode": "Get Code",
@@ -363,7 +366,10 @@
         "submit": "Confirm"
       },
       "aboutus": {
-        "title": "About Us"
+        "title": "About Us",
+        "pitch": "Speed Wash is the first digitalized automatic car wash in the region. Your car ready in minutes, no bookings, 24/7. Calmo Funes, Santa Fe.",
+        "terms": "Terms & conditions",
+        "privacy": "Privacy policy"
       },
       "items": {
         "nickname": "Nickname",
