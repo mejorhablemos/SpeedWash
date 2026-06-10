@@ -3,7 +3,18 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
 import LeadForm from "@/components/LeadForm";
-import { packs, site, contactHref, CONTACT_CHANNEL } from "@/lib/site";
+import {
+  packs,
+  foundersPack,
+  foundersPerks,
+  site,
+  contactHref,
+  CONTACT_CHANNEL,
+  BUY_APP_URL,
+  SINGLE_WASH_PRICE_FROM,
+  FOUNDERS_SEATS_LEFT,
+  FOUNDERS_TOTAL_SEATS,
+} from "@/lib/site";
 
 /* ---------------------------------------------------------------- */
 
@@ -364,13 +375,159 @@ export default function Home() {
                   Pagá menos.
                 </h2>
                 <p className="max-w-sm text-sm leading-relaxed text-mist">
-                  Packs prepagos con hasta 25% de ahorro. Preventa exclusiva
+                  Packs prepagos con hasta 27% de ahorro. Preventa exclusiva
                   para los primeros founders.
                 </p>
               </div>
             </Reveal>
 
-            <div className="mt-14 grid gap-px border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
+            {/* ── Diferencial: el pack funciona en cualquier auto ── */}
+            <Reveal delay={110}>
+              <div className="mt-10 border-l-2 border-led/60 bg-graphite-2/60 px-5 py-5 lg:px-7 lg:py-6">
+                <p className="font-display text-lg font-semibold text-snow lg:text-xl">
+                  Tu pack, tu familia.{" "}
+                  <span className="text-led">Funciona en cualquier auto.</span>{" "}
+                  Activación por patente o desde la app.
+                </p>
+                <p className="mt-2 max-w-2xl text-xs leading-relaxed text-mist lg:text-[0.82rem]">
+                  Asociá una patente para abrir la puerta automáticamente con
+                  nuestra cámara, o usá la app desde cualquier vehículo cuando
+                  escanees el QR de la máquina.
+                </p>
+              </div>
+            </Reveal>
+
+            {/* Aviso: lavado individual */}
+            <Reveal delay={130}>
+              <p className="mt-6 text-xs leading-relaxed text-mist">
+                Lavado individual desde{" "}
+                <span className="font-display font-semibold text-snow">
+                  {SINGLE_WASH_PRICE_FROM}
+                </span>
+                <span className="mx-2 text-mist/50">·</span>
+                Pagás al escanear la máquina
+              </p>
+            </Reveal>
+
+            {/* ── Founders pack — destacado full-width, gold sobre azul deep ── */}
+            <Reveal delay={160} as="article">
+              <div className="relative mt-4 overflow-hidden border border-gold/30 bg-gradient-to-br from-blue-deep-2 via-blue-deep to-black p-8 ring-1 ring-inset ring-gold/40 lg:p-12">
+                {/* glow dorado decorativo */}
+                <div className="pointer-events-none absolute -top-24 -right-20 h-72 w-72 rounded-full bg-gold/10 blur-3xl" />
+                <div className="pointer-events-none absolute -bottom-20 -left-10 h-56 w-56 rounded-full bg-gold/5 blur-3xl" />
+
+                {/* Badge superior: oferta de preventa */}
+                <div className="absolute left-0 right-0 top-0 flex flex-wrap items-stretch justify-between gap-px bg-line">
+                  <span className="bg-gold/95 px-4 py-1.5 font-display text-[0.62rem] font-bold tracking-[0.18em] text-black">
+                    OFERTA DE PREVENTA · CUPOS LIMITADOS
+                  </span>
+                  <span className="bg-black/70 px-4 py-1.5 font-display text-[0.62rem] font-bold tracking-[0.18em] text-gold">
+                    PRIMEROS {FOUNDERS_TOTAL_SEATS} FUNDADORES
+                  </span>
+                </div>
+
+                <div className="relative mt-7 grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-start">
+                  <div>
+                    <span className="micro text-gold/80">
+                      {foundersPack.washes} · preventa Founders Club
+                    </span>
+                    <h3 className="display mt-3 text-3xl lg:text-5xl">
+                      {foundersPack.name}
+                    </h3>
+                    <p className="mt-5 max-w-md text-sm leading-relaxed text-mist">
+                      {foundersPack.note}
+                    </p>
+                    <div className="mt-7 flex flex-wrap gap-2">
+                      {foundersPack.discount && (
+                        <span className="border border-gold/50 bg-gold/15 px-3 py-1.5 font-display text-[0.7rem] font-semibold tracking-wide text-gold">
+                          {foundersPack.discount}
+                        </span>
+                      )}
+                      {foundersPack.expiry && (
+                        <span className="border border-line/80 px-3 py-1.5 font-display text-[0.7rem] tracking-wide text-mist">
+                          {foundersPack.expiry}
+                        </span>
+                      )}
+                      <span className="border border-gold/30 px-3 py-1.5 font-display text-[0.7rem] tracking-wide text-gold/90">
+                        Cera incluida
+                      </span>
+                    </div>
+
+                    {/* Beneficios Founders */}
+                    <ul className="mt-8 space-y-2.5">
+                      {foundersPerks.map((perk) => (
+                        <li
+                          key={perk}
+                          className="flex items-start gap-3 text-sm leading-relaxed text-snow"
+                        >
+                          <span
+                            aria-hidden
+                            className="mt-[0.35rem] inline-block h-1.5 w-1.5 shrink-0 rotate-45 bg-gold"
+                          />
+                          <span>{perk}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="flex flex-col gap-5">
+                    {/* Contador de cupos con pulse rojo */}
+                    <div
+                      className="flex items-center gap-3 self-start border border-red-500/40 bg-red-500/10 px-4 py-2.5 font-display text-[0.78rem] font-semibold tracking-wide text-red-200"
+                      role="status"
+                      aria-live="polite"
+                    >
+                      <span className="relative flex h-2.5 w-2.5">
+                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500/70" />
+                        <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-red-500" />
+                      </span>
+                      Quedan {FOUNDERS_SEATS_LEFT} de {FOUNDERS_TOTAL_SEATS} cupos
+                    </div>
+
+                    <div>
+                      <div className="flex items-baseline gap-3">
+                        <p className="display text-5xl text-gold lg:text-6xl">
+                          {foundersPack.price}
+                        </p>
+                        {foundersPack.priceCompare && (
+                          <p className="display text-2xl text-mist/60 line-through lg:text-3xl">
+                            {foundersPack.priceCompare}
+                          </p>
+                        )}
+                      </div>
+                      {foundersPack.perWash && (
+                        <p className="mt-2 text-xs text-mist">
+                          {foundersPack.perWash}
+                        </p>
+                      )}
+                      <p className="mt-3 text-[0.72rem] leading-relaxed text-mist">
+                        Una vez agotados los {FOUNDERS_TOTAL_SEATS} cupos,
+                        este pack pasa a precio regular de{" "}
+                        <span className="text-snow">
+                          {foundersPack.priceCompare}
+                        </span>
+                        . La oferta no se repite.
+                      </p>
+                    </div>
+
+                    <a
+                      href={BUY_APP_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group flex items-center justify-center gap-2 bg-gold py-3.5 font-display text-[0.82rem] font-semibold tracking-wide text-black transition-all hover:bg-gold-bright"
+                    >
+                      Lo quiero
+                      <span className="transition-transform group-hover:translate-x-1">
+                        →
+                      </span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+
+            {/* ── 3 packs regulares ── */}
+            <div className="mt-4 grid gap-px border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
               {packs.map((p, i) => (
                 <Reveal key={p.id} delay={i * 90} as="article">
                   <div
@@ -413,9 +570,7 @@ export default function Home() {
                       {p.note}
                     </p>
                     <a
-                      href={contactHref(
-                        `Hola Speed Wash, quiero info del pack ${p.name}.`,
-                      )}
+                      href={BUY_APP_URL}
                       target="_blank"
                       rel="noopener noreferrer"
                       className={`mt-7 flex items-center justify-center gap-2 py-3 font-display text-[0.78rem] font-semibold tracking-wide transition-all ${
@@ -430,6 +585,18 @@ export default function Home() {
                 </Reveal>
               ))}
             </div>
+
+            {/* Nota al pie: cera incluida en todos los packs */}
+            <Reveal delay={140}>
+              <p className="mt-5 text-xs leading-relaxed text-mist">
+                <span className="text-led">✦</span>{" "}
+                Todos los packs incluyen{" "}
+                <span className="font-display font-semibold text-snow">
+                  Lavado Premium con cera
+                </span>
+                .
+              </p>
+            </Reveal>
 
             <Reveal delay={120}>
               <div className="mt-px flex flex-col items-start justify-between gap-5 border border-t-0 border-line bg-black px-8 py-7 sm:flex-row sm:items-center">

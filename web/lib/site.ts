@@ -53,6 +53,7 @@ export type Pack = {
   name: string;
   washes: string;
   price: string;
+  priceCompare?: string;
   perWash?: string;
   discount?: string;
   expiry?: string;
@@ -60,43 +61,69 @@ export type Pack = {
   featured?: boolean;
 };
 
+// URL de la app de compra (fuente de verdad de precios y packs).
+export const BUY_APP_URL = "https://lavar.speedwash.com.ar/home";
+
+// Precio del lavado individual (se paga al escanear la máquina en la app).
+export const SINGLE_WASH_PRICE_FROM = "$23.000";
+
+// Pack destacado de preventa Founders (primeros 50). Card aparte, full-width.
+export const foundersPack: Pack = {
+  id: "speed-12-founders",
+  name: "Speed 12 Founders",
+  washes: "12 lavados",
+  price: "$220.000",
+  priceCompare: "$240.000",
+  perWash: "$18.333 / lavado",
+  discount: "27% OFF",
+  expiry: "Vence a 180 días",
+  note: "Precio especial de preventa. Solo 50 cupos.",
+  featured: true,
+};
+
+// Stock Founders. Estático por ahora; conectar a backend cuando exista.
+export const FOUNDERS_TOTAL_SEATS = 50;
+export const FOUNDERS_SEATS_LEFT = 47;
+
+export const foundersPerks: string[] = [
+  "Precio fundador para siempre en renovaciones",
+  "Acceso prioritario a futuras sedes Speed Wash",
+  "Tu nombre en el Muro de Fundadores del local",
+  "Atención preferencial vía WhatsApp directo",
+  "Primer lavado de inauguración bonificado",
+];
+
+// Packs regulares — fuente de verdad: app lavar.speedwash.com.ar.
 export const packs: Pack[] = [
-  {
-    id: "speed-one",
-    name: "Speed One",
-    washes: "1 lavado",
-    price: "$22.000",
-    note: "Ideal para probar el servicio.",
-  },
   {
     id: "speed-4",
     name: "Speed 4",
     washes: "4 lavados",
-    price: "$79.000",
-    perWash: "$19.750 / lavado",
-    discount: "10% OFF",
+    price: "$95.000",
+    perWash: "$23.750 / lavado",
+    discount: "5% OFF",
     expiry: "Vence a 60 días",
-    note: "Para uso mensual constante.",
+    note: "Ideal para probar el sistema.",
   },
   {
     id: "speed-8",
     name: "Speed 8",
     washes: "8 lavados",
-    price: "$145.000",
-    perWash: "$18.125 / lavado",
-    discount: "18% OFF",
-    expiry: "Vence a 90 días",
-    note: "Para quienes mantienen su auto impecable.",
+    price: "$180.000",
+    perWash: "$22.500 / lavado",
+    discount: "10% OFF",
+    expiry: "Vence a 180 días",
+    note: "Para uso regular mensual.",
   },
   {
     id: "speed-12",
     name: "Speed 12",
     washes: "12 lavados",
-    price: "$198.000",
-    perWash: "$16.500 / lavado",
-    discount: "25% OFF",
-    expiry: "Vence a 120 días",
-    note: "El plan founders por excelencia.",
+    price: "$240.000",
+    perWash: "$20.000 / lavado",
+    discount: "20% OFF",
+    expiry: "Vence a 180 días",
+    note: "El plan más elegido.",
     featured: true,
   },
 ];
