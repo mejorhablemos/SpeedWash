@@ -95,10 +95,10 @@ const guestLogin = () => {
     </van-form>
 
     <!-- 辅助链接 -->
-    <div class="flex justify-center items-center gap-4 h-44px text-26 text-white">
-      <router-link to="/register">{{ t('routes.login.register') }}</router-link>
+    <div class="flex justify-center items-center gap-4 h-44px text-26 font-medium">
+      <router-link to="/register" class="!text-white">{{ t('routes.login.register') }}</router-link>
       <div class="w-2 h-28 bg-white/30"></div>
-      <router-link to="/forgot-password">{{ t('routes.login.forgotPassword') }}</router-link>
+      <router-link to="/forgot-password" class="!text-white">{{ t('routes.login.forgotPassword') }}</router-link>
     </div>
 
     <!-- Continuar como invitado: oculto si el redirect es a un flujo
@@ -108,8 +108,10 @@ const guestLogin = () => {
         {{ t('routes.login.guestLogin') }}
       </van-button>
     </div>
-    <div v-else class="px-30 text-center text-white/80 text-22 mt-40 leading-relaxed">
-      {{ t('routes.login.purchaseRequiresAccount') }}
+    <div v-else class="mx-30 mt-60 rounded-2xl border border-white/15 bg-white/5 px-24 py-20 text-center backdrop-blur-sm">
+      <div class="text-white/85 text-22 leading-relaxed">
+        {{ t('routes.login.purchaseRequiresAccount') }}
+      </div>
     </div>
   </van-space>
 </template>

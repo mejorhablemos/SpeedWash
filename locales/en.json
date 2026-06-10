@@ -5,7 +5,8 @@
       "hero": {
         "welcome": "Welcome to",
         "brand": "SpeedWash",
-        "subtitle": "Premium automatic car wash. Fast, efficient, and with the best technology for your vehicle."
+        "subtitle": "Premium automatic car wash. Fast, efficient, and with the best technology for your vehicle.",
+        "tagline": "No bookings. No waiting. In minutes."
       },
       "scanButton": {
         "title": "Scan machine",

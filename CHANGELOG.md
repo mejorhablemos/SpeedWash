@@ -107,6 +107,55 @@ template. Se movió al sistema de i18n:
   literal.
 - `locales/es-AR.json:74`: nueva key `routes.voucher.viewPlans`.
 
+### 1.6 Contraste de links en pantalla de login
+**Archivo:** `src/pages/login-page.vue` (líneas 97-102)
+
+Los links "Crear cuenta nueva | Olvidé mi contraseña" usaban el color
+celeste por defecto de `<router-link>`, que sobre el fondo del hero queda
+con contraste pobre. Se forzaron a blanco (`!text-white`) y se sumó
+`font-medium` para que el ojo los lea como CTA secundario claro.
+
+Además, el mensaje "Para comprar un pack necesitás registrarte…" (que
+aparece cuando se oculta el botón guest — ver 1.2) ahora va dentro de un
+card sutil (borde + fondo translúcido + backdrop-blur) para que se
+distinga del bloque de links sin competir con el botón "Ingresar".
+
+### 1.7 Tagline de la home
+**Archivos:** `src/pages/home-page.vue` (línea 38), `locales/es-AR.json`,
+`locales/en.json`
+
+El tagline bajo el logo de la home cambió de:
+> "Lavado automático premium."
+
+a:
+> "Sin turnos. Sin esperas. En minutos."
+
+Se sumó la key `routes.home.hero.tagline` en ambos locales. Se mantuvieron
+las keys viejas (`subtitle`, `brand`, `welcome`) sin uso por si las
+referencia algún componente que no detecté en el grep — son inertes.
+
+### 1.8 vConsole eliminado del bundle de producción
+**Archivo:** `src/main.js` (líneas 1-13)
+
+El botón verde "vConsole" del debugger aparecía en producción. El gate
+`if (import.meta.env.DEV)` ya estaba, pero el `import VConsole from "vconsole"`
+estaba a nivel top — Vite lo tree-shakeaba en algunos casos pero no era
+seguro. Se cambió a **dynamic import dentro del if**:
+
+```diff
+- import VConsole from "vconsole";
+- ...
+- if (import.meta.env.DEV) {
+-   new VConsole();
+- }
++ if (import.meta.env.DEV) {
++   import("vconsole").then(({ default: VConsole }) => new VConsole());
++ }
+```
+
+Verificado con `pnpm build`: `grep -rli "vconsole" dist/` no devuelve
+ningún match. La librería queda fuera del bundle de producción.
+
 ---
 
 ## 2. Pendientes que requieren intervención del backend (proveedor en China)

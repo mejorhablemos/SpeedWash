@@ -5,7 +5,8 @@
       "hero": {
         "welcome": "Bienvenido a",
         "brand": "SpeedWash",
-        "subtitle": "Lavado automático premium.\nRápido, eficiente y con la última tecnología."
+        "subtitle": "Lavado automático premium.\nRápido, eficiente y con la última tecnología.",
+        "tagline": "Sin turnos. Sin esperas. En minutos."
       },
       "scanButton": {
         "title": "Escanear máquina",

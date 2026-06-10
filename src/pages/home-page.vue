@@ -35,7 +35,7 @@ function viewShop(id) {
       <div class="hero-bg"></div>
       <div class="hero-content">
         <img :src="logoUrl" alt="SpeedWash" class="hero-logo" />
-        <p class="hero-subtitle"><strong>Lavado automático premium.</strong></p>
+        <p class="hero-subtitle"><strong>{{ t('routes.home.hero.tagline') }}</strong></p>
       </div>
     </div>
 

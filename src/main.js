@@ -4,13 +4,13 @@ import router from "./router";
 import 'modern-normalize';
 import "virtual:uno.css";
 import "./styles/main.css";
-import VConsole from "vconsole";
 
 const app = createApp(App);
 
-// Only enable VConsole in development mode
+// vConsole solo en dev. Dynamic import para que el bundle de producción
+// no incluya la librería (Vite lo trata como dead-code y lo excluye).
 if (import.meta.env.DEV) {
-  new VConsole();
+  import("vconsole").then(({ default: VConsole }) => new VConsole());
 }
 
 const ctx = {
