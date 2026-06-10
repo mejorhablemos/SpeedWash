@@ -91,11 +91,11 @@ const goToLogin = () => {
 </script>
 <template>
   <!-- Logo SpeedWash -->
-  <div class="py-10 text-center">
+  <div class="px-6 py-10 text-center">
     <img
       src="@/assets/speedwash-logo.png"
       alt="Speed Wash"
-      class="mx-auto h-80px w-auto"
+      class="mx-auto block h-auto w-full max-w-[280px]"
     />
   </div>
 
