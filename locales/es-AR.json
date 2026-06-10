@@ -80,7 +80,7 @@
     "register": {
       "title": "Crear cuenta",
       "codePlaceholder": "Ingresá el código",
-      "passwordPlaceholder": "Creá una contraseña de 6 a 20 caracteres",
+      "passwordPlaceholder": "Creá una contraseña (mínimo 6 caracteres)",
       "confirmPasswordPlaceholder": "Confirmá tu contraseña",
       "phoneRequired": "Ingresá tu número de teléfono",
       "passwordRequired": "La contraseña es obligatoria",

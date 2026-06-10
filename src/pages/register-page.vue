@@ -192,6 +192,7 @@ const goToLogin = () => {
         <password-field
           v-model="formData.password"
           name="password"
+          maxlength="20"
           :placeholder="t('routes.register.passwordPlaceholder')"
           :disabled="!codeSent"
           :rules="codeSent ? passwordRules : []"
@@ -200,6 +201,7 @@ const goToLogin = () => {
         <password-field
           v-model="formData.confirmPassword"
           name="confirmPassword"
+          maxlength="20"
           :placeholder="t('routes.register.confirmPasswordPlaceholder')"
           :disabled="!codeSent"
           :rules="codeSent ? confirmPasswordRules : []"

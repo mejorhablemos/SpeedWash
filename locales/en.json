@@ -79,7 +79,7 @@
     "register": {
       "title": "Register",
       "codePlaceholder": "Enter verification code",
-      "passwordPlaceholder": "Set 6-20 characters password",
+      "passwordPlaceholder": "Create a password (min 6 characters)",
       "confirmPasswordPlaceholder": "Confirm password",
       "phoneRequired": "Please enter phone number",
       "passwordRequired": "Password is required",

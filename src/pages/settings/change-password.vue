@@ -126,9 +126,11 @@ defineExpose({
         <div v-show="active === 1" class="verify-step">
           <!-- 设置新密码步骤 -->
           <password-field v-model="formData.password" name="password"
+            maxlength="20"
             :placeholder="t('routes.settings.changePassword.form.newPassword')" :rules="passwordRules" />
 
           <password-field v-model="formData.confirmPassword" name="confirmPassword"
+            maxlength="20"
             :placeholder="t('routes.settings.changePassword.form.confirmPassword')"
             :rules="confirmPasswordRules" />
 

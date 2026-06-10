@@ -158,6 +158,7 @@ defineExpose({
             {{ t("routes.settings.changePassword.form.newPasswordLabel") }}
           </label>
           <password-field v-model="formData.password" name="password"
+            maxlength="20"
             :placeholder="t('routes.settings.changePassword.form.newPassword')"
             :rules="passwordRules" />
 
@@ -165,6 +166,7 @@ defineExpose({
             {{ t("routes.settings.changePassword.form.confirmPasswordLabel") }}
           </label>
           <password-field v-model="formData.confirmPassword" name="confirmPassword"
+            maxlength="20"
             :placeholder="t('routes.settings.changePassword.form.confirmPassword')"
             :rules="confirmPasswordRules" />
 
