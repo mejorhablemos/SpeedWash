@@ -89,7 +89,7 @@ export default function Terminos() {
         <strong>activado el pack mediante su primer lavado</strong>, la
         compra no es reembolsable. Los packs que aún no hayan sido
         utilizados pueden solicitarse en reembolso dentro de los 10 días
-        corridos desde la compra, escribiendo a{" "}
+        hábiles desde la compra, escribiendo a{" "}
         <a href={`mailto:${site.email}`}>{site.email}</a>.
       </p>
       <p>
@@ -174,9 +174,10 @@ export default function Terminos() {
           por el túnel de lavado (frenos, dirección, transmisión, etc.).
         </li>
         <li>
-          Daños indirectos derivados del uso del servicio, incluyendo lucro
-          cesante, pérdida de tiempo o cualquier daño no relacionado
-          directamente con el lavado del vehículo.
+          Daños indirectos o consecuentes no vinculados directamente con la
+          prestación del servicio. Esta limitación no aplica al daño directo
+          causado en el vehículo durante el proceso de lavado atribuible al
+          equipamiento.
         </li>
       </ul>
 
@@ -222,7 +223,10 @@ export default function Terminos() {
         evasión de cobro, uso de patentes que no sean propiedad del usuario, o
         cualquier conducta que perjudique la operación del lavadero o a
         terceros usuarios. En caso de fraude detectado, los packs activos
-        pueden ser cancelados sin derecho a reembolso.
+        pueden ser cancelados sin derecho a reembolso. Antes de proceder a la
+        cancelación, Speed Wash notificará al usuario por el medio de contacto
+        registrado otorgando un plazo de 48 horas para descargo, salvo en casos
+        de fraude flagrante debidamente documentado.
       </p>
 
       <h2>14. Resolución de conflictos</h2>
@@ -238,6 +242,16 @@ export default function Terminos() {
           www.argentina.gob.ar/produccion/defensadelconsumidor
         </a>
         .
+      </p>
+
+      <h2>15. Baja del servicio</h2>
+      <p>
+        El usuario puede solicitar la baja de su cuenta en cualquier momento a
+        través de la misma aplicación móvil o escribiendo a{" "}
+        <a href={`mailto:${site.email}`}>{site.email}</a>. La baja implica la
+        cancelación de los packs activos sin derecho a reembolso de los lavados
+        no utilizados, salvo que corresponda por aplicación del art. 34 de la
+        Ley 24.240.
       </p>
     </LegalLayout>
   );

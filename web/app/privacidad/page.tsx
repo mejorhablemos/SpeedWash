@@ -71,9 +71,13 @@ export default function Privacidad() {
           asocia una patente a un pack, nuestras cámaras capturan la imagen de
           la patente al momento del lavado y la procesan mediante
           reconocimiento óptico de caracteres (OCR) para validar la asociación
-          con un pack activo. Las imágenes se utilizan exclusivamente para esta
-          finalidad y se conservan por un plazo máximo de 90 días con fines de
-          auditoría operativa.
+          con un pack activo. La base jurídica de este tratamiento es la
+          ejecución del contrato de prestación del servicio. La imagen se
+          procesa únicamente para el reconocimiento óptico de la patente y{" "}
+          <strong>no se almacena ni trata como dato biométrico</strong>. Las
+          imágenes se utilizan exclusivamente para esta finalidad y se
+          conservan por un plazo máximo de 90 días con fines de auditoría
+          operativa.
         </li>
       </ul>
 
@@ -143,11 +147,13 @@ export default function Privacidad() {
         </li>
       </ul>
       <p>
-        Algunos de nuestros proveedores pueden estar ubicados fuera de la
-        República Argentina. En esos casos, garantizamos que el tratamiento se
-        realiza con niveles de protección equivalentes a los exigidos por la
-        legislación argentina, mediante acuerdos de confidencialidad y
-        cláusulas contractuales adecuadas.
+        El proveedor del software de la máquina de lavado se encuentra ubicado
+        en la República Popular China. La transferencia internacional de datos
+        hacia dicho proveedor se realiza mediante un contrato que incorpora
+        cláusulas de protección de datos equivalentes a las exigidas por la{" "}
+        <strong>Ley 25.326</strong> de la República Argentina. Al aceptar esta
+        política, el usuario presta su consentimiento expreso para dicha
+        transferencia internacional de datos.
       </p>
 
       <h2>5. Derechos del titular de los datos</h2>
@@ -218,6 +224,13 @@ export default function Privacidad() {
         Sin perjuicio de ello, ningún sistema es 100% seguro. Si detectás un
         problema o sospechás de un uso indebido de tu cuenta, comunicate a{" "}
         <a href={`mailto:${site.email}`}>{site.email}</a> a la brevedad.
+      </p>
+      {/* TODO legal: completar con el Nº de registro RNBD una vez obtenido. */}
+      <p>
+        Las bases de datos personales de Speed Wash se encuentran inscriptas o
+        en proceso de inscripción ante el Registro Nacional de Bases de Datos
+        de la <strong>Agencia de Acceso a la Información Pública (AAIP)</strong>,
+        conforme al artículo 21 de la Ley 25.326.
       </p>
 
       <h2>8. Conservación de los datos</h2>
