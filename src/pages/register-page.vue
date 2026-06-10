@@ -117,12 +117,12 @@ const goToLogin = () => {
 };
 </script>
 <template>
-  <!-- Logo SpeedWash — versión chica para que el form respire -->
-  <div class="px-6 py-6 text-center">
+  <!-- Isotipo Speed Wash — cuadrado, deja respirar al form de 2 pasos -->
+  <div class="pt-8 pb-4 text-center">
     <img
-      src="@/assets/speedwash-logo.png"
+      src="@/assets/speedwash-iso.png"
       alt="Speed Wash"
-      class="mx-auto block h-auto w-full max-w-[200px]"
+      class="mx-auto block h-72px w-auto"
     />
   </div>
 

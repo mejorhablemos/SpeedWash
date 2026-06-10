@@ -85,3 +85,8 @@ coverage
 # Meta Ads — token de acceso (NO commitear)
 meta/.token
 meta/*.token
+
+# Brand assets entregados por el cliente — los usables se copian a
+# src/assets/ con nombres descriptivos. La carpeta source queda local.
+Logos SW/
+Logos SW en png/

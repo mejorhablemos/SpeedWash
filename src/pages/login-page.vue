@@ -71,8 +71,12 @@ const guestLogin = () => {
   <wave />
 
   <van-space direction="vertical" fill class="pt-20% z-10 relative">
-    <div class="flex justify-center text-4xl text-white w-full h-100px font-bold">
-      SpeedWash
+    <div class="flex justify-center items-center w-full h-100px">
+      <img
+        src="@/assets/speedwash-wordmark.png"
+        alt="Speed Wash"
+        class="block h-auto w-full max-w-[240px]"
+      />
     </div>
 
     <van-form @submit="onSubmit" ref="formRef">

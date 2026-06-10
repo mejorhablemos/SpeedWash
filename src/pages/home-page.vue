@@ -1,7 +1,7 @@
 <script setup>
 import { indexApi } from "@/api";
 import { getImageUrl } from "@/utils";
-import logoUrl from "@/assets/speedwash-logo.png";
+import logoUrl from "@/assets/speedwash-wordmark.png";
 
 const { t } = useI18n();
 const router = useRouter();

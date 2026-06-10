@@ -191,7 +191,43 @@ No requiere este rediseño.
 `/settings/change-password`. Se pueden aplicar las mismas pautas en un
 commit aparte si se quiere consistencia.
 
-### 1.9 vConsole eliminado del bundle de producción
+### 1.9 Sistema de logos definitivo + limpieza de assets KIREI
+**Archivos:** `src/pages/register-page.vue`, `src/pages/login-page.vue`,
+`src/pages/home-page.vue`, `src/assets/*`
+
+El cliente entregó el sistema de identidad oficial de Speed Wash en PNG
+con transparencia (carpeta `Logos SW en png/PNG - Sin Fondo/`).
+Se importaron 3 variantes con nombres descriptivos a `src/assets/`:
+
+| Asset nuevo | Variante | Uso |
+|---|---|---|
+| `speedwash-iso.png` | Isotipo "S" cyan, transparente | Splash, header de auth |
+| `speedwash-wordmark.png` | Wordmark "SpeedWash" + ✦, transparente | Hero, headers |
+| `speedwash-lockup.png` | Isotipo + wordmark apilados, transparente | Reservado para splash |
+
+Aplicaciones:
+- **`/register`**: pasa del wordmark (`speedwash-logo.png`, ancho) al
+  **isotipo cuadrado a 72px**. Libera mucho viewport vertical para el
+  form de 2 pasos del fix 1.8 — antes ocupaba 200px de ancho × ~30px de
+  alto, ahora 72×72 con padding más compacto.
+- **`/login`**: el `<div>` con el texto plano "SpeedWash" (line 74-76)
+  se reemplaza por el wordmark real (`speedwash-wordmark.png` a max-w
+  240px). Marca consistente con home.
+- **`/` (home)**: cambio del asset viejo (`speedwash-logo.png`) al
+  `speedwash-wordmark.png` transparente. Sin cambio visual significativo
+  porque el viejo también era transparente, pero ahora es el wordmark
+  oficial del cliente con el ✦.
+
+**Assets eliminados** (sin referencias en el código):
+- `src/assets/logo.jpg` — logo KIREI Car Wash heredado.
+- `src/assets/logo_trans.png` — variante transparente del KIREI heredado.
+- `src/assets/speedwash-logo.png` — wordmark provisional pre-entrega del
+  cliente. Reemplazado por `speedwash-wordmark.png` que es el oficial.
+
+Verificado: `grep -ri logo_trans|logo\.jpg|speedwash-logo` en `src/` no
+devuelve referencias activas (solo en el historial del CHANGELOG).
+
+### 1.10 vConsole eliminado del bundle de producción
 **Archivo:** `src/main.js` (líneas 1-13)
 
 El botón verde "vConsole" del debugger aparecía en producción. El gate
