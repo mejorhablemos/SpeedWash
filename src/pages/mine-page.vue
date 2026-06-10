@@ -3,6 +3,10 @@ import IconInProgress from "@/assets/order/icon_in_progress.png";
 import IconPendingPayment from "@/assets/order/icon_pending_payment.png";
 import IconCompleted from "@/assets/order/icon_completed.png";
 
+// Feature flag — Speed Wash al lanzamiento solo vende packs (no billetera
+// con saldo). Si en el futuro se habilita, flipear a true y el bloque vuelve.
+const SHOW_WALLET = false;
+
 const { t } = useI18n();
 const userInfo = ref(null);
 
@@ -35,8 +39,8 @@ watchEffect(() => {
       </div>
     </div>
 
-    <!-- Saldo -->
-    <div class="mine-section" style="margin-top: -20px; position: relative; z-index: 2;">
+    <!-- Saldo — oculto por SHOW_WALLET flag. Speed Wash solo vende packs. -->
+    <div v-if="SHOW_WALLET" class="mine-section" style="margin-top: -20px; position: relative; z-index: 2;">
       <div class="balance-card" @click="$router.push('/wallet')">
         <div class="balance-card__left">
           <span class="balance-card__label">{{ t('routes.mine.wallet.balance') }}</span>

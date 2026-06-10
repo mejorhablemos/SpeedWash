@@ -189,19 +189,19 @@ const goToLogin = () => {
           center
         />
 
-        <van-field
+        <password-field
           v-model="formData.password"
           name="password"
-          type="password"
+          maxlength="20"
           :placeholder="t('routes.register.passwordPlaceholder')"
           :disabled="!codeSent"
           :rules="codeSent ? passwordRules : []"
         />
 
-        <van-field
+        <password-field
           v-model="formData.confirmPassword"
           name="confirmPassword"
-          type="password"
+          maxlength="20"
           :placeholder="t('routes.register.confirmPasswordPlaceholder')"
           :disabled="!codeSent"
           :rules="codeSent ? confirmPasswordRules : []"

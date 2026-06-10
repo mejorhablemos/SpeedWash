@@ -6,7 +6,8 @@
         "welcome": "Bienvenido a",
         "brand": "SpeedWash",
         "subtitle": "Lavado automático premium.\nRápido, eficiente y con la última tecnología.",
-        "tagline": "Sin turnos. Sin esperas. En minutos."
+        "tagline": "Sin turnos. Sin esperas. En minutos.",
+        "microbanner": "Lavado desde $23.000 · 8 minutos"
       },
       "scanButton": {
         "title": "Escanear máquina",
@@ -78,8 +79,8 @@
     },
     "register": {
       "title": "Crear cuenta",
-      "codePlaceholder": "Ingresá el código de verificación",
-      "passwordPlaceholder": "Creá una contraseña de 6 a 20 caracteres",
+      "codePlaceholder": "Ingresá el código",
+      "passwordPlaceholder": "Creá una contraseña (mínimo 6 caracteres)",
       "confirmPasswordPlaceholder": "Confirmá tu contraseña",
       "phoneRequired": "Ingresá tu número de teléfono",
       "passwordRequired": "La contraseña es obligatoria",
@@ -359,9 +360,11 @@
           "complete": "Listo"
         },
         "form": {
-          "verifyCode": "Ingresá el código de verificación",
-          "newPassword": "Ingresá la nueva contraseña",
-          "confirmPassword": "Confirmá la nueva contraseña",
+          "verifyCode": "Ingresá el código",
+          "newPassword": "Mínimo 6 caracteres",
+          "newPasswordLabel": "Nueva contraseña",
+          "confirmPassword": "Repetí la contraseña",
+          "confirmPasswordLabel": "Confirmá tu nueva contraseña",
           "next": "Siguiente",
           "confirm": "Confirmar",
           "getCode": "Obtener código",
@@ -398,7 +401,10 @@
         "submit": "Confirmar"
       },
       "aboutus": {
-        "title": "Sobre nosotros"
+        "title": "Sobre nosotros",
+        "pitch": "Speed Wash es el primer lavadero automático digitalizado de la región. Tu auto listo en minutos, sin turnos, las 24 horas. Calmo Funes, Santa Fe.",
+        "terms": "Términos y condiciones",
+        "privacy": "Política de privacidad"
       },
       "items": {
         "nickname": "Nombre de usuario",
@@ -718,7 +724,19 @@
     "networkError": "Error de conexión, intentá más tarde",
     "unknownError": "Error desconocido, intentá más tarde",
     "serviceError": "Error del servicio, intentá más tarde",
-    "locationError": "Error de ubicación, verificá los permisos de localización"
+    "locationError": "Error de ubicación, verificá los permisos de localización",
+    "backend": {
+      "phoneAlreadyExists": "Este número ya tiene una cuenta. Iniciá sesión.",
+      "phoneNotRegistered": "Este número no está registrado. ¿Querés crear una cuenta?",
+      "passwordMismatch": "Las contraseñas no coinciden.",
+      "sessionExpired": "Tu sesión expiró. Iniciá sesión de nuevo.",
+      "smsCodeInvalid": "El código de verificación no es válido.",
+      "passwordIncorrect": "Contraseña incorrecta. Probá de nuevo.",
+      "insufficientBalance": "No tenés saldo suficiente para esta operación.",
+      "forbidden": "No tenés permisos para realizar esta acción.",
+      "notFound": "No encontramos lo que buscabas.",
+      "unknown": "Algo no salió bien. Probá de nuevo en unos segundos."
+    }
   },
   "validations": {},
   "notifications": {},

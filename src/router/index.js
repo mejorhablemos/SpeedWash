@@ -102,7 +102,7 @@ const routes = [
       {
         path: "/settings/change-password",
         name: "SettingsChangePassword",
-        component: () => import("@/pages/settings/change-password-old.vue"),
+        component: () => import("@/pages/settings/change-password.vue"),
         meta: {
           titleKey: "routes.settings.changePassword.title",
         },

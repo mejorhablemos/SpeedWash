@@ -275,6 +275,124 @@ sin validar (visible en screenshot del usuario:
 `"3411321213121321231321"`). Ahora se trunca a 10 al tocar el input.
 
 ### 1.11 vConsole eliminado del bundle de producción
+
+---
+
+## Round 2 — ajustes visuales y limpieza de flujos (2026-06-09)
+
+### 1.12 Microbanner informativo en home
+**Archivos:** `src/pages/home-page.vue` (líneas 38, ~210),
+`locales/es-AR.json` (`routes.home.hero.microbanner`),
+`locales/en.json` (idem).
+
+Debajo del tagline "Sin turnos. Sin esperas. En minutos." se sumó un
+microbanner: **"Lavado desde $23.000 · 8 minutos"**. Estilo discreto
+(pill con borde cyan a 18% de opacidad, texto blanco a 70%, 11px) que
+informa al usuario que abre la app por primera vez sin competir con el
+CTA principal "Escanear máquina".
+
+### 1.13 Logo de login: isotipo en vez del wordmark
+**Archivo:** `src/pages/login-page.vue` (líneas 73-80)
+
+El wordmark se veía cortado/superpuesto con la onda decorativa de fondo
+(`<wave>` cyan animado). Se pasa al mismo tratamiento que `/register`:
+isotipo `speedwash-iso.png` cuadrado a 80px de alto centrado arriba.
+Marca consistente entre las dos pantallas de auth.
+
+### 1.14 Patrón de pasos aplicado a forgot-password (y change-password)
+**Archivo:** `src/components/change-password.vue` (compartido por
+`/forgot-password` y `/settings/change-password`).
+
+Antes los 3 campos del paso 1 aparecían juntos sin pista del orden:
+teléfono → código → "Siguiente". El usuario podía apretar "Siguiente"
+sin haber pedido el código.
+
+Cambios:
+- **Tel limitado a 10 dígitos en AR**: `phone-number-field` ya aplica
+  `maxlength` del país desde `src/constants/countries.js` (fix de
+  round 1, sección 1.10) — no requería cambios acá.
+- **`isPhoneValid` computed nuevo**: usa el regex del país. Si el
+  teléfono viene precargado por props (flujo de `/settings`, usuario
+  ya logueado), confiamos en el backend.
+- **Botón "Obtener código" disabled** hasta `isPhoneValid === true`.
+- **Campo "Código de verificación" `:disabled="!codeSent"`** —
+  arranca grisado hasta que el SMS fue solicitado.
+- **Botón "Siguiente" `:disabled="!codeSent"`** — no se puede avanzar
+  sin haber pedido código.
+- Las rules del código se ignoran mientras el bloque está disabled
+  para no mostrar errores prematuros.
+
+### 1.15 Paso 2 de change-password: labels + validación local de match
+**Archivo:** `src/components/change-password.vue` (paso 2),
+`locales/es-AR.json` (`form.newPasswordLabel`, `form.confirmPasswordLabel`),
+`locales/en.json` (idem).
+
+Antes los 2 campos eran solo "puntitos" sin contexto. Se agregaron
+**labels arriba** ("Nueva contraseña" / "Confirmá tu nueva contraseña")
+con clase `.field-label`.
+
+Además, **validación local del match antes de submit**: si las dos
+passwords no coinciden, se muestra toast `passwordMismatch` y NO se
+pega al backend. Evita el error críptico "Code does not match" que
+devolvía el server cuando el problema era el typo del usuario.
+
+### 1.16 Texto chino en pantalla de éxito de change-password
+**Archivo:** `src/components/change-password.vue` (paso 3, botón final)
+
+El botón de la pantalla de éxito tenía hardcoded:
+- `{{ countDown.seconds }}秒后自动跳转至首页` (chino)
+- `返回首页` (chino)
+
+Reemplazado por las keys i18n que ya existían:
+`routes.settings.changePassword.backToHome.countdown` y
+`routes.settings.changePassword.backToHome.button`.
+
+**Nota:** `useCountDown` de Vant devuelve `.seconds` en **milisegundos**,
+no en segundos. Aplicamos `Math.ceil(countDown.seconds / 1000)` para
+mostrar "3, 2, 1" como espera el usuario, no "3000, 2999, 2998".
+
+### 1.17 Bloque "Saldo" oculto en Mi cuenta (decisión comercial)
+**Archivo:** `src/pages/mine-page.vue` (líneas 1-13 y 36-50)
+
+Speed Wash al lanzamiento solo vende packs (no billetera con saldo).
+La card "Saldo ($) — $0.00 — Ver todo" confundía sugiriendo un producto
+que no existe. Se oculta detrás del flag local **`SHOW_WALLET = false`**.
+
+Cuando se decida activar la billetera, flipear el flag a `true` y el
+bloque vuelve sin más cambios. Las rutas `/wallet*` y los strings i18n
+quedan intactos.
+
+### 1.18 Sobre nosotros: contenido estático en vez de fetch al backend
+**Archivos:** `src/pages/settings/aboutus.vue`,
+`locales/es-AR.json` (`routes.settings.aboutus.{pitch,terms,privacy}`),
+`locales/en.json` (idem), `package.json` (version).
+
+Antes la pantalla hacía `await loginApi.getSysVal('USER_ABOUT_US')` y
+renderizaba la respuesta como HTML. Cuando el backend devolvía vacío,
+la pantalla quedaba **en blanco con loading infinito** (no había guard
+contra `data?.value.val` undefined).
+
+Reescrita como pantalla 100% estática (zero deps de backend):
+- Lockup Speed Wash (`speedwash-lockup.png`) centrado arriba.
+- Versión de la app leída de `package.json` con `import pkg from
+  "../../../package.json"` (Vite lo soporta nativo).
+- Pitch institucional desde i18n: "Speed Wash es el primer lavadero
+  automático digitalizado de la región. Tu auto listo en minutos, sin
+  turnos, las 24 horas. Calmo Funes, Santa Fe."
+- 3 enlaces: speedwash.com.ar, Instagram @speedwash.funes, email
+  info@speedwash.com.ar.
+- 2 enlaces legales: Términos / Política de privacidad (apuntan a
+  speedwash.com.ar/terminos y .../privacidad — el sitio aún no los
+  tiene, son placeholders).
+- Footer: © año Speed Wash · Calmo Funes, Santa Fe.
+
+**Aprovechamos para subir version del package.json de `0.0.0` →
+`0.1.0`** (preventa Founders) y renombrar `"car-wash"` →
+`"speedwash-app"`. **Nota:** los lockfiles (`package-lock.json` y
+`pnpm-lock.yaml`) todavía referencian `kirei-car-wash` y `car-wash`
+hasta correr `pnpm install`; no lo hago acá para no inflar el diff.
+Quien tome el commit puede regenerar el lockfile en una rama de
+mantenimiento.
 **Archivo:** `src/main.js` (líneas 1-13)
 
 El botón verde "vConsole" del debugger aparecía en producción. El gate
@@ -364,6 +482,49 @@ los mensajes de error de:
 - `washApi.newOrder` (creación de orden)
 - `orderApi.refundApply` (solicitud de reembolso)
 - `myPageApi.setPwd` / `setMyInfo` (configuración)
+
+### 2.6 Mensaje del backend al registrarse con un número ya existente
+**Prioridad:** ALTA.
+**Contexto:** al intentar registrar un teléfono que ya tiene cuenta, el
+backend devuelve `"This cell phone number already exists"` (inglés
+hardcoded).
+**Acción solicitada:** devolver:
+> "Este número ya tiene una cuenta. Iniciá sesión."
+
+Ideal: code tipificado (ej. `code: 1005` = `PHONE_ALREADY_EXISTS`)
++ campo `redirect: "/login"` para que el frontend pueda mandar al
+usuario directo al login con el teléfono precargado.
+
+### 2.7 Mensaje "Code does not match" cuando las contraseñas no coinciden
+**Prioridad:** ALTA.
+**Contexto:** al cambiar contraseña, si el usuario tipea dos passwords
+distintas, el backend devuelve `"Code does not match"` (inglés
+hardcoded). El mensaje además es engañoso — sugiere que el problema es
+el código SMS cuando en realidad son las contraseñas.
+
+**Mitigación ya aplicada en frontend (1.15):** validamos el match
+local antes de pegarle al backend, así que el escenario casi no se
+dispara. Pero queda como defense-in-depth.
+
+**Acción solicitada:**
+1. Cambiar el `msg` a: "Las contraseñas no coinciden."
+2. Si el error real es el SMS, devolver un mensaje distinto:
+   "Código de verificación incorrecto."
+3. Ideal: códigos tipificados separados (`PASSWORD_MISMATCH` vs
+   `SMS_CODE_INVALID`) para que el frontend renderice mensajes
+   localizados claros.
+
+### 2.8 Endpoint `loginApi.getSysVal("USER_ABOUT_US")` deprecado
+**Prioridad:** BAJA.
+**Contexto:** la pantalla "Sobre nosotros" usaba este endpoint para
+traer HTML institucional. Devolvía vacío o tildaba la pantalla. Se
+reemplazó por contenido estático en frontend (ver 1.18).
+
+**Acción solicitada:** ninguna obligatoria. Si el panel admin del
+backend tiene un editor para este contenido, queda **deprecado** —
+no lo conectamos más al frontend. Si en el futuro se quiere editar
+desde panel sin redeploy de la app, definir un endpoint nuevo
+(ej. `/sys/about`) con formato JSON estructurado en vez de HTML.
 
 ---
 

@@ -36,6 +36,7 @@ function viewShop(id) {
       <div class="hero-content">
         <img :src="logoUrl" alt="SpeedWash" class="hero-logo" />
         <p class="hero-subtitle"><strong>{{ t('routes.home.hero.tagline') }}</strong></p>
+        <p class="hero-microbanner">{{ t('routes.home.hero.microbanner') }}</p>
       </div>
     </div>
 
@@ -144,7 +145,9 @@ function viewShop(id) {
 /* Hero Section */
 .hero-section {
   position: relative;
-  padding: 36px 24px 42px;
+  /* Compresión del hero para que "Sucursales" entre en viewport
+     mobile estándar (375x667 y arriba) sin scrollear. */
+  padding: 8px 24px 18px;
   overflow: hidden;
 }
 
@@ -193,7 +196,7 @@ function viewShop(id) {
   max-width: 340px;
   height: auto;
   object-fit: contain;
-  margin: 0 0 6px;
+  margin: 0 0 2px;
 }
 
 .hero-subtitle {
@@ -202,6 +205,20 @@ function viewShop(id) {
   margin: 0;
   line-height: 1.5;
   letter-spacing: 0.5px;
+}
+
+/* Microbanner informativo bajo el tagline. Discreto, no compite con CTAs. */
+.hero-microbanner {
+  display: inline-block;
+  margin: 6px 0 0;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(0, 187, 252, 0.08);
+  border: 1px solid rgba(0, 187, 252, 0.18);
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.3px;
 }
 
 /* Scan CTA Button */

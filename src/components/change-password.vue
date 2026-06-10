@@ -2,7 +2,7 @@
 import PhoneNumberField from "./phone-number-field.vue";
 import SuccessPng from "@/assets/icon_success.png";
 import { useCountDown } from '@vant/use';
-// import { myPageApi } from "@/api";
+import { getCountryByCode } from "@/constants/countries";
 
 const props = defineProps({
   phone: {
@@ -43,31 +43,56 @@ areaCode.value = props.areaCode;
 
 const phoneNumberReadOnly = computed(() => !!props.phone);
 
+// Validación local: botón "Obtener código" se habilita solo cuando el
+// teléfono cumple el regex del país (AR: 10 dígitos exactos).
+// Si el teléfono viene precargado (props.phone, flujo settings con
+// usuario logueado), confiamos en el backend.
+const isPhoneValid = computed(() => {
+  if (props.phone) return true;
+  const digits = String(formData.value.phone || "").replace(/\D/g, "");
+  const country = getCountryByCode(areaCode.value);
+  return country.pattern.test(digits);
+});
+
+// El código solo se considera enviado cuando el backend devolvió un
+// smsRequestId. Hasta entonces los campos de "código" / "Siguiente"
+// quedan deshabilitados para que el usuario entienda el flujo.
+const codeSent = computed(() => !!smsRequestId.value);
+
 const countDown = useCountDown({
   time: 3000
 });
 
-// 验证并进入下一步
+// Validar y avanzar al paso 2.
 const goToNext = async () => {
   await formRef.value.validate(["verifyCode"]);
   active.value = 1;
 };
 
-// 提交新密码
+// Validación local de match de password antes de mandar al backend.
+// Evita el error "Code does not match" del server cuando el problema
+// es que el usuario tipeó dos passwords distintas.
+const submitError = ref("");
+
 const onSubmit = async () => {
+  submitError.value = "";
+  if (formData.value.password !== formData.value.confirmPassword) {
+    submitError.value = t("routes.auth.validation.passwordMismatch");
+    showToast(submitError.value);
+    return;
+  }
   try {
     emit('submit', {
       ...formData.value,
       smsRequestId: smsRequestId.value,
       phone: phoneNumber.value,
     });
-    
   } catch (error) {
     showToast(t("routes.settings.changePassword.messages.changeFailed"));
   }
 };
 
-// 添加一个新方法处理密码修改成功
+// Pantalla de éxito: arrancar countdown y saltar al paso 3.
 const handlePasswordChangeSuccess = () => {
   countDown.start();
   active.value = 2;
@@ -95,35 +120,55 @@ defineExpose({
     </div>
 
     <van-cell-group inset>
-      <!-- 手机号验证步骤 -->
       <van-form ref="formRef" @submit="onSubmit">
+        <!-- ─────── PASO 1: verificar teléfono ─────── -->
         <div v-show="active === 0" class="verify-step">
           <phone-number-field v-model="formData.phone" name="phone" v-model:area-code="areaCode"
             :readonly="phoneNumberReadOnly" :rules="phoneRules" class="mb-3" />
 
+          <!-- Campo código: deshabilitado hasta que se solicite el SMS -->
           <van-field v-model="formData.verifyCode" name="verifyCode"
-            :placeholder="t('routes.settings.changePassword.form.verifyCode')" center :rules="verifyCodeRules">
+            :placeholder="t('routes.settings.changePassword.form.verifyCode')"
+            :disabled="!codeSent"
+            :rules="codeSent ? verifyCodeRules : []"
+            maxlength="6"
+            type="digit"
+            center>
             <template #button>
-              <van-button size="small" type="primary" @click="getVerifyCode" :disabled="isActive" class="rounded-lg">
+              <van-button size="small" type="primary"
+                @click="getVerifyCode"
+                :disabled="!isPhoneValid || isActive"
+                class="rounded-lg">
                 {{ countdownButtonText }}
               </van-button>
             </template>
           </van-field>
 
           <div class="submit-btn">
-            <van-button round block type="primary" @click="goToNext">
+            <!-- Siguiente: solo habilitado cuando el código ya fue enviado -->
+            <van-button round block type="primary" @click="goToNext" :disabled="!codeSent">
               {{ t("routes.settings.changePassword.form.next") }}
             </van-button>
           </div>
         </div>
 
+        <!-- ─────── PASO 2: nueva contraseña ─────── -->
         <div v-show="active === 1" class="verify-step">
-          <!-- 设置新密码步骤 -->
-          <van-field v-model="formData.password" name="password" type="password"
-            :placeholder="t('routes.settings.changePassword.form.newPassword')" :rules="passwordRules" />
+          <label class="field-label">
+            {{ t("routes.settings.changePassword.form.newPasswordLabel") }}
+          </label>
+          <password-field v-model="formData.password" name="password"
+            maxlength="20"
+            :placeholder="t('routes.settings.changePassword.form.newPassword')"
+            :rules="passwordRules" />
 
-          <van-field v-model="formData.confirmPassword" name="confirmPassword" type="password" :placeholder="t('routes.settings.changePassword.form.confirmPassword')
-            " :rules="confirmPasswordRules" />
+          <label class="field-label mt-12px">
+            {{ t("routes.settings.changePassword.form.confirmPasswordLabel") }}
+          </label>
+          <password-field v-model="formData.confirmPassword" name="confirmPassword"
+            maxlength="20"
+            :placeholder="t('routes.settings.changePassword.form.confirmPassword')"
+            :rules="confirmPasswordRules" />
 
           <div class="submit-btn">
             <van-button round block type="primary" native-type="submit">
@@ -133,13 +178,15 @@ defineExpose({
         </div>
       </van-form>
 
-      <!-- 完成步骤 -->
+      <!-- ─────── PASO 3: éxito ─────── -->
       <div v-show="active === 2" class="complete-step">
-        <van-empty :image="SuccessPng" image-size="80" :description="t('routes.settings.changePassword.messages.changeSuccess')
-          ">
+        <van-empty :image="SuccessPng" image-size="80"
+          :description="t('routes.settings.changePassword.messages.changeSuccess')">
           <van-button round type="primary" class="bottom-button" @click="router.replace('/')">
-            <span v-if="countDown.seconds > 0">{{ countDown.seconds }}秒后自动跳转至首页</span>
-            <span v-else>返回首页</span>
+            <span v-if="countDown.seconds > 0">
+              {{ t('routes.settings.changePassword.backToHome.countdown', { seconds: Math.ceil(countDown.seconds / 1000) }) }}
+            </span>
+            <span v-else>{{ t('routes.settings.changePassword.backToHome.button') }}</span>
           </van-button>
         </van-empty>
       </div>
@@ -154,6 +201,16 @@ defineExpose({
 
 .verify-step {
   padding: 16px;
+}
+
+/* Labels arriba de los campos de password (paso 2). */
+.field-label {
+  display: block;
+  margin: 0 0 6px 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary, #fff);
+  letter-spacing: 0.01em;
 }
 
 .submit-btn {

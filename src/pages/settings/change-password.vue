@@ -125,11 +125,14 @@ defineExpose({
 
         <div v-show="active === 1" class="verify-step">
           <!-- 设置新密码步骤 -->
-          <van-field v-model="formData.password" name="password" type="password"
-            :placeholder="t('routes.settings.changePassword.form.√')" :rules="passwordRules" />
+          <password-field v-model="formData.password" name="password"
+            maxlength="20"
+            :placeholder="t('routes.settings.changePassword.form.newPassword')" :rules="passwordRules" />
 
-          <van-field v-model="formData.confirmPassword" name="confirmPassword" type="password" :placeholder="t('routes.settings.changePassword.form.confirmPassword')
-            " :rules="confirmPasswordRules" />
+          <password-field v-model="formData.confirmPassword" name="confirmPassword"
+            maxlength="20"
+            :placeholder="t('routes.settings.changePassword.form.confirmPassword')"
+            :rules="confirmPasswordRules" />
 
           <div class="submit-btn">
             <van-button round block type="primary" native-type="submit">

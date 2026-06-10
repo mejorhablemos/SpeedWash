@@ -54,7 +54,7 @@ const onSubmit = async () => {
     router.replace(redirectUrl.value);
   } catch (err) {
     console.error("登录失败:", err);
-    showToast(t("routes.login.failed"));
+    showToast(err?.message || t("routes.login.failed"));
   }
 };
 
@@ -67,15 +67,13 @@ const guestLogin = () => {
 </script>
 
 <template>
-  <!-- 水波纹背景 -->
-  <wave />
-
-  <van-space direction="vertical" fill class="pt-20% z-10 relative">
-    <div class="flex justify-center items-center w-full h-100px">
+  <van-space direction="vertical" fill class="z-10 relative">
+    <!-- Isotipo Speed Wash, mismo tratamiento que /register -->
+    <div class="flex justify-center items-center w-full pt-12 pb-6">
       <img
-        src="@/assets/speedwash-wordmark.png"
+        src="@/assets/speedwash-iso.png"
         alt="Speed Wash"
-        class="block h-auto w-full max-w-[240px]"
+        class="block h-80px w-auto"
       />
     </div>
 
@@ -86,7 +84,7 @@ const guestLogin = () => {
         <phone-number-field v-model="formData.phone" name="phone" :rules="phoneRules" v-model:area-code="areaCode" />
 
         <!-- 密码输入框 -->
-        <van-field v-model="formData.password" name="password" type="password"
+        <password-field v-model="formData.password" name="password"
           :placeholder="t('routes.login.passwordPlaceholder')" :rules="passwordRules" />
       </van-cell-group>
 
