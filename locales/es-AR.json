@@ -72,7 +72,8 @@
       "forgotPassword": "Olvidé mi contraseña",
       "guestLogin": "Continuar como invitado",
       "passwordPlaceholder": "Ingresá tu contraseña",
-      "pleaseLogin": "Iniciá sesión para continuar"
+      "pleaseLogin": "Iniciá sesión para continuar",
+      "purchaseRequiresAccount": "Para comprar un pack necesitás registrarte. Es gratis y toma 30 segundos."
     },
     "register": {
       "title": "Crear cuenta",
@@ -410,6 +411,7 @@
       "expired": "Vencidos",
       "empty": "No tenés abonos activos",
       "useNow": "Usar ahora",
+      "viewPlans": "Ver planes disponibles",
       "licensePlate": {
         "bind": "Vincular patente",
         "placeholder": "Ingresá la patente",

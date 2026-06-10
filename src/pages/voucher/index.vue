@@ -74,7 +74,7 @@ const bindLicenseNo = async (licenseNo) => {
           class="empty-state__btn"
           @click="router.push('/vip')"
         >
-          Ver planes disponibles
+          {{ t('routes.voucher.viewPlans') }}
         </van-button>
       </div>
 

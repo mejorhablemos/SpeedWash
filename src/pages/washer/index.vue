@@ -1,5 +1,10 @@
 <script setup>
 import { PAYMENT_FROM, PAYMENT_METHOD, IOT_STATUS } from "@/constants";
+
+// Feature flag — pasar a true cuando RR.PP. confirme % de descuento
+// por pago en efectivo y la operatoria en sucursal. Default off al lanzamiento.
+const SHOW_CASH_OFFER = false;
+
 const { t, tm } = useI18n();
 const route = useRoute();
 const router = useRouter();
@@ -272,8 +277,10 @@ watch(
       </div> -->
     </group-card>
 
-    <!-- Oferta de pago en efectivo (destacada) -->
-    <div class="px-4 py-3">
+    <!-- Oferta de pago en efectivo (destacada).
+         Oculta hasta confirmar % de descuento y disponibilidad real.
+         Flipear SHOW_CASH_OFFER a true cuando esté definido. -->
+    <div v-if="SHOW_CASH_OFFER" class="px-4 py-3">
       <div class="cash-offer flex items-center gap-3 rounded-2xl px-5 py-4">
         <span class="cash-offer__peso shrink-0">$</span>
         <div class="flex-1">

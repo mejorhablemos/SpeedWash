@@ -71,7 +71,8 @@
       "forgotPassword": "Forgot Password",
       "guestLogin": "Guest Login",
       "passwordPlaceholder": "Enter password",
-      "pleaseLogin": "Please Login"
+      "pleaseLogin": "Please Login",
+      "purchaseRequiresAccount": "Buying a pack requires an account. It's free and takes 30 seconds."
     },
     "register": {
       "title": "Register",

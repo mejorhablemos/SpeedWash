@@ -90,17 +90,13 @@ const goToLogin = () => {
 };
 </script>
 <template>
-  <!-- Logo区域 -->
+  <!-- Logo SpeedWash -->
   <div class="py-10 text-center">
-    <div
-      class="w-150 aspect-ratio-1 mx-auto bg-white rounded-lg flex-center shadow-sm overflow-clip"
-    >
-      <img
-        src="@/assets/logo_trans.png"
-        alt="logo"
-        class="w-full aspect-ratio-1"
-      />
-    </div>
+    <img
+      src="@/assets/speedwash-logo.png"
+      alt="Speed Wash"
+      class="mx-auto h-80px w-auto"
+    />
   </div>
 
   <!-- 注册表单 -->

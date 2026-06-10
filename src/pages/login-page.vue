@@ -7,6 +7,15 @@ const { t } = useI18n();
 const { query } = useRoute();
 const redirectUrl = computed(() => query.redirect || "/");
 
+// Rutas que requieren cuenta real (no funcionan con guestId).
+// Si el usuario aterrizó en /login por una de estas, ocultamos el botón
+// "Continuar como invitado" para evitar el loop de redirección.
+const PURCHASE_PATHS = ["/vip", "/vouchers", "/wallet"];
+const isPurchaseFlow = computed(() => {
+  const redirect = String(query.redirect || "");
+  return PURCHASE_PATHS.some((p) => redirect.startsWith(p));
+});
+
 const {
   areaCode,
   formData,
@@ -92,11 +101,15 @@ const guestLogin = () => {
       <router-link to="/forgot-password">{{ t('routes.login.forgotPassword') }}</router-link>
     </div>
 
-    <!-- 访客登录 -->
-    <div class="grid place-items-center">
+    <!-- Continuar como invitado: oculto si el redirect es a un flujo
+         que necesita cuenta real (compra de pack, billetera). -->
+    <div v-if="!isPurchaseFlow" class="grid place-items-center">
       <van-button round type="primary" class="mt-40 bg-primary border-none" @click="guestLogin">
         {{ t('routes.login.guestLogin') }}
       </van-button>
+    </div>
+    <div v-else class="px-30 text-center text-white/80 text-22 mt-40 leading-relaxed">
+      {{ t('routes.login.purchaseRequiresAccount') }}
     </div>
   </van-space>
 </template>
