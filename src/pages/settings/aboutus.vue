@@ -97,7 +97,7 @@ const legalLinks = [
 }
 
 .aboutus__logo {
-  width: 140px;
+  width: 168px;
   height: auto;
   object-fit: contain;
 }

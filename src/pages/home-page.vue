@@ -145,9 +145,10 @@ function viewShop(id) {
 /* Hero Section */
 .hero-section {
   position: relative;
-  /* Compresión del hero para que "Sucursales" entre en viewport
-     mobile estándar (375x667 y arriba) sin scrollear. */
-  padding: 8px 24px 18px;
+  /* Con el logo recortado (sin margen transparente) el hero es bajo,
+     así que devolvemos aire arriba/abajo para que no quede pegado al
+     navbar y mantenga buen equilibrio vertical. */
+  padding: 30px 24px 26px;
   overflow: hidden;
 }
 
@@ -196,7 +197,7 @@ function viewShop(id) {
   max-width: 340px;
   height: auto;
   object-fit: contain;
-  margin: 0 0 2px;
+  margin: 0 0 8px;
 }
 
 .hero-subtitle {

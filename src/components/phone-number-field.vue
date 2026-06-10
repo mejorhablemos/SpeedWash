@@ -27,6 +27,19 @@ const props = defineProps({
 // País actual (derivado del areaCode). AR por default.
 const currentCountry = computed(() => getCountryByCode(areaCode.value));
 
+// Hint bajo el campo. AR (mercado principal) muestra el aviso explícito
+// "sin 0/15/+54"; el resto, la cantidad de dígitos esperada según el país.
+const phoneHint = computed(() => {
+  const c = currentCountry.value;
+  if (c.code === "54") return t("components.phoneNumberField.hintAr");
+  if (c.minLength === c.maxLength)
+    return t("components.phoneNumberField.hintDigits", { count: c.maxLength });
+  return t("components.phoneNumberField.hintDigitsRange", {
+    min: c.minLength,
+    max: c.maxLength,
+  });
+});
+
 // Opciones del picker, etiquetadas con la traducción del país.
 const areaCodeColumns = computed(() =>
   COUNTRIES.map((c) => ({
@@ -96,6 +109,9 @@ const onInput = (value) => {
     </template>
   </van-field>
 
+  <!-- Hint de formato: evita 0/15/+54 y aclara los dígitos esperados. -->
+  <p v-if="!readonly" class="phone-hint">{{ phoneHint }}</p>
+
   <!-- 区号选择器 -->
   <van-popup v-model:show="showAreaPicker" position="bottom" round>
     <van-picker
@@ -121,5 +137,14 @@ const onInput = (value) => {
 <style scoped>
 :deep(.van-field__label) {
   width: auto;
+}
+
+/* Hint discreto bajo el input, alineado con el padding del van-field. */
+.phone-hint {
+  margin: 4px 0 0;
+  padding: 0 16px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--text-secondary, rgba(255, 255, 255, 0.55));
 }
 </style>

@@ -108,7 +108,8 @@ defineExpose({
             :readonly="phoneNumberReadOnly" :rules="phoneRules" class="mb-3" />
 
           <van-field v-model="formData.verifyCode" name="verifyCode"
-            :placeholder="t('routes.settings.changePassword.form.verifyCode')" center :rules="verifyCodeRules">
+            :placeholder="t('routes.settings.changePassword.form.verifyCode')" center :rules="verifyCodeRules"
+            maxlength="6" type="digit">
             <template #button>
               <van-button size="small" type="primary" @click="getVerifyCode" :disabled="isActive" class="rounded-lg">
                 {{ countdownButtonText }}

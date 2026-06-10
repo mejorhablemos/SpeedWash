@@ -2,6 +2,7 @@ import { Locale } from "vant";
 // 引入英文语言包
 import enUSPackage from "vant/es/locale/lang/en-US";
 import zhCNPackage from "vant/es/locale/lang/zh-CN";
+import esESPackage from "vant/es/locale/lang/es-ES";
 import { createI18n } from "vue-i18n";
 import { isZh, isEs, getBrowserLanguage, getLocaleCode } from "@/utils";
 import en from "~i18n/en.json";
@@ -92,7 +93,9 @@ export async function loadLanguageAsync(lang) {
   const messages = await localesMap[lang]();
   const { default: messagesDefault, ...messagesRest } = messages;
   i18n.global.setLocaleMessage(lang, messagesRest);
-  Locale.use(lang, isZh() ? zhCNPackage : enUSPackage); // Vant no tiene es-AR, usa en-US como fallback
+  // Vant no tiene es-AR: para español usamos su pack es-ES (botones
+  // "Confirmar"/"Cancelar", etc.); chino → zh-CN; resto → en-US.
+  Locale.use(lang, isZh() ? zhCNPackage : isEs() ? esESPackage : enUSPackage);
   loadedLanguages.push(lang);
   return setI18nLanguage(lang);
 }

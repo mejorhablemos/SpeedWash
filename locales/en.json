@@ -575,6 +575,9 @@
     "phoneNumberField": {
       "placeholder": "Enter phone number",
       "required": "Phone number is required",
+      "hintAr": "No 0, no 15, no +54. Just 10 digits.",
+      "hintDigits": "Just {count} digits.",
+      "hintDigitsRange": "Between {min} and {max} digits.",
       "selectAreaCode": "Select area code",
       "areaCode": {
         "argentina": "Argentina",

@@ -611,6 +611,9 @@
     "phoneNumberField": {
       "placeholder": "Ingresá tu teléfono",
       "required": "El teléfono es obligatorio",
+      "hintAr": "Sin 0, sin 15, sin +54. Solo 10 dígitos.",
+      "hintDigits": "Solo {count} dígitos.",
+      "hintDigitsRange": "Entre {min} y {max} dígitos.",
       "selectAreaCode": "Código de área",
       "areaCode": {
         "argentina": "Argentina",

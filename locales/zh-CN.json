@@ -562,6 +562,9 @@
     "phoneNumberField": {
       "placeholder": "请输入手机号",
       "required": "请输入手机号",
+      "hintAr": "不加 0、15 或 +54，仅 10 位数字。",
+      "hintDigits": "仅 {count} 位数字。",
+      "hintDigitsRange": "{min} 至 {max} 位数字。",
       "selectAreaCode": "选择区号",
       "areaCode": {
         "argentina": "阿根廷",
