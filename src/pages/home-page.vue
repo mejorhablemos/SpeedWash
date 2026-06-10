@@ -132,7 +132,7 @@ function viewShop(id) {
       class="order-notification"
     >
       <div class="order-notification__pulse"></div>
-      <van-icon name="info-o" size="18" color="#FF8C00" />
+      <van-icon name="info-o" size="18" color="#FF9416" />
       <span class="order-notification__text">{{ t("routes.home.orderNotification.message") }}</span>
       <van-button type="primary" round size="small" class="order-notification__btn" @click="viewOrder">
         {{ t("routes.home.orderNotification.view") }}
@@ -228,16 +228,16 @@ function viewShop(id) {
   align-items: center;
   gap: 14px;
   padding: 16px 20px;
-  background: linear-gradient(135deg, #FF8C00 0%, #FFAB40 100%);
+  background: linear-gradient(135deg, #FF9416 0%, #FFB04D 100%);
   border-radius: 16px;
   cursor: pointer;
-  box-shadow: 0 8px 28px rgba(255, 140, 0, 0.4);
+  box-shadow: 0 8px 28px rgba(255, 148, 22, 0.4);
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .scan-cta:active {
   transform: scale(0.98);
-  box-shadow: 0 4px 12px rgba(255, 140, 0, 0.28);
+  box-shadow: 0 4px 12px rgba(255, 148, 22, 0.28);
 }
 
 .scan-cta__icon {
@@ -295,13 +295,13 @@ function viewShop(id) {
   position: relative;
   overflow: hidden;
   background:
-    radial-gradient(130% 120% at 100% 0%, rgba(255, 140, 0, 0.14) 0%, transparent 55%),
+    radial-gradient(130% 120% at 100% 0%, rgba(255, 148, 22, 0.14) 0%, transparent 55%),
     var(--surface-color);
-  border: 1px solid rgba(255, 140, 0, 0.4);
+  border: 1px solid rgba(255, 148, 22, 0.4);
   border-radius: 18px;
   padding: 16px 16px 14px;
   cursor: pointer;
-  box-shadow: 0 12px 30px -18px rgba(255, 140, 0, 0.5);
+  box-shadow: 0 12px 30px -18px rgba(255, 148, 22, 0.5);
   transition: transform 0.2s;
 }
 
@@ -316,7 +316,7 @@ function viewShop(id) {
   width: 150px;
   height: 150px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 140, 0, 0.2) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255, 148, 22, 0.2) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -335,8 +335,8 @@ function viewShop(id) {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #FF8C00 0%, #FFAB40 100%);
-  box-shadow: 0 8px 18px -6px rgba(255, 140, 0, 0.7);
+  background: linear-gradient(135deg, #FF9416 0%, #FFB04D 100%);
+  box-shadow: 0 8px 18px -6px rgba(255, 148, 22, 0.7);
 }
 
 .pack-card__title {
@@ -381,7 +381,7 @@ function viewShop(id) {
   gap: 4px;
   font-size: 13px;
   font-weight: 700;
-  color: #FF8C00;
+  color: #FF9416;
   margin-top: 12px;
 }
 
@@ -429,8 +429,8 @@ function viewShop(id) {
   font-weight: 600;
   padding: 2px 10px;
   border-radius: 20px;
-  background: rgba(46, 204, 113, 0.14);
-  color: #34d399;
+  background: rgba(var(--brand-success-rgb), 0.14);
+  color: var(--brand-success);
 }
 
 .store-card__address {
@@ -468,7 +468,7 @@ function viewShop(id) {
   background: var(--surface-2);
   border-radius: 14px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(255, 140, 0, 0.35);
+  border: 1px solid rgba(255, 148, 22, 0.35);
   z-index: 50;
 }
 

@@ -189,13 +189,13 @@ const handleView = () => {
 }
 
 .status-badge--open {
-  color: #34D399;
-  background: rgba(52, 211, 153, 0.12);
-  border: 1px solid rgba(52, 211, 153, 0.32);
+  color: var(--brand-success);
+  background: rgba(var(--brand-success-rgb), 0.12);
+  border: 1px solid rgba(var(--brand-success-rgb), 0.32);
 }
 
 .status-badge--open .status-badge__dot {
-  background: #34D399;
+  background: var(--brand-success);
   animation: badge-pulse 2s ease-in-out infinite;
 }
 

@@ -74,13 +74,13 @@ watchEffect(() => {
         </router-link>
         <router-link to="/orders?status=3" class="order-item">
           <div class="order-item__icon order-item__icon--pending">
-            <van-icon name="balance-o" size="22" color="#FF8C00" />
+            <van-icon name="balance-o" size="22" color="#FF9416" />
           </div>
           <span class="order-item__text">{{ t('routes.mine.orders.status.pending') }}</span>
         </router-link>
         <router-link to="/orders?status=4" class="order-item">
           <div class="order-item__icon order-item__icon--completed">
-            <van-icon name="passed" size="22" color="#2ecc71" />
+            <van-icon name="passed" size="22" color="var(--brand-success)" />
           </div>
           <span class="order-item__text">{{ t('routes.mine.orders.status.completed') }}</span>
         </router-link>
@@ -94,7 +94,7 @@ watchEffect(() => {
       </div>
       <router-link to="/vouchers" class="service-item">
         <div class="service-item__icon">
-          <van-icon name="vip-card-o" size="22" color="#FF8C00" />
+          <van-icon name="vip-card-o" size="22" color="#FF9416" />
         </div>
         <span class="service-item__text">{{ t('routes.mine.services.vipCard') }}</span>
         <van-icon name="arrow" size="14" color="#C0C4C8" />
@@ -295,7 +295,7 @@ watchEffect(() => {
 }
 
 .order-item__icon--progress { background: rgba(0, 187, 252, 0.14); }
-.order-item__icon--pending { background: rgba(255, 140, 0, 0.14); }
+.order-item__icon--pending { background: rgba(255, 148, 22, 0.14); }
 .order-item__icon--completed { background: rgba(46, 204, 113, 0.14); }
 .order-item__text {
   font-size: 12px;
@@ -325,7 +325,7 @@ watchEffect(() => {
   width: 40px;
   height: 40px;
   border-radius: 10px;
-  background: rgba(255, 140, 0, 0.14);
+  background: rgba(255, 148, 22, 0.14);
   display: flex;
   align-items: center;
   justify-content: center;

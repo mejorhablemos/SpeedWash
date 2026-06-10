@@ -137,7 +137,7 @@ const specialPrice = computed(() => {
 }
 
 .vip-card--special .vip-card__glow {
-  background: radial-gradient(circle, rgba(255, 140, 0, 0.18) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255, 148, 22, 0.18) 0%, transparent 70%);
 }
 
 .vip-card--selected {
@@ -147,7 +147,7 @@ const specialPrice = computed(() => {
 
 .vip-card--special.vip-card--selected {
   border-color: var(--accent-color);
-  box-shadow: 0 0 0 1px var(--accent-color), 0 16px 36px -18px rgba(255, 140, 0, 0.55);
+  box-shadow: 0 0 0 1px var(--accent-color), 0 16px 36px -18px rgba(255, 148, 22, 0.55);
 }
 
 /* Header */
@@ -184,8 +184,8 @@ const specialPrice = computed(() => {
 
 .vip-card--special .vip-card__mode {
   color: var(--accent-light);
-  background: rgba(255, 140, 0, 0.1);
-  border-color: rgba(255, 140, 0, 0.28);
+  background: rgba(255, 148, 22, 0.1);
+  border-color: rgba(255, 148, 22, 0.28);
 }
 
 .vip-card__mode-icon {
@@ -260,7 +260,7 @@ const specialPrice = computed(() => {
   font-size: 13px;
   color: #fff;
   background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-light) 100%);
-  box-shadow: 0 8px 20px -10px rgba(255, 140, 0, 0.7);
+  box-shadow: 0 8px 20px -10px rgba(255, 148, 22, 0.7);
 }
 
 .vip-card__save .van-icon {

@@ -15,10 +15,10 @@ const emit = defineEmits(["contact", "refund", "pay", "detail", "click"]);
 // 获取状态样式
 const getStatusStyle = (status) => {
   const styleMap = {
-    completed: "text-[#07c160]",
-    pending: "text-[#FF8C00]",
-    processing: "text-[#00BBFC]",
-    refund: "text-[#e74c3c]",
+    completed: "text-success",
+    pending: "text-accent",
+    processing: "text-primary",
+    refund: "text-error",
   };
   return styleMap[status] || "";
 };

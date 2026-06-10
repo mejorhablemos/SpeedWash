@@ -178,7 +178,7 @@ const slots = useSlots();
 }
 
 .voucher-card__origin :deep(.van-tag) {
-  background: linear-gradient(135deg, #FF8C00 0%, #FFAB40 100%) !important;
+  background: linear-gradient(135deg, #FF9416 0%, #FFB04D 100%) !important;
   border: none !important;
   border-radius: 0 16px 0 12px !important;
   padding: 2px 10px;

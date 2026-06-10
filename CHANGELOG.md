@@ -10,6 +10,64 @@ Fecha: 2026-06-09
 
 ---
 
+## 🎨 Branch `fix/brand-colors` — sistema de color Speed Wash (2026-06-10)
+
+Cierre de la auditoría de marca ([BRAND-AUDIT.md](BRAND-AUDIT.md)). Se
+unificó la paleta a tokens, se sumaron `success` y `error`, y se limpiaron
+colores hardcodeados heredados del white-label KIREI. **No requiere backend.**
+
+### Decisiones de marca tomadas
+- **Verde success oficial:** `#00D97E` (combina con el azul LED, mismo nivel de
+  saturación, "verde = ok" universal). Para: abierto/online, verificación/pago
+  ok, confirmaciones.
+- **Rojo error/danger oficial:** `#F04438` (moderno; se diferencia del spark
+  naranja y no se confunde con el viejo Kirei `#FD5C57`).
+- **Radius de la app:** se mantiene redondeado (estilo Tesla/Apple Music/
+  Spotify). El "borde recto" del manual aplica a piezas estáticas, no a la app.
+
+### Tokens
+- `--accent-color` **#FF8C00 → #FF9416** (naranja oficial) + `--accent-light`
+  `#FFAB40 → #FFB04D`; idem en `uno.config.js`. — [variables.css](src/styles/variables.css), [uno.config.js](uno.config.js)
+- Nuevos `--brand-success` (#00D97E) y `--brand-error` (#F04438) + sus `-rgb`,
+  y clases UnoCSS `success` / `error` (`text-success`, `bg-error`, etc.).
+- Vant: `--van-success-color` / `--van-tag-success-color` → `--brand-success`.
+
+### Reemplazos de color (hardcoded → token)
+- Naranja viejo `#FF8C00`/`#FFAB40` (gradientes/glows) → `#FF9416`/`#FFB04D` en
+  8 archivos (home-page, layout, membership-card, voucher-card, order-item,
+  mine-page, store, variables).
+- Verde Kirei/ad-hoc → `success`: `#2ecc71` ([mine-page.vue:83](src/pages/mine-page.vue#L83),
+  [register-page.vue](src/pages/register-page.vue) badge), `#34D399` "Abierto"
+  ([shop-list-item.vue](src/components/shop-list-item.vue), [status-tag.vue](src/components/status-tag.vue),
+  [home-page.vue](src/pages/home-page.vue), [store/index.vue](src/pages/store/index.vue)),
+  `#07c160` "completado" ([order-item.vue](src/components/order/order-item.vue)).
+- Rojo error `#E74C3C` → `text-error` ([order-item.vue](src/components/order/order-item.vue),
+  [refund/index.vue](src/pages/order/refund/index.vue)).
+- Rojo Kirei `#FF6B6B` del checkout Stripe → azul de marca `#00BBFC`
+  ([sr-checkout-form.vue:47](src/components/payment/sr-checkout-form.vue#L47)).
+- `order-item` status map tokenizado: pending→`text-accent`, processing→`text-primary`.
+
+### Limpieza
+- Borrados assets muertos (sin imports) con rojo Kirei: `src/assets/icons/scan.svg`,
+  `src/assets/icons/map.svg`, `src/assets/vue.svg`.
+
+### Docs
+- `CLAUDE.md`: paleta actualizada (era `#FD5C57`/`#2ecc71` Kirei).
+- `CONTEXTO.md §12`: sumados `--success`/`--error` y nota de excepción de radius app↔web.
+
+### Verificación
+- `pnpm build` OK (3.1s). Grep confirma 0 restos de los colores migrados.
+
+### ⚠️ Pendiente (Etapa 2, post-lanzamiento) — ver BRAND-AUDIT.md 🟡
+- Afinar grises/azules secundarios a valores exactos del manual (surface
+  `#141418`→`#17181B`, líneas sólidas→alpha, texto `#ACACB6`→`#C9CDD2`, etc.).
+- `letter-spacing` display `-0.02em`→`-0.04em`; eyebrow a Inter 9px.
+- Verdes/colores aún fuera de token por ser categóricos, no success: pin de
+  mapa `#18C686`, badges de rol `#4CD263`/`#6B7FF7` ([mine/identity.vue](src/pages/mine/identity.vue)),
+  amarillo `#FFF1AD` (invite), grises sueltos `#969799`/`#C0C4C8`/`#9FB0CB`.
+
+---
+
 ## 1. Cambios aplicados en el frontend (Vue) — no requieren backend
 
 ### 1.1 Branding · logo KIREI eliminado de "Crear cuenta"
