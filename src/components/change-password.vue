@@ -157,14 +157,14 @@ defineExpose({
           <label class="field-label">
             {{ t("routes.settings.changePassword.form.newPasswordLabel") }}
           </label>
-          <van-field v-model="formData.password" name="password" type="password"
+          <password-field v-model="formData.password" name="password"
             :placeholder="t('routes.settings.changePassword.form.newPassword')"
             :rules="passwordRules" />
 
           <label class="field-label mt-12px">
             {{ t("routes.settings.changePassword.form.confirmPasswordLabel") }}
           </label>
-          <van-field v-model="formData.confirmPassword" name="confirmPassword" type="password"
+          <password-field v-model="formData.confirmPassword" name="confirmPassword"
             :placeholder="t('routes.settings.changePassword.form.confirmPassword')"
             :rules="confirmPasswordRules" />
 

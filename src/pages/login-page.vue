@@ -84,7 +84,7 @@ const guestLogin = () => {
         <phone-number-field v-model="formData.phone" name="phone" :rules="phoneRules" v-model:area-code="areaCode" />
 
         <!-- 密码输入框 -->
-        <van-field v-model="formData.password" name="password" type="password"
+        <password-field v-model="formData.password" name="password"
           :placeholder="t('routes.login.passwordPlaceholder')" :rules="passwordRules" />
       </van-cell-group>
 
