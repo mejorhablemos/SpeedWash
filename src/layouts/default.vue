@@ -150,11 +150,11 @@ function goHome() {
 }
 
 :deep(.tabbar-premium .tabbar-scan) {
-  color: #FF8C00 !important;
+  color: #FF9416 !important;
 }
 
 :deep(.tabbar-premium .tabbar-scan .van-tabbar-item__icon) {
-  background: linear-gradient(135deg, #FF8C00 0%, #FFAB40 100%);
+  background: linear-gradient(135deg, #FF9416 0%, #FFB04D 100%);
   color: #fff !important;
   width: 46px;
   height: 46px;
@@ -163,16 +163,16 @@ function goHome() {
   align-items: center;
   justify-content: center;
   margin-top: -20px;
-  box-shadow: 0 4px 14px rgba(255, 140, 0, 0.45);
+  box-shadow: 0 4px 14px rgba(255, 148, 22, 0.45);
   font-size: 24px;
 }
 
 :deep(.tabbar-premium .tabbar-scan.van-tabbar-item--active) {
-  color: #FF8C00 !important;
+  color: #FF9416 !important;
 }
 
 :deep(.tabbar-premium .tabbar-scan.van-tabbar-item--active .van-tabbar-item__icon) {
-  background: linear-gradient(135deg, #FF8C00 0%, #FFAB40 100%);
+  background: linear-gradient(135deg, #FF9416 0%, #FFB04D 100%);
   color: #fff !important;
 }
 

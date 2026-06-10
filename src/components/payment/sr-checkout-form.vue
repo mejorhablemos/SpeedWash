@@ -44,7 +44,9 @@ async function initStripe() {
     appearance: {
       theme: "flat",
       variables: {
-        colorPrimary: "#FF6B6B",
+        // Azul de marca Speed Wash (Stripe Appearance no lee CSS vars,
+        // requiere hex literal; mantener en sync con --primary-color).
+        colorPrimary: "#00BBFC",
       },
     },
   });

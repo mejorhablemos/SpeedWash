@@ -31,7 +31,7 @@ const statusText = computed(() => {
 
 const statusTextClass = computed(() => {
   const classMap = {
-    0: 'text-[#34D399]',
+    0: 'text-success',
     1: 'text-primary',
     2: 'text-text-secondary'
   }

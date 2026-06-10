@@ -256,6 +256,9 @@ Aplica a todas las piezas visuales: brochures, presentación, sitio web, app.
 --blue-deep:   #0079B8   /* sombras/gradientes */
 --orange:      #FF9416   /* spark · uso mínimo (acento puntual) */
 
+--success: #00D97E   /* verde · estados ok: abierto/online, verificado, pago ok */
+--error:   #F04438   /* rojo · errores/danger (diferenciable del spark) */
+
 --black:  #000000
 --g0:     #08090A   /* fondo casi negro de slides */
 --g1:     #101113
@@ -288,7 +291,11 @@ Aplica a todas las piezas visuales: brochures, presentación, sitio web, app.
 - Hero shots a sangre
 - Sin sombras blandas (Material). Si hay elevación, es por contraste de
   luz/color
-- CTAs con bordes rectos o radius mínimo (≤ 4px)
+- CTAs con bordes rectos o radius mínimo (≤ 4px) **en piezas estáticas**
+  (brochures, sitio web). **Excepción: la app mobile** (`lavar.speedwash.com.ar`)
+  usa botones/cards redondeados (estilo Tesla app / Apple Music / Spotify):
+  mejor UX táctil y estándar de apps premium. La diferencia app↔web se
+  justifica por contexto de uso, no es un bug.
 - **Cero estética "lavadero"** (sin burbujas, agua brillante, destellos
   cursis)
 

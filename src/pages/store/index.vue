@@ -169,10 +169,10 @@ const handleBuyVip = () => {
   border-radius: 16px;
   cursor: pointer;
   background:
-    radial-gradient(140% 120% at 100% 0%, rgba(255, 140, 0, 0.16) 0%, transparent 55%),
+    radial-gradient(140% 120% at 100% 0%, rgba(255, 148, 22, 0.16) 0%, transparent 55%),
     var(--surface-color);
-  border: 1px solid rgba(255, 140, 0, 0.45);
-  box-shadow: 0 10px 28px -16px rgba(255, 140, 0, 0.6);
+  border: 1px solid rgba(255, 148, 22, 0.45);
+  box-shadow: 0 10px 28px -16px rgba(255, 148, 22, 0.6);
   transition: transform 0.2s, border-color 0.2s;
 }
 
@@ -191,7 +191,7 @@ const handleBuyVip = () => {
   font-size: 24px;
   color: #fff;
   background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-light) 100%);
-  box-shadow: 0 6px 16px -6px rgba(255, 140, 0, 0.7);
+  box-shadow: 0 6px 16px -6px rgba(255, 148, 22, 0.7);
 }
 
 .buy-pack__title {
@@ -236,13 +236,13 @@ const handleBuyVip = () => {
 }
 
 .status-badge--open {
-  color: #34D399;
-  background: rgba(52, 211, 153, 0.12);
-  border: 1px solid rgba(52, 211, 153, 0.32);
+  color: var(--brand-success);
+  background: rgba(var(--brand-success-rgb), 0.12);
+  border: 1px solid rgba(var(--brand-success-rgb), 0.32);
 }
 
 .status-badge--open .status-badge__dot {
-  background: #34D399;
+  background: var(--brand-success);
   animation: badge-pulse 2s ease-in-out infinite;
 }
 

@@ -303,7 +303,7 @@ const goToLogin = () => {
 
 /* Paso completado: badge verde con check */
 .step-badge--done {
-  background: #2ecc71;
+  background: var(--brand-success);
   color: #fff;
   font-size: 14px;
 }

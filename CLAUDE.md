@@ -61,7 +61,7 @@ Single layout wrapper with Vant NavBar (gradient support), bottom Tabbar (Home/S
 
 ### UI Framework
 - **Vant 4** — mobile component library, auto-imported via `unplugin-vue-components`
-- **UnoCSS** — atomic CSS with custom theme colors: primary `#FD5C57`, secondary `#2ecc71`, background `#F5F7FA`. Custom responsive `vw`-based unit rules for mobile sizing.
+- **UnoCSS** — atomic CSS with the Speed Wash dark theme: primary `#00BBFC` (LED blue), accent/spark `#FF9416` (orange, minimal use), success `#00D97E`, error `#F04438`, dark backgrounds (`#000000` base, `#141418` surfaces). Tokens live in [uno.config.js](uno.config.js) + [src/styles/variables.css](src/styles/variables.css) (kept in sync). Custom responsive `vw`-based unit rules for mobile sizing. (The old `#FD5C57`/`#2ecc71` were the inherited KIREI white-label palette — no longer used.)
 
 ### i18n (`locales/`)
 Vue I18n with `en.json` and `zh-CN.json`. Locale detection in `src/utils/locale.js`. API sends `lang` header as `CN` or `EN`.

@@ -3,8 +3,11 @@
   --primary-color: #00BBFC;        /* LED cyan */
   --primary-dark: #0090CC;
   --primary-light: #5ED2FD;
-  --accent-color: #FF8C00;         /* spark */
-  --accent-light: #FFAB40;
+  --accent-color: #FF9416;         /* spark · naranja, uso mínimo */
+  --accent-light: #FFB04D;
+
+  --brand-success: #00D97E;        /* verde success · abierto/online, verificado, pago ok */
+  --brand-error: #F04438;          /* rojo error/danger · diferenciable del spark */
 
   --ink: #000000;                  /* fondo base */
   --graphite: #0B0B0D;
@@ -18,7 +21,9 @@
   --text-dim: #6B6B73;
 
   --primary-color-rgb: 0, 187, 252;
-  --accent-color-rgb: 255, 140, 0;
+  --accent-color-rgb: 255, 148, 22;
+  --brand-success-rgb: 0, 217, 126;
+  --brand-error-rgb: 240, 68, 56;
 }
 
 :root:root {
@@ -45,6 +50,8 @@
   --van-button-danger-background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-light) 100%);
   --van-button-danger-border-color: var(--accent-color);
   --van-tag-primary-color: var(--primary-color);
+  --van-tag-success-color: var(--brand-success);
+  --van-success-color: var(--brand-success);
   --van-tabbar-item-active-color: var(--primary-color);
 }
 
