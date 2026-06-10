@@ -50,6 +50,11 @@ export const metadata: Metadata = {
     description:
       "El primer lavadero automático digitalizado de la región. Autoservicio 24 hs en Funes, Santa Fe.",
   },
+  verification: {
+    other: {
+      "facebook-domain-verification": "ymontt9jb11z9y14gp94qn9mg2e8nz",
+    },
+  },
 };
 
 export const viewport: Viewport = {
