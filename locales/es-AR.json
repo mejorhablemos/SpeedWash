@@ -5,7 +5,8 @@
       "hero": {
         "welcome": "Bienvenido a",
         "brand": "SpeedWash",
-        "subtitle": "Lavado automático premium.\nRápido, eficiente y con la última tecnología."
+        "subtitle": "Lavado automático premium.\nRápido, eficiente y con la última tecnología.",
+        "tagline": "Sin turnos. Sin esperas. En minutos."
       },
       "scanButton": {
         "title": "Escanear máquina",
@@ -72,7 +73,8 @@
       "forgotPassword": "Olvidé mi contraseña",
       "guestLogin": "Continuar como invitado",
       "passwordPlaceholder": "Ingresá tu contraseña",
-      "pleaseLogin": "Iniciá sesión para continuar"
+      "pleaseLogin": "Iniciá sesión para continuar",
+      "purchaseRequiresAccount": "Para comprar un pack necesitás registrarte. Es gratis y toma 30 segundos."
     },
     "register": {
       "title": "Crear cuenta",
@@ -99,7 +101,12 @@
       "hasAccount": "¿Ya tenés cuenta? ",
       "login": "Iniciá sesión",
       "inviteKeyPlaceholder": "Código de invitación (opcional)",
-      "getCodeFirst": "Primero obtené el código de verificación"
+      "getCodeFirst": "Primero obtené el código de verificación",
+      "step1Title": "1. Verificá tu teléfono",
+      "step2Title": "2. Completá tus datos",
+      "sendCode": "Enviarme código",
+      "codeSentTo": "Te enviamos un código a {phone}",
+      "inviteToggle": "¿Tenés código de invitación?"
     },
     "order": {
       "index": {
@@ -410,6 +417,7 @@
       "expired": "Vencidos",
       "empty": "No tenés abonos activos",
       "useNow": "Usar ahora",
+      "viewPlans": "Ver planes disponibles",
       "licensePlate": {
         "bind": "Vincular patente",
         "placeholder": "Ingresá la patente",
@@ -601,6 +609,13 @@
       "areaCode": {
         "argentina": "Argentina",
         "china": "China"
+      },
+      "country": {
+        "argentina": "Argentina",
+        "uruguay": "Uruguay",
+        "chile": "Chile",
+        "brasil": "Brasil",
+        "paraguay": "Paraguay"
       }
     },
     "shopListItem": {

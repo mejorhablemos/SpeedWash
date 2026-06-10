@@ -23,7 +23,10 @@ watchEffect(() => {
           <van-icon name="user-o" size="28" color="#00BBFC" />
         </div>
         <div class="mine-user-info">
-          <h2 class="mine-user-name">{{ userInfo?.nickName || 'Usuario' }}</h2>
+          <router-link to="/settings/nickname" class="mine-user-name-row">
+            <h2 class="mine-user-name">{{ userInfo?.nickName || 'Usuario' }}</h2>
+            <van-icon name="edit" size="14" color="rgba(255,255,255,0.5)" />
+          </router-link>
           <p class="mine-user-phone">{{ userInfo?.phoneNum || '' }}</p>
         </div>
         <router-link to="/settings" class="mine-settings-btn">
@@ -142,11 +145,19 @@ watchEffect(() => {
   min-width: 0;
 }
 
+.mine-user-name-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  margin-bottom: 2px;
+}
+
 .mine-user-name {
   font-size: 18px;
   font-weight: 700;
   color: #fff;
-  margin: 0 0 2px;
+  margin: 0;
 }
 
 .mine-user-phone {

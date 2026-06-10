@@ -1,7 +1,7 @@
 <script setup>
 import { indexApi } from "@/api";
 import { getImageUrl } from "@/utils";
-import logoUrl from "@/assets/speedwash-logo.png";
+import logoUrl from "@/assets/speedwash-wordmark.png";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -35,7 +35,7 @@ function viewShop(id) {
       <div class="hero-bg"></div>
       <div class="hero-content">
         <img :src="logoUrl" alt="SpeedWash" class="hero-logo" />
-        <p class="hero-subtitle"><strong>Lavado automático premium.</strong></p>
+        <p class="hero-subtitle"><strong>{{ t('routes.home.hero.tagline') }}</strong></p>
       </div>
     </div>
 

@@ -7,6 +7,15 @@ const { t } = useI18n();
 const { query } = useRoute();
 const redirectUrl = computed(() => query.redirect || "/");
 
+// Rutas que requieren cuenta real (no funcionan con guestId).
+// Si el usuario aterrizó en /login por una de estas, ocultamos el botón
+// "Continuar como invitado" para evitar el loop de redirección.
+const PURCHASE_PATHS = ["/vip", "/vouchers", "/wallet"];
+const isPurchaseFlow = computed(() => {
+  const redirect = String(query.redirect || "");
+  return PURCHASE_PATHS.some((p) => redirect.startsWith(p));
+});
+
 const {
   areaCode,
   formData,
@@ -62,8 +71,12 @@ const guestLogin = () => {
   <wave />
 
   <van-space direction="vertical" fill class="pt-20% z-10 relative">
-    <div class="flex justify-center text-4xl text-white w-full h-100px font-bold">
-      SpeedWash
+    <div class="flex justify-center items-center w-full h-100px">
+      <img
+        src="@/assets/speedwash-wordmark.png"
+        alt="Speed Wash"
+        class="block h-auto w-full max-w-[240px]"
+      />
     </div>
 
     <van-form @submit="onSubmit" ref="formRef">
@@ -86,17 +99,23 @@ const guestLogin = () => {
     </van-form>
 
     <!-- 辅助链接 -->
-    <div class="flex justify-center items-center gap-4 h-44px text-26 text-white">
-      <router-link to="/register">{{ t('routes.login.register') }}</router-link>
+    <div class="flex justify-center items-center gap-4 h-44px text-26 font-medium">
+      <router-link to="/register" class="!text-white">{{ t('routes.login.register') }}</router-link>
       <div class="w-2 h-28 bg-white/30"></div>
-      <router-link to="/forgot-password">{{ t('routes.login.forgotPassword') }}</router-link>
+      <router-link to="/forgot-password" class="!text-white">{{ t('routes.login.forgotPassword') }}</router-link>
     </div>
 
-    <!-- 访客登录 -->
-    <div class="grid place-items-center">
+    <!-- Continuar como invitado: oculto si el redirect es a un flujo
+         que necesita cuenta real (compra de pack, billetera). -->
+    <div v-if="!isPurchaseFlow" class="grid place-items-center">
       <van-button round type="primary" class="mt-40 bg-primary border-none" @click="guestLogin">
         {{ t('routes.login.guestLogin') }}
       </van-button>
+    </div>
+    <div v-else class="mx-30 mt-60 rounded-2xl border border-white/15 bg-white/5 px-24 py-20 text-center backdrop-blur-sm">
+      <div class="text-white/85 text-22 leading-relaxed">
+        {{ t('routes.login.purchaseRequiresAccount') }}
+      </div>
     </div>
   </van-space>
 </template>

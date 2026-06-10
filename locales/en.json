@@ -5,7 +5,8 @@
       "hero": {
         "welcome": "Welcome to",
         "brand": "SpeedWash",
-        "subtitle": "Premium automatic car wash. Fast, efficient, and with the best technology for your vehicle."
+        "subtitle": "Premium automatic car wash. Fast, efficient, and with the best technology for your vehicle.",
+        "tagline": "No bookings. No waiting. In minutes."
       },
       "scanButton": {
         "title": "Scan machine",
@@ -71,7 +72,8 @@
       "forgotPassword": "Forgot Password",
       "guestLogin": "Guest Login",
       "passwordPlaceholder": "Enter password",
-      "pleaseLogin": "Please Login"
+      "pleaseLogin": "Please Login",
+      "purchaseRequiresAccount": "Buying a pack requires an account. It's free and takes 30 seconds."
     },
     "register": {
       "title": "Register",
@@ -98,7 +100,12 @@
       "hasAccount": "Already have an account? ",
       "login": "Login now",
       "inviteKeyPlaceholder": "Enter invite code (optional)",
-      "getCodeFirst": "Please get the verification code first"
+      "getCodeFirst": "Please get the verification code first",
+      "step1Title": "1. Verify your phone",
+      "step2Title": "2. Complete your details",
+      "sendCode": "Send me a code",
+      "codeSentTo": "We sent a code to {phone}",
+      "inviteToggle": "Have an invite code?"
     },
     "order": {
       "index": {
@@ -566,6 +573,13 @@
       "areaCode": {
         "argentina": "Argentina",
         "china": "China"
+      },
+      "country": {
+        "argentina": "Argentina",
+        "uruguay": "Uruguay",
+        "chile": "Chile",
+        "brasil": "Brazil",
+        "paraguay": "Paraguay"
       }
     },
     "shopListItem": {

@@ -1,4 +1,6 @@
 <script setup>
+import { COUNTRIES, getCountryByCode } from "@/constants/countries";
+
 const { t } = useI18n();
 
 const model = defineModel();
@@ -22,34 +24,31 @@ const props = defineProps({
   },
 });
 
-// 区号选项
-const areaCodeColumns = computed(() => [
-  { text: t("components.phoneNumberField.areaCode.argentina"), value: "54" },
-  { text: t("components.phoneNumberField.areaCode.china"), value: "86" },
-]);
+// País actual (derivado del areaCode). AR por default.
+const currentCountry = computed(() => getCountryByCode(areaCode.value));
 
-// 区号选择器显示控制
+// Opciones del picker, etiquetadas con la traducción del país.
+const areaCodeColumns = computed(() =>
+  COUNTRIES.map((c) => ({
+    text: t(`components.phoneNumberField.country.${c.i18nKey}`),
+    iso: c.iso,
+    value: c.code,
+  }))
+);
+
 const showAreaPicker = ref(false);
 
-// 选择区号
 const onAreaCodeConfirm = ({ selectedOptions }) => {
-  areaCode.value = selectedOptions[0].value;
+  const newCode = selectedOptions[0].value;
+  areaCode.value = newCode;
   showAreaPicker.value = false;
-};
 
-const flagIconMap = {
-  // 阿根廷
-  54: "AR",
-  // 中国
-  86: "🇨🇳"
+  // Si el número ya cargado excede el nuevo maxLength, lo truncamos.
+  const next = getCountryByCode(newCode);
+  if (model.value && model.value.length > next.maxLength) {
+    model.value = model.value.slice(0, next.maxLength);
+  }
 };
-
-function FlagIcon({ code }) {
-  return h("span", {
-    class: "text-24px",
-    innerHTML: flagIconMap[`${code}`],
-  });
-}
 
 const onAreaCodeClick = () => {
   if (props.readonly) {
@@ -57,14 +56,40 @@ const onAreaCodeClick = () => {
   }
   showAreaPicker.value = true;
 };
+
+// Sanitiza input: solo dígitos, trunca a maxLength del país.
+// Lo hacemos en el modelo (no en el DOM) para que el v-model siempre
+// refleje el valor visible.
+const onInput = (value) => {
+  const digits = String(value || "").replace(/\D/g, "");
+  const limited = digits.slice(0, currentCountry.value.maxLength);
+  model.value = limited;
+};
 </script>
 
 <template>
-  <van-field v-model="model" type="tel" :placeholder="t('components.phoneNumberField.placeholder')" :center="false"
-    :readonly="readonly" :rules="rules" :name="name">
+  <van-field
+    :model-value="model"
+    @update:model-value="onInput"
+    type="tel"
+    inputmode="numeric"
+    :maxlength="currentCountry.maxLength"
+    :placeholder="t('components.phoneNumberField.placeholder')"
+    :center="false"
+    :readonly="readonly"
+    :rules="rules"
+    :name="name"
+  >
     <template #label>
-      <van-space class="text-primary cursor-pointer" align="center" :size="2" @click="onAreaCodeClick">
-        <flag-icon :code="areaCode" />
+      <van-space
+        class="text-primary cursor-pointer"
+        align="center"
+        :size="2"
+        @click="onAreaCodeClick"
+      >
+        <span class="font-display text-22 font-bold tracking-wide">
+          {{ currentCountry.iso }}
+        </span>
         <van-icon name="arrow-down" v-if="!readonly" />
         <span> +{{ areaCode }} </span>
       </van-space>
@@ -73,13 +98,20 @@ const onAreaCodeClick = () => {
 
   <!-- 区号选择器 -->
   <van-popup v-model:show="showAreaPicker" position="bottom" round>
-    <van-picker :columns="areaCodeColumns" @confirm="onAreaCodeConfirm" @cancel="showAreaPicker = false"
-      :title="t('components.phoneNumberField.selectAreaCode')" show-toolbar>
+    <van-picker
+      :columns="areaCodeColumns"
+      @confirm="onAreaCodeConfirm"
+      @cancel="showAreaPicker = false"
+      :title="t('components.phoneNumberField.selectAreaCode')"
+      show-toolbar
+    >
       <template #option="option">
         <van-space align="center" :size="10">
-          <flag-icon :code="option.value" />
+          <span class="font-display text-22 font-bold tracking-wide text-primary">
+            {{ option.iso }}
+          </span>
           <span>{{ option.text }}</span>
-          <span>+{{ option.value }}</span>
+          <span class="text-text-secondary">+{{ option.value }}</span>
         </van-space>
       </template>
     </van-picker>

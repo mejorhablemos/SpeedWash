@@ -1,4 +1,6 @@
 <script setup>
+import { getCountryByCode } from "@/constants/countries";
+
 const router = useRouter();
 const { t } = useI18n();
 
@@ -28,6 +30,34 @@ formData.value.inviteCode = inviteCode;
 const { data, error } = loginApi.getSysVal("USER_SERVICE_CONTRACT")
 
 const loading = ref(false); // 提交loading
+
+// ── UX del flujo de registro ────────────────────────────────────────────
+// El usuario tiene que entender: 1° pedir código, 2° completar datos.
+// Habilitamos el bloque 2 solo cuando el SMS ya fue solicitado.
+const codeSent = computed(() => !!smsRequestId.value);
+
+// Validación local para habilitar el botón "Enviarme código" sin disparar
+// las rules de van-form (que pintarían el input de rojo).
+// Aplica el regex del país seleccionado (AR es /^\d{10}$/, etc).
+const isPhoneValid = computed(() => {
+  const digits = String(formData.value.phone || "").replace(/\D/g, "");
+  const country = getCountryByCode(areaCode.value);
+  return country.pattern.test(digits);
+});
+
+// Mostrar el teléfono formateado en el aviso "Te enviamos un código a…".
+const phoneDisplay = computed(() => {
+  const raw = String(formData.value.phone || "").replace(/\D/g, "");
+  if (raw.length < 8) return `+${areaCode.value} ${raw}`;
+  // ej. 3411234567 → 341 123 4567
+  const head = raw.slice(0, raw.length - 7);
+  const mid = raw.slice(-7, -4);
+  const tail = raw.slice(-4);
+  return `+${areaCode.value} ${head} ${mid} ${tail}`;
+});
+
+// Campo de invitación: solo visible si vino por URL o si el usuario lo abre.
+const showInviteField = ref(!!inviteCode);
 
 // 提交表单
 const onSubmit = async () => {
@@ -90,85 +120,124 @@ const goToLogin = () => {
 };
 </script>
 <template>
-  <!-- Logo区域 -->
-  <div class="py-10 text-center">
-    <div
-      class="w-150 aspect-ratio-1 mx-auto bg-white rounded-lg flex-center shadow-sm overflow-clip"
-    >
-      <img
-        src="@/assets/logo_trans.png"
-        alt="logo"
-        class="w-full aspect-ratio-1"
-      />
-    </div>
+  <!-- Isotipo Speed Wash — cuadrado, deja respirar al form de 2 pasos -->
+  <div class="pt-8 pb-4 text-center">
+    <img
+      src="@/assets/speedwash-iso.png"
+      alt="Speed Wash"
+      class="mx-auto block h-72px w-auto"
+    />
   </div>
 
-  <!-- 注册表单 -->
   <van-form @submit="onSubmit" ref="formRef">
+    <!-- ─────── PASO 1: verificá tu teléfono ─────── -->
+    <div class="step-header">
+      <span class="step-badge" :class="{ 'step-badge--done': codeSent }">
+        <van-icon v-if="codeSent" name="success" />
+        <template v-else>1</template>
+      </span>
+      <span class="step-title">{{ t("routes.register.step1Title") }}</span>
+    </div>
+
     <van-cell-group inset>
-      <!-- 手机号 -->
       <phone-number-field
         v-model="formData.phone"
         v-model:area-code="areaCode"
         name="phone"
         :rules="phoneRules"
-        class="mb-3"
       />
-
-      <!-- 验证码 -->
-      <van-field
-        v-model="formData.verifyCode"
-        name="verifyCode"
-        :placeholder="t('routes.register.codePlaceholder')"
-        center
-        :rules="verifyCodeRules"
-      >
-        <template #button>
-          <van-button
-            size="small"
-            type="primary"
-            @click="getVerifyCode"
-            :disabled="isActive"
-            class="rounded-lg"
-          >
-            {{ countdownButtonText }}
-          </van-button>
-        </template>
-      </van-field>
-
-      <!-- 密码 -->
-      <van-field
-        v-model="formData.password"
-        name="password"
-        type="password"
-        :placeholder="t('routes.register.passwordPlaceholder')"
-        :rules="passwordRules"
-      >
-      </van-field>
-
-      <!-- 确认密码 -->
-      <van-field
-        v-model="formData.confirmPassword"
-        name="confirmPassword"
-        type="password"
-        :placeholder="t('routes.register.confirmPasswordPlaceholder')"
-        :rules="confirmPasswordRules"
-      >
-      </van-field>
-
-      <van-field
-        v-model="formData.inviteCode"
-        name="inviteKey"
-        :placeholder="t('routes.register.inviteKeyPlaceholder')"
-      >
-      </van-field>
     </van-cell-group>
-    <!-- 用户协议 -->
-    <van-cell-group inset class="!my-10 !bg-transparent text-xl">
+
+    <!-- Botón destacado "Enviarme código" -->
+    <div class="mx-4 mt-4">
+      <van-button
+        round
+        block
+        type="primary"
+        @click="getVerifyCode"
+        :disabled="!isPhoneValid || isActive"
+        class="h-44px"
+      >
+        {{ codeSent ? countdownButtonText : t("routes.register.sendCode") }}
+      </van-button>
+    </div>
+
+    <!-- ─────── PASO 2: completá tus datos ─────── -->
+    <div class="step-header mt-8">
+      <span class="step-badge" :class="{ 'step-badge--inactive': !codeSent }">2</span>
+      <span class="step-title" :class="{ 'step-title--inactive': !codeSent }">
+        {{ t("routes.register.step2Title") }}
+      </span>
+    </div>
+
+    <!-- Aviso "Te enviamos un código a +54 …" -->
+    <div v-if="codeSent" class="mx-4 mb-3 text-22 text-text-secondary leading-relaxed">
+      {{ t("routes.register.codeSentTo", { phone: phoneDisplay }) }}
+    </div>
+
+    <!-- Bloque grisado/inhabilitado hasta que se envíe el SMS -->
+    <div :class="{ 'step-block--disabled': !codeSent }">
+      <van-cell-group inset>
+        <van-field
+          v-model="formData.verifyCode"
+          name="verifyCode"
+          :placeholder="t('routes.register.codePlaceholder')"
+          :disabled="!codeSent"
+          :rules="codeSent ? verifyCodeRules : []"
+          maxlength="6"
+          type="digit"
+          center
+        />
+
+        <van-field
+          v-model="formData.password"
+          name="password"
+          type="password"
+          :placeholder="t('routes.register.passwordPlaceholder')"
+          :disabled="!codeSent"
+          :rules="codeSent ? passwordRules : []"
+        />
+
+        <van-field
+          v-model="formData.confirmPassword"
+          name="confirmPassword"
+          type="password"
+          :placeholder="t('routes.register.confirmPasswordPlaceholder')"
+          :disabled="!codeSent"
+          :rules="codeSent ? confirmPasswordRules : []"
+        />
+      </van-cell-group>
+
+      <!-- Código de invitación: oculto por defecto. Si vino por URL ya está
+           visible y precargado; si no, aparece como link colapsable. -->
+      <div class="mx-4 mt-3">
+        <button
+          v-if="!showInviteField"
+          type="button"
+          class="text-22 text-primary cursor-pointer bg-transparent border-none p-0"
+          :disabled="!codeSent"
+          @click="showInviteField = true"
+        >
+          {{ t("routes.register.inviteToggle") }}
+        </button>
+      </div>
+      <van-cell-group v-if="showInviteField" inset class="!mt-3">
+        <van-field
+          v-model="formData.inviteCode"
+          name="inviteKey"
+          :placeholder="t('routes.register.inviteKeyPlaceholder')"
+          :disabled="!codeSent"
+        />
+      </van-cell-group>
+    </div>
+
+    <!-- Términos -->
+    <van-cell-group inset class="!my-8 !bg-transparent text-xl">
       <van-checkbox
         v-model="agreement"
         shape="round"
         checked-color="var(--primary-color)"
+        :disabled="!codeSent"
       >
         {{ t("routes.register.agreementPrefix") }}
         <span class="text-primary cursor-pointer" @click.stop="showAgreement">
@@ -177,7 +246,7 @@ const goToLogin = () => {
       </van-checkbox>
     </van-cell-group>
 
-    <!-- 注册按钮 -->
+    <!-- Crear cuenta -->
     <div class="mx-4 mt-6">
       <van-button
         round
@@ -185,7 +254,7 @@ const goToLogin = () => {
         type="primary"
         native-type="submit"
         :loading="loading"
-        :disabled="!agreement"
+        :disabled="!agreement || !codeSent"
         class="h-48px"
       >
         {{ t("routes.register.submit") }}
@@ -193,7 +262,7 @@ const goToLogin = () => {
     </div>
   </van-form>
 
-  <!-- 登录入口 -->
+  <!-- Volver a login -->
   <div class="text-center mt-30px text-text-secondary text-xl">
     {{ t("routes.register.hasAccount") }}
     <span class="text-primary cursor-pointer" @click="goToLogin">
@@ -201,3 +270,59 @@ const goToLogin = () => {
     </span>
   </div>
 </template>
+
+<style scoped>
+.step-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 24px;
+  margin-bottom: 12px;
+}
+
+.step-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  color: #000;
+  font-family: var(--font-display, inherit);
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: background 0.2s, color 0.2s;
+}
+
+.step-badge--inactive {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Paso completado: badge verde con check */
+.step-badge--done {
+  background: #2ecc71;
+  color: #fff;
+  font-size: 14px;
+}
+
+.step-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary, #fff);
+  letter-spacing: 0.01em;
+  transition: color 0.2s;
+}
+
+.step-title--inactive {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.step-block--disabled {
+  opacity: 0.45;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+</style>
