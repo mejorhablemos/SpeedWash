@@ -19,6 +19,7 @@ const routes = [
           titleKey: "routes.home.title",
           showTabbar: true,
           hideBackToHome: true,
+          hideBackArrow: true,
         },
       },
       {
@@ -165,6 +166,10 @@ const routes = [
         component: () => import("@/pages/login-page.vue"),
         meta: {
           titleKey: "routes.login.title",
+          // El guard de auth redirige acá desde páginas protegidas:
+          // un back() normal rebotaría contra el guard y no iría a
+          // ningún lado, así que la flecha vuelve a la home.
+          backTo: "/home",
         },
       },
       {

@@ -9,8 +9,9 @@ const router = useRouter();
 // Banner
 const { data: banners } = indexApi.banner();
 
-// Shops
-const { data: shops } = indexApi.storeList();
+// Shops. isFinished evita el "flash" del fallback hardcodeado mientras
+// la API responde: solo lo mostramos si la request terminó sin datos.
+const { data: shops, isFinished: shopsLoaded } = indexApi.storeList();
 
 // Ongoing order check
 const { data: orderData } = indexApi.checkWashingOrder();
@@ -79,7 +80,10 @@ function viewShop(id) {
 
         <div class="pack-card__feature">
           <van-icon name="scan" size="16" />
-          <span>{{ t("routes.home.vip.plate") }}</span>
+          <div class="pack-card__feature-text">
+            <span class="pack-card__feature-title">{{ t("routes.home.vip.plateTitle") }}</span>
+            <span class="pack-card__feature-sub">{{ t("routes.home.vip.plateSub") }}</span>
+          </div>
         </div>
 
         <div class="pack-card__action">
@@ -103,8 +107,8 @@ function viewShop(id) {
         />
       </div>
 
-      <!-- Fallback: SpeedWash Funes -->
-      <div v-else class="store-card">
+      <!-- Fallback: SpeedWash Funes (solo si la API terminó y no trajo nada) -->
+      <div v-else-if="shopsLoaded" class="store-card">
         <div class="store-card__left">
           <div class="store-card__top">
             <h3 class="store-card__name">SpeedWash Funes</h3>
@@ -208,16 +212,17 @@ function viewShop(id) {
   letter-spacing: 0.5px;
 }
 
-/* Microbanner informativo bajo el tagline. Discreto, no compite con CTAs. */
+/* Microbanner informativo bajo el tagline. Legible de un vistazo,
+   sin competir con el CTA naranja de escaneo. */
 .hero-microbanner {
   display: inline-block;
-  margin: 6px 0 0;
-  padding: 4px 12px;
+  margin: 8px 0 0;
+  padding: 8px 18px;
   border-radius: 999px;
   background: rgba(0, 187, 252, 0.08);
   border: 1px solid rgba(0, 187, 252, 0.18);
-  font-size: 11px;
-  font-weight: 500;
+  font-size: 15px;
+  font-weight: 600;
   color: rgba(255, 255, 255, 0.7);
   letter-spacing: 0.3px;
 }
@@ -364,14 +369,30 @@ function viewShop(id) {
   border-radius: 12px;
   background: rgba(0, 187, 252, 0.08);
   border: 1px solid rgba(0, 187, 252, 0.22);
-  font-size: 12.5px;
-  font-weight: 500;
   color: var(--primary-light);
   line-height: 1.35;
 }
 
 .pack-card__feature .van-icon {
   flex-shrink: 0;
+}
+
+.pack-card__feature-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.pack-card__feature-title {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pack-card__feature-sub {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-secondary);
 }
 
 .pack-card__action {

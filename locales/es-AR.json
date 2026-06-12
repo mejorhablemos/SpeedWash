@@ -7,7 +7,7 @@
         "brand": "SpeedWash",
         "subtitle": "Lavado automático premium.\nRápido, eficiente y con la última tecnología.",
         "tagline": "Sin turnos. Sin esperas. En minutos.",
-        "microbanner": "Lavado desde $23.000 · 8 minutos"
+        "microbanner": "Lavado desde $23.000 · 24/7"
       },
       "scanButton": {
         "title": "Escanear máquina",
@@ -16,7 +16,8 @@
       "vip": {
         "title": "Packs de lavado",
         "subtitle": "Lavados prepagos: ahorrá en cada visita.",
-        "plate": "Activación automática por patente: no perdés tiempo, tu patente inicia el lavado.",
+        "plateTitle": "Tu patente inicia el lavado.",
+        "plateSub": "Sin sacar el celular, sin escanear, sin esperar.",
         "buy": "Ver planes"
       },
       "invite": {
@@ -105,8 +106,8 @@
       "getCodeFirst": "Primero obtené el código de verificación",
       "step1Title": "1. Verificá tu teléfono",
       "step2Title": "2. Completá tus datos",
-      "sendCode": "Enviarme código",
-      "codeSentTo": "Te enviamos un código a {phone}",
+      "sendCode": "Enviarme código por SMS",
+      "codeSentTo": "Te enviamos un SMS a {phone}",
       "inviteToggle": "¿Tenés código de invitación?"
     },
     "order": {
@@ -361,6 +362,7 @@
         },
         "form": {
           "verifyCode": "Ingresá el código",
+          "smsHint": "Te enviamos un SMS al número anterior",
           "newPassword": "Mínimo 6 caracteres",
           "newPasswordLabel": "Nueva contraseña",
           "confirmPassword": "Repetí la contraseña",
@@ -575,7 +577,7 @@
         "codeSent": "Código de verificación enviado",
         "sendFailed": "Error al enviar el código",
         "codeCountdown": "Reenviar en {time}s",
-        "getCode": "Obtener código"
+        "getCode": "Obtener código por SMS"
       }
     }
   },
@@ -611,7 +613,7 @@
     "phoneNumberField": {
       "placeholder": "Ingresá tu teléfono",
       "required": "El teléfono es obligatorio",
-      "hintAr": "Sin 0, sin 15, sin +54. Solo 10 dígitos.",
+      "hintAr": "Solo 10 dígitos. Sin 0 ni 15.",
       "hintDigits": "Solo {count} dígitos.",
       "hintDigitsRange": "Entre {min} y {max} dígitos.",
       "selectAreaCode": "Código de área",

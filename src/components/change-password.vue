@@ -135,14 +135,21 @@ defineExpose({
             type="digit"
             center>
             <template #button>
-              <van-button size="small" type="primary"
+              <!-- plain (outline): el primario de la pantalla es "Siguiente" -->
+              <van-button size="small" type="primary" plain
                 @click="getVerifyCode"
                 :disabled="!isPhoneValid || isActive"
-                class="rounded-lg">
+                class="rounded-lg code-btn">
                 {{ countdownButtonText }}
               </van-button>
             </template>
           </van-field>
+
+          <!-- Aclara el canal: el cliente puede esperar un WhatsApp y
+               creer que falló si no le llega. -->
+          <p v-if="codeSent" class="sms-hint">
+            {{ t("routes.settings.changePassword.form.smsHint") }}
+          </p>
 
           <div class="submit-btn">
             <!-- Siguiente: solo habilitado cuando el código ya fue enviado -->
@@ -195,8 +202,34 @@ defineExpose({
 </template>
 
 <style scoped>
+/* El layout ya pinta el fondo oscuro; ocupamos el alto disponible bajo el
+   navbar y centramos la card verticalmente para que no quede "cortada"
+   arriba con todo el espacio inferior vacío. */
 .password-page {
-  background: #f7f8fa;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 46px - env(safe-area-inset-top));
+  min-height: calc(100dvh - 46px - env(safe-area-inset-top));
+}
+
+.password-page > :deep(.van-cell-group--inset) {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+/* Outline sobre fondo oscuro: sin el blanco default de van-button--plain */
+.code-btn {
+  background: transparent;
+}
+
+/* Hint bajo el campo de código, mismo tratamiento que el del teléfono. */
+.sms-hint {
+  margin: 4px 0 0;
+  padding: 0 16px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--text-secondary, rgba(255, 255, 255, 0.55));
 }
 
 .verify-step {
@@ -221,7 +254,8 @@ defineExpose({
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 60vh;
+  /* La card ya se centra en el viewport; solo un poco de cuerpo propio. */
+  min-height: 40vh;
 }
 
 /* 步骤切换动画 */

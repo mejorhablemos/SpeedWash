@@ -149,7 +149,7 @@ const goToLogin = () => {
     </van-cell-group>
 
     <!-- Botón destacado "Enviarme código" -->
-    <div class="mx-4 mt-4">
+    <div class="mx-4 mt-5">
       <van-button
         round
         block
@@ -163,7 +163,7 @@ const goToLogin = () => {
     </div>
 
     <!-- ─────── PASO 2: completá tus datos ─────── -->
-    <div class="step-header mt-8">
+    <div class="step-header mt-12">
       <span class="step-badge" :class="{ 'step-badge--inactive': !codeSent }">2</span>
       <span class="step-title" :class="{ 'step-title--inactive': !codeSent }">
         {{ t("routes.register.step2Title") }}
@@ -277,7 +277,18 @@ const goToLogin = () => {
   align-items: center;
   gap: 10px;
   padding: 0 24px;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
+}
+
+/* Respiración del form: aire vertical dentro de las cards y entre los
+   campos. Estética premium tipo Tesla/Apple, no formulario denso. */
+:deep(.van-cell-group--inset) {
+  padding: 8px 0;
+}
+
+:deep(.van-cell-group--inset .van-cell) {
+  padding-top: 14px;
+  padding-bottom: 14px;
 }
 
 .step-badge {

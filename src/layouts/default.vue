@@ -35,7 +35,11 @@ const themeVars = computed(() => ({
 }))
 
 function onClickLeft() {
-  router.back()
+  if (route.meta.backTo) {
+    router.replace(route.meta.backTo)
+  } else {
+    router.back()
+  }
 }
 
 function goHome() {
@@ -48,7 +52,7 @@ function goHome() {
   <van-config-provider theme="dark" :theme-vars="themeVars">
     <div :class="containerClass">
       <!-- 导航栏 -->
-      <van-nav-bar v-if="!route.meta.hideNavBar" left-arrow @click-left="onClickLeft" fixed :z-index="99" placeholder
+      <van-nav-bar v-if="!route.meta.hideNavBar" :left-arrow="!route.meta.hideBackArrow" @click-left="onClickLeft" fixed :z-index="99" placeholder
         safe-area-inset-top :border="false" :class="{ 'nav-hairline': !route.meta.gradientBg }">
         <template #title>
           <slot name="nav-title">{{ pageTitle }}</slot>

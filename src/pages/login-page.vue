@@ -67,13 +67,13 @@ const guestLogin = () => {
 </script>
 
 <template>
-  <van-space direction="vertical" fill class="z-10 relative">
+  <van-space direction="vertical" fill class="z-10 relative login-screen">
     <!-- Isotipo Speed Wash, mismo tratamiento que /register -->
-    <div class="flex justify-center items-center w-full pt-12 pb-6">
+    <div class="flex justify-center items-center w-full pb-6">
       <img
         src="@/assets/speedwash-iso.png"
         alt="Speed Wash"
-        class="block h-80px w-auto"
+        class="block h-60px w-auto"
       />
     </div>
 
@@ -96,21 +96,27 @@ const guestLogin = () => {
       </van-cell-group>
     </van-form>
 
-    <!-- 辅助链接 -->
-    <div class="flex justify-center items-center gap-4 h-44px text-26 font-medium">
+    <!-- Links secundarios: crear cuenta / olvidé contraseña / invitado.
+         Los tres como text link al mismo nivel — el único botón lleno de
+         la pantalla es "Ingresar". "Invitado" se oculta si el redirect es
+         a un flujo que necesita cuenta real (compra de pack, billetera). -->
+    <div class="flex flex-wrap justify-center items-center gap-x-4 gap-y-3 min-h-44px px-4 text-26 font-medium">
       <router-link to="/register" class="!text-white">{{ t('routes.login.register') }}</router-link>
       <div class="w-2 h-28 bg-white/30"></div>
       <router-link to="/forgot-password" class="!text-white">{{ t('routes.login.forgotPassword') }}</router-link>
+      <template v-if="!isPurchaseFlow">
+        <div class="w-2 h-28 bg-white/30"></div>
+        <button
+          type="button"
+          class="!text-white text-26 font-medium bg-transparent border-none p-0 cursor-pointer"
+          @click="guestLogin"
+        >
+          {{ t('routes.login.guestLogin') }}
+        </button>
+      </template>
     </div>
 
-    <!-- Continuar como invitado: oculto si el redirect es a un flujo
-         que necesita cuenta real (compra de pack, billetera). -->
-    <div v-if="!isPurchaseFlow" class="grid place-items-center">
-      <van-button round type="primary" class="mt-40 bg-primary border-none" @click="guestLogin">
-        {{ t('routes.login.guestLogin') }}
-      </van-button>
-    </div>
-    <div v-else class="mx-30 mt-60 rounded-2xl border border-white/15 bg-white/5 px-24 py-20 text-center backdrop-blur-sm">
+    <div v-if="isPurchaseFlow" class="mx-30 mt-20 rounded-2xl border border-white/15 bg-white/5 px-24 py-20 text-center backdrop-blur-sm">
       <div class="text-white/85 text-22 leading-relaxed">
         {{ t('routes.login.purchaseRequiresAccount') }}
       </div>
@@ -121,5 +127,14 @@ const guestLogin = () => {
 <style scoped>
 :deep(.van-field__label) {
   width: auto;
+}
+
+/* Centrado vertical: la pantalla quedaba pegada arriba con la mitad
+   inferior vacía. Ocupamos el alto disponible bajo el navbar y centramos
+   logo + form + links como un solo bloque. */
+.login-screen {
+  min-height: calc(100vh - 46px - env(safe-area-inset-top));
+  min-height: calc(100dvh - 46px - env(safe-area-inset-top));
+  justify-content: center;
 }
 </style>

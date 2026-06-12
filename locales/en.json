@@ -104,8 +104,8 @@
       "getCodeFirst": "Please get the verification code first",
       "step1Title": "1. Verify your phone",
       "step2Title": "2. Complete your details",
-      "sendCode": "Send me a code",
-      "codeSentTo": "We sent a code to {phone}",
+      "sendCode": "Send me a code by SMS",
+      "codeSentTo": "We sent an SMS to {phone}",
       "inviteToggle": "Have an invite code?"
     },
     "order": {
@@ -326,6 +326,7 @@
         },
         "form": {
           "verifyCode": "Enter verification code",
+          "smsHint": "We sent you an SMS to the number above",
           "newPassword": "Min 6 characters",
           "newPasswordLabel": "New password",
           "confirmPassword": "Repeat the password",
@@ -539,7 +540,7 @@
         "codeSent": "Verification code sent",
         "sendFailed": "Failed to send code",
         "codeCountdown": "Resend in {time}s",
-        "getCode": "Get Code"
+        "getCode": "Get SMS code"
       }
     }
   },
@@ -575,7 +576,7 @@
     "phoneNumberField": {
       "placeholder": "Enter phone number",
       "required": "Phone number is required",
-      "hintAr": "No 0, no 15, no +54. Just 10 digits.",
+      "hintAr": "Just 10 digits. No 0 or 15.",
       "hintDigits": "Just {count} digits.",
       "hintDigitsRange": "Between {min} and {max} digits.",
       "selectAreaCode": "Select area code",

@@ -324,7 +324,8 @@
           "confirm": "确认",
           "getCode": "获取验证码",
           "codeCountdown": "{time}s后重新获取",
-          "verifyCode": "输入验证码"
+          "verifyCode": "输入验证码",
+          "smsHint": "验证码已通过短信发送至上方手机号"
         },
         "messages": {
           "codeRequired": "请输入验证码",
@@ -526,7 +527,7 @@
         "codeSent": "验证码已发送",
         "sendFailed": "验证码发送失败",
         "codeCountdown": "{time}s后重新获取",
-        "getCode": "获取验证码"
+        "getCode": "获取短信验证码"
       }
     }
   },
@@ -562,7 +563,7 @@
     "phoneNumberField": {
       "placeholder": "请输入手机号",
       "required": "请输入手机号",
-      "hintAr": "不加 0、15 或 +54，仅 10 位数字。",
+      "hintAr": "仅 10 位数字，不加 0 或 15。",
       "hintDigits": "仅 {count} 位数字。",
       "hintDigitsRange": "{min} 至 {max} 位数字。",
       "selectAreaCode": "选择区号",

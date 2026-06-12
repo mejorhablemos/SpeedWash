@@ -10,6 +10,93 @@ Fecha: 2026-06-09
 
 ---
 
+## 🎨 Ajustes UX — home, login y registro (2026-06-12)
+
+Retoques de legibilidad y navegación. **No requiere backend.**
+
+- **Microbanner de precio/tiempo** ("Lavado desde $23.000 · 8 minutos"):
+  era casi imperceptible. Fuente 11px → **15px**, peso 500 → **600**,
+  padding 4px 12px → **8px 18px**. Mantiene estilo pill, fondo y colores.
+  — [home-page.vue](src/pages/home-page.vue) `.hero-microbanner`
+- **Copy del microbanner**: "… · 8 minutos" → **"… · 24/7"**. El "8 minutos"
+  duplicaba el tagline "En minutos." de arriba; "24/7" suma info nueva
+  (disponibilidad horaria, otro diferenciador clave). — [es-AR.json](locales/es-AR.json)
+- **Registro — respiración visual del form de 2 pasos**: la pantalla se
+  veía amontonada. Más padding vertical dentro de las cards (cells 10px →
+  **14px** + 8px de aire interno en cada card), más separación entre el
+  botón "Enviarme código" y el paso 2 (`mt-8` → **`mt-12`**), y headers de
+  paso con 14px de margen inferior. — [register-page.vue](src/pages/register-page.vue)
+- **Registro — helper del teléfono simplificado**: "Sin 0, sin 15, sin +54.
+  Solo 10 dígitos." → **"Solo 10 dígitos. Sin 0 ni 15."** El "+54" ya se ve
+  en el selector de país y mencionarlo confundía ("¿lo pongo o no?").
+  Actualizado en los 3 idiomas. — [es-AR.json](locales/es-AR.json),
+  [en.json](locales/en.json), [zh-CN.json](locales/zh-CN.json)
+- **Home — sin "flash" de la sucursal fallback**: al recargar, aparecía un
+  instante la card hardcodeada de SpeedWash Funes (sin foto) y luego se
+  reemplazaba por la card real de la API. El fallback ahora solo se muestra
+  si la request de sucursales terminó sin datos (`isFinished` de useFetch);
+  durante la carga no se muestra nada. — [home-page.vue](src/pages/home-page.vue)
+- **Toasts más tiempo en pantalla**: los mensajes de error del backend
+  (ej. "Este número ya tiene una cuenta. Iniciá sesión.") desaparecían a
+  los 2s, sin tiempo de leerlos. Duración default de Vant 2000ms →
+  **3500ms**, global vía `setToastDefaultOptions` en un módulo nuevo.
+  — [toast.js](src/modules/toast.js)
+- **Registro y recuperar contraseña — aclarar que el código llega por SMS**:
+  el cliente podía esperar un WhatsApp y creer que falló. Botón del registro
+  "Enviarme código" → **"Enviarme código por SMS"**; aviso post-envío
+  "Te enviamos un código a {phone}" → **"Te enviamos un SMS a {phone}"**;
+  botón de recuperar contraseña "Obtener código" → **"Obtener código por
+  SMS"** + nuevo helper bajo el campo de código: *"Te enviamos un SMS al
+  número anterior"* (visible tras solicitar el código). Textos en los 3
+  idiomas. — [es-AR.json](locales/es-AR.json), [en.json](locales/en.json),
+  [zh-CN.json](locales/zh-CN.json), [change-password.vue](src/components/change-password.vue)
+- **Login — isotipo más chico**: el logo S central competía con el form
+  (80px → **60px** de alto, -25%). — [login-page.vue](src/pages/login-page.vue)
+- **Login — "Continuar como invitado" pasa a text link**: era un botón con
+  fondo azul que competía con "Ingresar". Ahora es el tercer text link de
+  la fila "Crear cuenta nueva | Olvidé mi contraseña | Continuar como
+  invitado" (con wrap automático en pantallas angostas). "Ingresar" queda
+  como único botón lleno. Se mantiene la lógica de ocultarlo en flujos de
+  compra. — [login-page.vue](src/pages/login-page.vue)
+- **Login — contenido centrado verticalmente**: la mitad inferior quedaba
+  vacía ("pegado arriba"). Logo + form + links se centran ahora en el alto
+  disponible bajo el navbar, mismo patrón que recuperar contraseña.
+  — [login-page.vue](src/pages/login-page.vue)
+- **Recuperar contraseña — card centrada verticalmente**: la card quedaba
+  pegada arriba con todo el espacio inferior en negro ("pantalla cortada").
+  El contenedor ahora ocupa el alto disponible bajo el navbar y centra la
+  card entre el stepper y el bottom (aplica a los 3 pasos del flow, también
+  en cambio de contraseña desde ajustes). De paso se eliminó el
+  `background: #f7f8fa` gris heredado de KIREI que hubiera quedado visible.
+  — [change-password.vue](src/components/change-password.vue)
+- **Recuperar contraseña — jerarquía de botones**: "Obtener código" pasó a
+  outline (`plain`, borde y texto azul, fondo transparente) para que
+  "Siguiente" sea claramente el primario. Cambio local al componente, no
+  toca el theme global de Vant. — [change-password.vue](src/components/change-password.vue)
+- **Recuperar contraseña — helper del teléfono**: cubierto por el cambio de
+  `hintAr` de abajo (usa el mismo `phone-number-field` que registro/login).
+- **Flecha "atrás" del login ahora vuelve a la home**: al entrar a una
+  página protegida sin sesión (ej. "Mi cuenta"), el guard redirige a
+  `/login`; ahí el `back()` rebotaba contra el guard (login → mine → login)
+  y la flecha parecía muerta. Nuevo meta de ruta `backTo: "/home"` en Login:
+  la flecha hace `router.replace` a la home. — [router/index.js](src/router/index.js),
+  [default.vue](src/layouts/default.vue)
+- **NavBar de la home sin flecha "atrás"**: la home es la raíz de la
+  navegación, la flecha "<" no tenía destino útil y confundía. Nuevo meta de
+  ruta `hideBackArrow` (solo en `/home`; el resto de las pantallas conserva
+  la flecha). El título "Inicio" queda centrado — Vant centra el título de
+  forma absoluta, independiente de los laterales. — [router/index.js](src/router/index.js),
+  [default.vue](src/layouts/default.vue)
+- **Banner azul de patente** (card "Packs de lavado"): nuevo copy en dos
+  líneas con jerarquía — título semibold "Tu patente inicia el lavado." +
+  subtítulo sutil "Sin sacar el celular, sin escanear, sin esperar."
+  (antes: "Activación automática por patente: no perdés tiempo, tu patente
+  inicia el lavado."). Mismo ícono y colores. Key i18n `vip.plate` →
+  `vip.plateTitle` + `vip.plateSub`. — [home-page.vue](src/pages/home-page.vue),
+  [es-AR.json](locales/es-AR.json)
+
+---
+
 ## 📝 Mantenimiento de documentación (2026-06-10)
 
 Sincronización de la documentación con el estado real del código (no toca
