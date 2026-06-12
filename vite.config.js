@@ -167,14 +167,14 @@ export default defineConfig({
   server: {
     https: false,
     proxy: {
+      // Mismo camino que producción: el nginx de lavar.speedwash.com.ar
+      // proxea /api → backend real (argentina-user.cheyoudaren.com/api).
+      // La app llama /api/user/... (baseUrl default "/api" en useApi.js).
+      // Antes había dos proxies (/api → backend de test amaze-ventures y
+      // /user → backend real); se unificó para que dev y prod usen la
+      // misma ruta.
       "/api": {
-        target: "https://amaze-ventures-user-test.cheyoudaren.com", // API服务器地址
-        changeOrigin: true, // 支持跨域
-        // rewrite: path => path.replace(/^\/api/, ''), // 如果后端没有/api前缀,则需要重写
-        ws: true, // 支持websocket
-      },
-      "/user": {
-        target: "https://argentina-user.cheyoudaren.com/api",
+        target: "https://argentina-user.cheyoudaren.com",
         changeOrigin: true,
         ws: true,
       },

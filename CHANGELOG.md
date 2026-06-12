@@ -10,6 +10,34 @@ Fecha: 2026-06-09
 
 ---
 
+## 🔧 Fix crítico — producción sin API por build sin `.env` (2026-06-12)
+
+El build de jun-2026 subido a producción se hizo **sin `.env`**, dejando
+`baseUrl: undefined` horneado en el bundle: todos los llamados a la API
+morían con 405 contra el propio dominio (textos OK, datos no — login,
+usuarios, packs y sucursales rotos). Diagnóstico verificado contra el
+bundle deployado y los endpoints en vivo.
+
+Hallazgo clave: el nginx de `lavar.speedwash.com.ar` **ya proxea `/api` →
+backend real** (`argentina-user.cheyoudaren.com/api`) — así funcionaban
+los builds anteriores (`VITE_API_BASE_URL=/api`).
+
+Fix para que no vuelva a pasar (build correcto aunque falte el `.env`):
+
+- `baseUrl` con default **`"/api"`** si no hay `VITE_API_BASE_URL`.
+  — [useApi.js](src/composables/useApi.js)
+- Proxy de dev unificado a ese mismo camino: `/api` →
+  `argentina-user.cheyoudaren.com` (antes `/api` apuntaba al backend de
+  test amaze-ventures y `/user` al real; dev y prod ahora usan la misma
+  ruta). — [vite.config.js](vite.config.js)
+- Verificado: `pnpm build` sin `.env` hornea `baseUrl:"/api"`, y
+  `POST lavar.speedwash.com.ar/api/user/index/storeList` → 200 con datos.
+
+**Acción del proveedor:** solo su deploy de rutina (pull + build + subir
+`dist/`), sin recuperar `.env` ni tocar nginx.
+
+---
+
 ## 🎨 Ajustes UX — home, login y registro (2026-06-12)
 
 Retoques de legibilidad y navegación. **No requiere backend.**

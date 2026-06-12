@@ -5,7 +5,11 @@ import { translateBackendError } from "@/utils/backendErrors";
 import { TIMEOUT } from "@/constants";
 
 const fetchAPI = createFetch({
-  baseUrl: import.meta.env.VITE_API_BASE_URL,
+  // Default "/api": el nginx de producción (lavar.speedwash.com.ar) proxea
+  // /api → backend real, y el dev server replica ese mismo camino en
+  // vite.config.js. Así el build funciona aunque falte el .env (causa de
+  // la caída de producción de jun-2026: build sin .env → baseUrl undefined).
+  baseUrl: import.meta.env.VITE_API_BASE_URL || "/api",
   options: {
     timeout: TIMEOUT.API,
     async beforeFetch({ options }) {
