@@ -2,12 +2,21 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-> **⚡ Contexto completo del proyecto:** este repo tiene varios subproyectos
-> (la PWA Vue en `src/`, el sitio Next.js en `web/`, los brochures en
-> `Brochures/`, el plan de negocio en `Plan/`). Para tener todo el contexto
-> del negocio, el plan, los datos financieros, el sistema de diseño y los
-> pipelines de generación de PDF, **leer `CONTEXTO.md` en la raíz del repo.**
-> Esta sección describe la **PWA Vue (src/)** únicamente.
+> **⚡ Alcance de este repo:** **únicamente** la PWA Vue 3 del lavadero
+> (`lavar.speedwash.com.ar`) — el frontend del white-label provisto por el
+> proveedor chino, adaptado a Speed Wash.
+>
+> **El resto del proyecto Speed Wash vive en otro repo** (monorepo
+> `Bot-Multi-Tenant` de Mejor Hablemos, carpeta `packages/speedwash/`):
+> sitio institucional Next.js (`speedwash.com.ar`), brochures, plan de
+> negocio, gráficas, manual de marca, contexto comercial, brief Meta Ads,
+> tooling de Meta. Si necesitás esos contextos, abrí el otro repo
+> (path local: `C:\Claude\Wifix Iridiscentia\packages\speedwash\`).
+>
+> El backend de la PWA lo mantiene el proveedor en China (no está en este
+> repo). Cambios que requieren intervención del backend van documentados
+> en `CHANGELOG.md` sección "Pendientes que requieren intervención del
+> backend".
 
 ## Project Overview
 
