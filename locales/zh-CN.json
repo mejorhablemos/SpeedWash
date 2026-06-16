@@ -59,6 +59,13 @@
         "title": "我的服务",
         "vipCard": "我的VIP卡",
         "identity": "特殊身份认证"
+      },
+      "guest": {
+        "name": "访客",
+        "title": "创建你的 SpeedWash 账户",
+        "subtitle": "购买套餐、绑定车牌和查看洗车记录需要账户。",
+        "createAccount": "创建账户",
+        "login": "我已有账户"
       }
     },
     "login": {
@@ -249,6 +256,9 @@
         "2": "维护"
       },
       "selectPlan": "选择洗车方案",
+      "planName": {
+        "premium": "SpeedWash 镀膜洗"
+      },
       "vipCard": {
         "title": "VIP 卡",
         "count": "可用 VIP 卡: {count}张",
@@ -378,7 +388,14 @@
       "useNow": "立即使用",
       "licensePlate": {
         "bind": "绑定车牌",
-        "placeholder": "请输入车牌",
+        "change": "更换车牌",
+        "linked": "已绑定车牌",
+        "none": "未绑定车牌",
+        "placeholder": "例如 AB123CD 或 ABC123",
+        "hint": "阿根廷车牌：AB123CD（南共市）或 ABC123（旧版）。",
+        "invalid": "车牌无效。请使用 AB123CD 或 ABC123。",
+        "cancel": "取消",
+        "confirm": "保存",
         "success": "绑定成功",
         "fail": "绑定失败"
       }
@@ -428,6 +445,7 @@
         "specialUserOnly": "该卡仅限特殊用户购买"
       },
       "buy": "购买",
+      "tapToBuy": "点击套餐即可购买",
       "empty": "暂无可购买的会员卡"
     },
     "vouchers": {
@@ -581,8 +599,10 @@
     },
     "vipCardSelector": {
       "title": "选择 VIP 卡",
+      "subtitle": "点击卡片即可用于本次洗车。",
       "noMore": "没有更多了",
-      "notUse": "不使用"
+      "use": "使用此卡",
+      "notUse": "不使用卡支付"
     },
     "couponCard": {
       "defaultTitle": "VIP 卡",

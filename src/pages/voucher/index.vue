@@ -83,15 +83,27 @@ const bindLicenseNo = async (licenseNo) => {
         <template v-for="card in cards" :key="card.cardId">
           <voucher-card :card-info="card">
             <template #action>
-              <div class="flex flex-col justify-between items-end gap-lg" v-if="card.state === 1">
-                <van-button type="primary" size="mini" round @click="inputLicenseNo(card)">
-                  {{ t('routes.voucher.licensePlate.bind') }}
+              <template v-if="card.state === 1">
+                <van-button
+                  block
+                  round
+                  class="voucher-btn voucher-btn--ghost"
+                  @click="inputLicenseNo(card)"
+                >
+                  <van-icon name="orders-o" class="mr-1" />
+                  {{ card.licenseNo ? t('routes.voucher.licensePlate.change') : t('routes.voucher.licensePlate.bind') }}
                 </van-button>
-                <van-button type="primary" size="mini" round @click="() => useVoucher(card)">
+                <van-button
+                  block
+                  round
+                  class="voucher-btn voucher-btn--primary"
+                  @click="() => useVoucher(card)"
+                >
+                  <van-icon name="scan" class="mr-1" />
                   {{ t('routes.voucher.useNow') }}
                 </van-button>
-              </div>
-              <div v-else class="text-xl">
+              </template>
+              <div v-else class="voucher-unusable">
                 {{ getUnusableText(card.state) }}
               </div>
             </template>
@@ -100,7 +112,11 @@ const bindLicenseNo = async (licenseNo) => {
       </div>
     </van-pull-refresh>
 
-    <bind-license-plate v-model:show="showBind" @success="bindLicenseNo"/>
+    <bind-license-plate
+      v-model:show="showBind"
+      :initial="currentCard?.licenseNo"
+      @success="bindLicenseNo"
+    />
   </div>
 </template>
 
@@ -154,5 +170,34 @@ const bindLicenseNo = async (licenseNo) => {
   border: none;
   padding: 0 24px;
   font-weight: 600;
+}
+
+/* Botones de acción del abono — full-width, llamativos */
+.voucher-btn {
+  flex: 1;
+  height: 42px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.voucher-btn--primary {
+  background: linear-gradient(135deg, #00BBFC 0%, #0090CC 100%);
+  border: none;
+  color: #fff;
+  box-shadow: 0 8px 20px -8px rgba(0, 187, 252, 0.6);
+}
+
+.voucher-btn--ghost {
+  background: rgba(0, 187, 252, 0.1);
+  border: 1px solid rgba(0, 187, 252, 0.45);
+  color: #00BBFC;
+}
+
+.voucher-unusable {
+  flex: 1;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
 }
 </style>

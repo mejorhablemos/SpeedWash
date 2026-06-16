@@ -10,6 +10,85 @@ Fecha: 2026-06-09
 
 ---
 
+## 🎨 Ronda UX — packs, máquina, mi cuenta y rename del lavado (2026-06-16)
+
+Lote de ajustes de copy, naming y conversión. **Casi todo es frontend; hay
+una sola acción pendiente del proveedor (ver abajo).**
+
+**Frontend (no requiere backend):**
+
+- **Home › tagline**: "Sin turnos. Sin esperas. En minutos." → **"Sin turnos.
+  Llegás y listo. En minutos."** — [es-AR.json](locales/es-AR.json) `routes.home.hero.tagline`
+- **Home › microbanner**: "Lavado desde $23.000 · 24/7" → **"Lavado con Cera ·
+  $25.000 · 24/7"** (sin "SpeedWash" — el logo ya lo dice; así entra en un
+  renglón) — `routes.home.hero.microbanner`
+- **Home › packs subtítulo**: "Lavados prepagos: ahorrá en cada visita." →
+  **"Comprá lavados prepagos y ahorrá."** — `routes.home.vip.subtitle`
+- **Home › packs CTA**: "Ver planes" → **"Ver packs"** — `routes.home.vip.buy`
+- **Rename del lavado premium**: "Lavado Premium" → **"Lavado SpeedWash con
+  Cera"** en toda la app. El nombre lo manda el vendor en `schemeList[].name`,
+  así que se hace un override de display en frontend (no se toca el dato del
+  vendor): helper `displayPlanName` que matchea `/premium/i` →
+  [washer/index.vue](src/pages/washer/index.vue), nuevo key
+  `routes.washer.planName.premium`, y `washMode.2/3` actualizados (los usa
+  `membership-card`). Aplicado en es-AR, en y zh-CN.
+- **Pantalla máquina**: el "Lavado SpeedWash con Cera" (premium) queda
+  **preseleccionado al cargar** (si no hay, cae al de mayor precio), así el
+  botón "Iniciar lavado" funciona sin un tap previo de selección. El guard de
+  disponibilidad de la máquina (`canWash`) se mantiene. — [washer/index.vue](src/pages/washer/index.vue)
+- **Mi cuenta**: botón **"Cerrar sesión"** al final del scroll, mismo flujo que
+  Configuración (diálogo de confirmación + `userStore.logout()`). —
+  [mine-page.vue](src/pages/mine-page.vue)
+- **Comprar tarjeta VIP**: tocar un pack **ejecuta la compra directamente**,
+  sin el paso intermedio del botón "Comprar". Se eliminó la action bar; overlay
+  de carga mientras se inicia el checkout. — [membership/index.vue](src/pages/membership/index.vue)
+- **Home › packs › patente**: "…sin escanear, sin esperar." → **"…sin escanear,
+  llegás y arranca."** — `routes.home.vip.plateSub`
+- **Mi cuenta como invitado**: en vez del perfil vacío + "Cerrar sesión" (que no
+  tiene sentido sin cuenta), se muestra un estado **"Creá tu cuenta SpeedWash"**
+  con CTA Crear cuenta / Ya tengo cuenta. No se llama `myInfo()` para invitados.
+  — [mine-page.vue](src/pages/mine-page.vue)
+- **Flujo invitado → compra**: el guard redirige al invitado (sin token) que
+  toca packs/abonos/billetera a **login con el mensaje "necesitás cuenta"**, en
+  vez de dejar que el backend tire 999 → "tu sesión expiró" (confuso, nunca tuvo
+  sesión). — [router.js](src/modules/router.js) `requiresAccountPages`
+- **Selector de tarjeta VIP**: flujo confuso ("No usar tarjeta" era el único
+  botón). Ahora tocar resalta, **"Usar esta tarjeta"** (primario) confirma y
+  **"Pagar sin tarjeta"** (secundario) cancela. — [vip-card-selector.vue](src/components/vip-card-selector.vue)
+- **Mi abono (vouchers)**: botones "Vincular patente" / "Usar ahora" pasan a
+  **fila full-width** abajo de la tarjeta. La patente vinculada se muestra como
+  **chip** claro (o "Sin patente vinculada"); el botón es **"Cambiar patente"**
+  si ya hay una, y el popup **precarga** la patente para editarla. —
+  [voucher-card.vue](src/components/voucher-card.vue), [voucher/index.vue](src/pages/voucher/index.vue)
+- **Vincular patente**: botones ya no se desbordan; se eliminó "Restablecer"
+  (emitía patente vacía mostrando "éxito" — bug). **Validación de patente
+  argentina** (AB123CD Mercosur / A123BC moto / ABC123 vieja) con sanitización
+  en vivo. — [bind-license-plate.vue](src/components/bind-license-plate.vue)
+- **Login**: "Crear cuenta nueva" pasa de text-link a **botón CTA outline** bajo
+  "Ingresar" (temporal, mientras la base aún no tiene cuenta). — [login-page.vue](src/pages/login-page.vue)
+- **Escáner**: botón para **cambiar cámara** (solo si hay +1) y se prioriza
+  `facingMode: environment` para abrir la trasera por defecto (en algunos
+  Android abría la frontal). — [barcode-scanner.vue](src/components/barcode-scanner.vue)
+- **Detalle de sucursal**: nuevo render de portada; se recortó la franja blanca
+  inferior del PNG (646×362 → 646×340) y se ajustó el contenedor full-width sin
+  espacio muerto. — [store/index.vue](src/pages/store/index.vue), `store-banner-default.png`
+- **Plan de lavado**: se quitó la descripción "Plus + capa de cera"; cuando la
+  máquina tiene un solo lavado, la tarjeta ocupa **todo el ancho**. — [washer/index.vue](src/pages/washer/index.vue)
+- **Toast con ícono**: el cuadrado fijo partía palabras ("vinc/ulada"); ahora
+  crece a lo ancho y el texto va en una línea. — [main.css](src/styles/main.css)
+
+**⏳ Acción del proveedor (backend):**
+
+- **Título "Buy VIP" en la pantalla de pago del pack.** En el checkout de
+  Mercado Pago el ítem aparece como **"Buy VIP"** (en inglés y genérico). El
+  frontend solo envía `POST /vipCard/newVipCardOrder/{cardId}` — el `title` de
+  la preferencia MP lo arma el backend del proveedor, **no es editable desde la
+  app**. Pedido: que el `title`/`subject` de la preferencia use el **nombre del
+  pack seleccionado** (ej. "Pack Speed 4 Lavados") en español. Endpoint:
+  `newVipCardOrder/{cardId}` (`argentina-user.cheyoudaren.com`).
+
+---
+
 ## 🔧 Fix crítico — producción sin API por build sin `.env` (2026-06-12)
 
 El build de jun-2026 subido a producción se hizo **sin `.env`**, dejando

@@ -45,10 +45,10 @@ const handleBuyVip = () => {
 <template>
   <div class="py-4 flex flex-col gap-lg bottom-tabbar-40 pb-100px">
     <!-- 店铺封面图 -->
-    <van-cell-group inset :border="false" class="aspect-[692/402]">
+    <div class="store-cover">
       <van-image
         :src="storePicture"
-        class="w-full h-full"
+        class="store-cover__img"
         fit="cover"
         :alt="t('routes.store.detail.coverImage')"
       >
@@ -56,7 +56,7 @@ const handleBuyVip = () => {
           <van-loading type="spinner" size="20" />
         </template>
       </van-image>
-    </van-cell-group>
+    </div>
 
     <!-- 店铺信息 -->
     <van-cell-group inset :border="false">
@@ -139,6 +139,22 @@ const handleBuyVip = () => {
 </template>
 
 <style scoped>
+/* Portada de la sucursal: full-width con el ratio del render ya recortado
+   (646x340, sin la franja blanca inferior) para que no quede espacio muerto. */
+.store-cover {
+  margin: 0 16px;
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 646 / 340;
+  background: #000;
+}
+
+.store-cover__img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
 :deep(.van-nav-bar) {
   background-color: transparent;
 }

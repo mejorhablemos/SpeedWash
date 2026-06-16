@@ -1,4 +1,5 @@
 <script setup>
+import { storeToRefs } from "pinia";
 import IconInProgress from "@/assets/order/icon_in_progress.png";
 import IconPendingPayment from "@/assets/order/icon_pending_payment.png";
 import IconCompleted from "@/assets/order/icon_completed.png";
@@ -8,17 +9,66 @@ import IconCompleted from "@/assets/order/icon_completed.png";
 const SHOW_WALLET = false;
 
 const { t } = useI18n();
+const router = useRouter();
+const userStore = useUserStore();
+const { isGuest } = storeToRefs(userStore);
 const userInfo = ref(null);
 
-// Fetch user info
-const { data } = myPageApi.myInfo();
-watchEffect(() => {
-  if (data.value) userInfo.value = data.value;
-});
+// Solo traemos el perfil para usuarios con cuenta real. Un invitado no tiene
+// token, así que myInfo() no devuelve nada útil: en su lugar mostramos el
+// estado "invitado" con CTA para crear cuenta.
+if (!isGuest.value) {
+  const { data } = myPageApi.myInfo();
+  watchEffect(() => {
+    if (data.value) userInfo.value = data.value;
+  });
+}
+
+// Cerrar sesión — mismo flujo que en Configuración.
+const handleLogout = () => {
+  showDialog({
+    title: t("routes.settings.logout.title"),
+    message: t("routes.settings.logout.message"),
+    showCancelButton: true,
+  }).then(() => {
+    userStore.logout();
+    router.push("/login");
+  });
+};
 </script>
 
 <template>
   <div class="mine-page">
+    <!-- Estado invitado: sin cuenta real, empujamos a crear cuenta -->
+    <template v-if="isGuest">
+      <div class="mine-header">
+        <div class="mine-header__bg"></div>
+        <div class="mine-header__content">
+          <div class="mine-avatar">
+            <van-icon name="user-o" size="28" color="#00BBFC" />
+          </div>
+          <div class="mine-user-info">
+            <h2 class="mine-user-name">{{ t('routes.mine.guest.name') }}</h2>
+          </div>
+        </div>
+      </div>
+
+      <div class="mine-section">
+        <div class="guest-card">
+          <h3 class="guest-card__title">{{ t('routes.mine.guest.title') }}</h3>
+          <p class="guest-card__sub">{{ t('routes.mine.guest.subtitle') }}</p>
+          <van-button block round type="primary" class="guest-card__primary" @click="router.push('/register')">
+            {{ t('routes.mine.guest.createAccount') }}
+          </van-button>
+          <van-button block round class="guest-card__ghost" @click="router.push('/login')">
+            {{ t('routes.mine.guest.login') }}
+          </van-button>
+        </div>
+      </div>
+    </template>
+
+    <!-- Perfil de usuario con cuenta real -->
+    <template v-else>
     <!-- Header con avatar -->
     <div class="mine-header">
       <div class="mine-header__bg"></div>
@@ -100,6 +150,14 @@ watchEffect(() => {
         <van-icon name="arrow" size="14" color="#C0C4C8" />
       </router-link>
     </div>
+
+    <!-- Cerrar sesión -->
+    <div class="mine-section mine-logout">
+      <van-button block round class="logout-btn" @click="handleLogout">
+        {{ t('routes.settings.logout.button') }}
+      </van-button>
+    </div>
+    </template>
   </div>
 </template>
 
@@ -337,5 +395,60 @@ watchEffect(() => {
   font-size: 15px;
   font-weight: 600;
   color: var(--text-primary);
+}
+
+/* Estado invitado */
+.guest-card {
+  margin-top: -20px;
+  position: relative;
+  z-index: 2;
+  background:
+    radial-gradient(130% 120% at 100% 0%, rgba(0, 187, 252, 0.12) 0%, transparent 55%),
+    var(--surface-color);
+  border: 1px solid rgba(0, 187, 252, 0.3);
+  border-radius: 18px;
+  padding: 22px 18px;
+  box-shadow: 0 12px 30px -18px rgba(0, 0, 0, 0.85);
+  text-align: center;
+}
+
+.guest-card__title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 8px;
+}
+
+.guest-card__sub {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin: 0 0 18px;
+}
+
+.guest-card__primary {
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.guest-card__ghost {
+  background: rgba(0, 187, 252, 0.08);
+  border: 1px solid rgba(0, 187, 252, 0.45);
+  color: #00BBFC;
+  font-weight: 600;
+}
+
+/* Cerrar sesión — aire extra abajo para no quedar pegado al tabbar */
+.mine-logout {
+  margin-top: 24px;
+  padding-bottom: calc(var(--van-tabbar-height) + env(safe-area-inset-bottom) + 24px);
+}
+
+.logout-btn {
+  background: var(--surface-color);
+  border: 1px solid var(--line-color);
+  color: var(--brand-error);
+  font-weight: 600;
 }
 </style>

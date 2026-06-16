@@ -42,36 +42,47 @@ const slots = useSlots();
 
 <template>
   <div class="voucher-card" :class="{ 'voucher-card--active': active, 'voucher-card--disabled': !canUse }">
-    <!-- Lado izquierdo: VIP -->
-    <div class="voucher-card__left">
-      <span class="voucher-card__vip-text">
-        {{ title || t("components.couponCard.defaultTitle") }}
-      </span>
-      <van-tag class="voucher-card__tag" size="medium">
-        {{
-          t("components.couponCard.availableTimes", {
-            count: cardInfo.remainWashCount,
-          })
-        }}
-      </van-tag>
-    </div>
+    <!-- Cuerpo: VIP + info -->
+    <div class="voucher-card__body">
+      <!-- Lado izquierdo: VIP -->
+      <div class="voucher-card__left">
+        <span class="voucher-card__vip-text">
+          {{ title || t("components.couponCard.defaultTitle") }}
+        </span>
+        <van-tag class="voucher-card__tag" size="medium">
+          {{
+            t("components.couponCard.availableTimes", {
+              count: cardInfo.remainWashCount,
+            })
+          }}
+        </van-tag>
+      </div>
 
-    <div class="voucher-card__divider"></div>
+      <div class="voucher-card__divider"></div>
 
-    <!-- Lado derecho: info -->
-    <div class="voucher-card__right">
-      <div class="voucher-card__info">
-        <div class="voucher-card__name">{{ cardInfo.cardName }}</div>
-        <div class="voucher-card__license">{{ cardInfo.licenseNo }}</div>
-        <div class="voucher-card__expiry">
-          {{ t("components.couponCard.expiryDate") }}:
-          {{ cardInfo.expiryDate }}
+      <!-- Lado derecho: info -->
+      <div class="voucher-card__right">
+        <div class="voucher-card__info">
+          <div class="voucher-card__name">{{ cardInfo.cardName }}</div>
+          <div
+            class="voucher-card__plate"
+            :class="{ 'voucher-card__plate--empty': !cardInfo.licenseNo }"
+          >
+            <van-icon :name="cardInfo.licenseNo ? 'passed' : 'info-o'" />
+            <span v-if="cardInfo.licenseNo">{{ cardInfo.licenseNo }}</span>
+            <span v-else>{{ t("routes.voucher.licensePlate.none") }}</span>
+          </div>
+          <div class="voucher-card__expiry">
+            {{ t("components.couponCard.expiryDate") }}:
+            {{ cardInfo.expiryDate }}
+          </div>
         </div>
       </div>
+    </div>
 
-      <div class="voucher-card__action" v-if="slots.action">
-        <slot name="action" />
-      </div>
+    <!-- Acciones full-width abajo -->
+    <div class="voucher-card__footer" v-if="slots.action">
+      <slot name="action" />
     </div>
 
     <div class="voucher-card__origin" v-if="tagText">
@@ -83,20 +94,20 @@ const slots = useSlots();
 <style scoped>
 .voucher-card {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   background: var(--surface-color);
   border: 1px solid var(--line-color);
   border-radius: 16px;
-  padding: 16px 0;
+  padding: 16px 0 0;
   box-shadow: 0 8px 24px -16px rgba(0, 0, 0, 0.8);
   position: relative;
   overflow: hidden;
-  cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.voucher-card:active {
-  transform: scale(0.98);
+.voucher-card__body {
+  display: flex;
+  align-items: center;
 }
 
 .voucher-card--active {
@@ -145,7 +156,6 @@ const slots = useSlots();
   flex: 1;
   padding: 0 16px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
 }
 
@@ -161,14 +171,42 @@ const slots = useSlots();
   color: var(--text-primary);
 }
 
-.voucher-card__license {
-  font-size: 12px;
+/* Chip de patente vinculada — claro de un vistazo */
+.voucher-card__plate {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  align-self: flex-start;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--primary-light);
+  background: rgba(0, 187, 252, 0.12);
+  border: 1px solid rgba(0, 187, 252, 0.35);
+}
+
+.voucher-card__plate--empty {
+  font-weight: 500;
+  letter-spacing: normal;
   color: var(--text-secondary);
+  background: transparent;
+  border-color: var(--line-color);
 }
 
 .voucher-card__expiry {
   font-size: 12px;
   color: var(--text-secondary);
+}
+
+/* Acciones full-width abajo de la tarjeta */
+.voucher-card__footer {
+  display: flex;
+  gap: 10px;
+  padding: 14px 16px 16px;
+  margin-top: 14px;
+  border-top: 1px solid var(--line-color);
 }
 
 .voucher-card__origin {

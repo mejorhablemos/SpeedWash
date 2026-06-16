@@ -92,34 +92,45 @@ const drawPositions = (points) => {
   ctx.fill();
 };
 
+// Sincroniza deviceId/índice con la cámara que el navegador realmente abrió
+// (cuando dejamos elegir por facingMode no sabemos el deviceId de antemano).
+const syncActiveCamera = () => {
+  const video = document.getElementById('qrcode-scanner')
+  const track = video?.srcObject?.getVideoTracks?.()[0]
+  const settings = track?.getSettings?.()
+  if (settings?.deviceId) {
+    deviceId.value = settings.deviceId
+    const idx = cameras.value.findIndex(c => c.deviceId === settings.deviceId)
+    if (idx !== -1) currentCameraIndex.value = idx
+  }
+}
+
 // 开始扫描
 const openScan = async () => {
   try {
     isScanning.value = true
     const videoInputDevices = await codeReader.listVideoInputDevices()
-    
+
     if (videoInputDevices.length) {
       cameras.value = videoInputDevices
-      // 优先使用后置摄像头
-      deviceId.value = videoInputDevices[0]?.deviceId
-      if (videoInputDevices.length > 1) {
-        deviceId.value = videoInputDevices[1]?.deviceId
-        currentCameraIndex.value = 1
+
+      // Si el usuario eligió una cámara puntual (cambio manual) usamos ese
+      // deviceId; si no, pedimos facingMode 'environment' para que el navegador
+      // abra la trasera. Esto es más confiable que adivinar por índice —en
+      // algunos Android el índice 1 era la frontal y se abría esa.
+      const video = {
+        width: { ideal: 1920 },
+        height: { ideal: 1080 },
+        aspectRatio: { ideal: 1.7777777778 }, // 16:9
       }
-      
-      // 设置视频约束，要求较高的分辨率
-      const constraints = {
-        video: {
-          deviceId: deviceId.value,
-          width: { ideal: 1920 },  // 理想宽度
-          height: { ideal: 1080 }, // 理想高度
-          facingMode: 'environment', // 优先使用后置摄像头
-          aspectRatio: { ideal: 1.7777777778 }, // 16:9
-        }
+      if (deviceId.value) {
+        video.deviceId = { exact: deviceId.value }
+      } else {
+        video.facingMode = { ideal: 'environment' }
       }
-      
+
       // 使用自定义约束进行解码
-      await codeReader.decodeFromConstraints(constraints, 'qrcode-scanner', (result, error) => {
+      await codeReader.decodeFromConstraints({ video }, 'qrcode-scanner', (result, error) => {
         if (result) {
           handleScanResult(result)
         }
@@ -128,6 +139,8 @@ const openScan = async () => {
           ctx?.clearRect(0, 0, overlayRef.value.width, overlayRef.value.height)
         }
       })
+
+      syncActiveCamera()
     }
   } catch (error) {
     console.error('Camera init failed:', error)
@@ -489,9 +502,20 @@ const restartScan = () => {
           <!-- <div class="i-carbon-flash text-24px text-white" :class="{ 'text-yellow-400': isTorchOn }"></div> -->
         </button>
 
+        <!-- Cambiar cámara (frontal/trasera). Solo si hay más de una. -->
+        <button
+          v-if="cameras.length > 1"
+          type="button"
+          class="w-44px h-44px rounded-full bg-white/20 hover:bg-white/30 active:bg-white/40 transition-colors duration-300 flex items-center justify-center cursor-pointer"
+          :aria-label="t('routes.scan.camera.switch')"
+          @click="switchCamera"
+        >
+          <div class="i-carbon-renew text-24px text-white"></div>
+        </button>
+
         <!-- 相册 -->
-        <button 
-          type="button" 
+        <button
+          type="button"
           class="w-44px h-44px rounded-full bg-white/20 hover:bg-white/30 active:bg-white/40 transition-colors duration-300 flex items-center justify-center cursor-pointer"
           @click="selectImage"
         >

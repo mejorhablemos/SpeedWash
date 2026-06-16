@@ -6,8 +6,8 @@
         "welcome": "Bienvenido a",
         "brand": "SpeedWash",
         "subtitle": "Lavado automático premium.\nRápido, eficiente y con la última tecnología.",
-        "tagline": "Sin turnos. Sin esperas. En minutos.",
-        "microbanner": "Lavado desde $23.000 · 24/7"
+        "tagline": "Sin turnos. Llegás y listo. En minutos.",
+        "microbanner": "Lavado con Cera · $25.000 · 24/7"
       },
       "scanButton": {
         "title": "Escanear máquina",
@@ -15,10 +15,10 @@
       },
       "vip": {
         "title": "Packs de lavado",
-        "subtitle": "Lavados prepagos: ahorrá en cada visita.",
+        "subtitle": "Comprá lavados prepagos y ahorrá.",
         "plateTitle": "Tu patente inicia el lavado.",
-        "plateSub": "Sin sacar el celular, sin escanear, sin esperar.",
-        "buy": "Ver planes"
+        "plateSub": "Sin sacar el celular, sin escanear, llegás y arranca.",
+        "buy": "Ver packs"
       },
       "invite": {
         "title": "Invitá y ganá"
@@ -63,6 +63,13 @@
         "title": "Mis servicios",
         "vipCard": "Mi abono",
         "identity": "Verificación de identidad"
+      },
+      "guest": {
+        "name": "Invitado",
+        "title": "Creá tu cuenta SpeedWash",
+        "subtitle": "Necesitás una cuenta para comprar packs, vincular tu patente y ver tus lavados.",
+        "createAccount": "Crear cuenta",
+        "login": "Ya tengo cuenta"
       }
     },
     "login": {
@@ -259,9 +266,8 @@
         "2": "En mantenimiento"
       },
       "selectPlan": "Elegí tu lavado",
-      "planDesc": {
-        "plus": "Espuma activa + shampoo antiadherente",
-        "premium": "Plus + capa de cera SpeedWash Premium"
+      "planName": {
+        "premium": "Lavado SpeedWash con Cera"
       },
       "vipCard": {
         "title": "Tarjeta VIP",
@@ -349,7 +355,8 @@
         "noTrack": "No se encontró la cámara",
         "torchNotSupported": "Tu dispositivo no tiene linterna",
         "torchFailed": "No se pudo controlar la linterna",
-        "noQrInImage": "No se reconoció ningún código QR en la imagen"
+        "noQrInImage": "No se reconoció ningún código QR en la imagen",
+        "switch": "Cambiar cámara"
       }
     },
     "settings": {
@@ -428,7 +435,14 @@
       "viewPlans": "Ver planes disponibles",
       "licensePlate": {
         "bind": "Vincular patente",
-        "placeholder": "Ingresá la patente",
+        "change": "Cambiar patente",
+        "linked": "Patente vinculada",
+        "none": "Sin patente vinculada",
+        "placeholder": "Ej: AB123CD o ABC123",
+        "hint": "Patente argentina: AB123CD (Mercosur) o ABC123 (vieja).",
+        "invalid": "Patente inválida. Usá AB123CD o ABC123.",
+        "cancel": "Cancelar",
+        "confirm": "Guardar",
         "success": "Patente vinculada",
         "fail": "Error al vincular la patente"
       }
@@ -478,6 +492,7 @@
         "specialUserOnly": "Esta tarjeta es exclusiva para usuarios especiales"
       },
       "buy": "Comprar",
+      "tapToBuy": "Tocá un pack para comprarlo",
       "empty": "No hay tarjetas VIP disponibles"
     },
     "vouchers": {
@@ -638,8 +653,10 @@
     },
     "vipCardSelector": {
       "title": "Elegí tu tarjeta VIP",
+      "subtitle": "Tocá una tarjeta para usarla en este lavado.",
       "noMore": "No hay más datos",
-      "notUse": "No usar tarjeta"
+      "use": "Usar esta tarjeta",
+      "notUse": "Pagar sin tarjeta"
     },
     "couponCard": {
       "defaultTitle": "Tarjeta VIP",
@@ -766,7 +783,7 @@
   },
   "washMode": {
     "1": "Lavado estándar",
-    "2": "Lavado premium",
-    "3": "Lavado Premium con cera"
+    "2": "Lavado SpeedWash con Cera",
+    "3": "Lavado SpeedWash con Cera"
   }
 }

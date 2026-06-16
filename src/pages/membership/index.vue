@@ -23,9 +23,9 @@ const vipCards = computed(() => data.value?.canBuyList || []);
 const hasCards = computed(() => vipCards.value?.length > 0)
 
 // 立即购买
-const onPurchase = () => {
-  const card = selectedCard.value;
-  if (!card) return;
+const onPurchase = (card) => {
+  if (!card || confirmLoading.value) return;
+  selectedCard.value = card;
 
   // 是否仅特殊用户
   if (card.isOnlyMembership) {
@@ -61,9 +61,9 @@ const goToApply = () => {
   router.push("/verify");
 };
 
-// 选择卡片
+// Tocar un pack ejecuta la compra directamente (sin paso intermedio).
 const selectCard = (card) => {
-  selectedCard.value = card;
+  onPurchase(card);
 };
 </script>
 <template>
@@ -74,11 +74,12 @@ const selectCard = (card) => {
     </template>
     
     <template v-else-if="hasCards">
+      <p class="vip-hint">{{ t('routes.membership.tapToBuy') }}</p>
       <template v-for="card in vipCards" :key="card.cardId">
-        <membership-card 
-          :card="card" 
-          :selected="selectedCard?.cardId === card.cardId" 
-          @click="selectCard(card)" 
+        <membership-card
+          :card="card"
+          :selected="selectedCard?.cardId === card.cardId"
+          @click="selectCard(card)"
         />
       </template>
     </template>
@@ -92,10 +93,10 @@ const selectCard = (card) => {
     </template>
   </div>
 
-  <van-action-bar>
-    <van-action-bar-button :disabled="!selectedCard" type="primary" :loading="confirmLoading"
-      :text="t('routes.membership.buy')" @click="onPurchase" />
-  </van-action-bar>
+  <!-- Overlay de carga mientras se inicia el checkout del pack -->
+  <van-overlay :show="confirmLoading" class="flex-center">
+    <van-loading size="28px" vertical color="#fff">{{ t('common.loading') }}</van-loading>
+  </van-overlay>
 
   <van-dialog v-model:show="showLoginDialog" :title="t('routes.membership.tips.title')"
     :message="t('routes.membership.tips.specialUserOnly')" show-cancel-button
@@ -103,4 +104,11 @@ const selectCard = (card) => {
     :confirm-button-text="t('routes.membership.dialog.apply')" @confirm="goToApply" />
 </template>
 
-<style scoped></style>
+<style scoped>
+.vip-hint {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0 0 4px;
+}
+</style>

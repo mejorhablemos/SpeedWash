@@ -61,6 +61,13 @@
         "title": "My Services",
         "vipCard": "My VIP Card",
         "identity": "Identity Verification"
+      },
+      "guest": {
+        "name": "Guest",
+        "title": "Create your SpeedWash account",
+        "subtitle": "You need an account to buy packs, link your plate and track your washes.",
+        "createAccount": "Create account",
+        "login": "I already have an account"
       }
     },
     "login": {
@@ -257,6 +264,9 @@
         "2": "Maintenance"
       },
       "selectPlan": "Select Wash Plan",
+      "planName": {
+        "premium": "SpeedWash Wash with Wax"
+      },
       "vipCard": {
         "title": "VIP Card",
         "count": "{count} VIP Cards Available",
@@ -390,8 +400,15 @@
       "empty": "No vouchers",
       "useNow": "Use Now",
       "licensePlate": {
-        "bind": "Bind license plate",
-        "placeholder": "Enter license plate",
+        "bind": "Link plate",
+        "change": "Change plate",
+        "linked": "Linked plate",
+        "none": "No plate linked",
+        "placeholder": "e.g. AB123CD or ABC123",
+        "hint": "Argentine plate: AB123CD (Mercosur) or ABC123 (old).",
+        "invalid": "Invalid plate. Use AB123CD or ABC123.",
+        "cancel": "Cancel",
+        "confirm": "Save",
         "success": "Bind Success",
         "fail": "Bind Fail"
       }
@@ -441,6 +458,7 @@
         "specialUserOnly": "Only special users can purchase this card"
       },
       "buy": "Buy",
+      "tapToBuy": "Tap a pack to buy it",
       "empty": "No VIP cards available"
     },
     "vouchers": {
@@ -601,8 +619,10 @@
     },
     "vipCardSelector": {
       "title": "Select VIP Card",
+      "subtitle": "Tap a card to use it for this wash.",
       "noMore": "No more data",
-      "notUse": "Cancel Selection"
+      "use": "Use this card",
+      "notUse": "Pay without card"
     },
     "couponCard": {
       "defaultTitle": "VIP Card",
@@ -723,7 +743,7 @@
   },
   "washMode": {
     "1": "Standard Wash",
-    "2": "Premium Wash",
-    "3": "Premium Wash with Wax"
+    "2": "SpeedWash Wash with Wax",
+    "3": "SpeedWash Wash with Wax"
   }
 }

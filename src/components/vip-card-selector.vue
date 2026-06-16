@@ -30,12 +30,19 @@ const onLoad = () => {
   }, 1000);
 };
 
+// Tocar una tarjeta solo la resalta; confirmar con "Usar esta tarjeta".
+// Volver a tocar la seleccionada la deselecciona.
 const selectCard = (card) => {
-  // 如果点击已选中的卡片,则取消选择
   selectedCard.value = selectedCard.value?.cardId === card.cardId ? null : card;
+};
+
+// Confirmar el uso de la tarjeta resaltada.
+const confirmUse = () => {
+  if (!selectedCard.value) return;
   show.value = false;
 };
 
+// Pagar sin tarjeta: limpia la selección y cierra.
 const cancelSelect = () => {
   selectedCard.value = null;
   show.value = false;
@@ -53,8 +60,9 @@ const getMarkName = mark => props.washPlans.find(item => item.mark === mark)?.na
     :style="{ height: '70%' }"
   >
     <div class="flex flex-col h-full bg-background">
-      <div class="p-4 text-center text-3xl font-bold border-b">
-        {{ t("components.vipCardSelector.title") }}
+      <div class="p-4 text-center border-b">
+        <div class="text-3xl font-bold">{{ t("components.vipCardSelector.title") }}</div>
+        <div class="text-22 text-text-secondary mt-1">{{ t("components.vipCardSelector.subtitle") }}</div>
       </div>
       <div class="flex-1 overflow-hidden">
         <van-list
@@ -77,11 +85,22 @@ const getMarkName = mark => props.washPlans.find(item => item.mark === mark)?.na
           </div>
         </van-list>
       </div>
-      <div class="p-4 border-t">
-        <van-button block round type="primary" size="large" @click="cancelSelect">
+      <div class="p-4 border-t flex flex-col gap-3">
+        <van-button block round type="primary" size="large" :disabled="!selectedCard" @click="confirmUse">
+          {{ t('components.vipCardSelector.use') }}
+        </van-button>
+        <van-button block round size="large" class="skip-btn" @click="cancelSelect">
           {{ t('components.vipCardSelector.notUse') }}
         </van-button>
       </div>
     </div>
   </van-popup>
 </template>
+
+<style scoped>
+.skip-btn {
+  background: transparent;
+  border: 1px solid var(--line-color);
+  color: var(--text-secondary);
+}
+</style>

@@ -69,6 +69,19 @@ body {
   text-shadow: 0 0 30px rgba(var(--primary-color-rgb), 0.45);
 }
 
+/* Toast con ícono (éxito/error/loading): el cuadrado fijo de Vant partía
+   palabras a la mitad ("Patente vinc/ulada"). Lo dejamos crecer a lo ancho
+   y el texto en una sola línea — los mensajes de éxito son cortos. */
+.van-toast--icon {
+  width: auto;
+  max-width: 80vw;
+  padding: 16px 20px;
+}
+
+.van-toast--icon .van-toast__text {
+  white-space: nowrap;
+}
+
 .tech-grid {
   background-image:
     linear-gradient(to right, rgba(var(--primary-color-rgb), 0.05) 1px, transparent 1px),

@@ -40,18 +40,19 @@ const machineBenefits = computed(() => {
   return Array.isArray(list) ? list : [];
 });
 
-// Parte el nombre del plan en 2 líneas: "Lavado Plus" -> ["Lavado", "Plus"]
-const splitPlanName = (name = "") => {
-  const idx = name.indexOf(" ");
-  if (idx === -1) return { first: name, rest: "" };
-  return { first: name.slice(0, idx), rest: name.slice(idx + 1) };
+// El vendor nombra el plan con cera como "Lavado Premium"; en la marca
+// SpeedWash se muestra como "Lavado SpeedWash con Cera". Override de display.
+const displayPlanName = (name = "") => {
+  if (/premium/i.test(name)) return t("routes.washer.planName.premium");
+  return name;
 };
 
-// Descripción de qué incluye cada plan (por nombre)
-const planDesc = (name = "") => {
-  if (/premium/i.test(name)) return t("routes.washer.planDesc.premium");
-  if (/plus/i.test(name)) return t("routes.washer.planDesc.plus");
-  return "";
+// Parte el nombre del plan en 2 líneas: "Lavado Plus" -> ["Lavado", "Plus"]
+const splitPlanName = (name = "") => {
+  const display = displayPlanName(name);
+  const idx = display.indexOf(" ");
+  if (idx === -1) return { first: display, rest: "" };
+  return { first: display.slice(0, idx), rest: display.slice(idx + 1) };
 };
 
 // 其他状态
@@ -161,6 +162,21 @@ watch(
     },
     { immediate: true, deep: true }
 );
+
+// Preselección: al cargar los planes, dejamos elegido el "Lavado con Cera"
+// (premium) por defecto, así el usuario puede iniciar sin un tap extra.
+// Si no hubiera uno premium, cae al de mayor precio.
+watch(
+  washPlans,
+  (plans) => {
+    if (plans.length && !selectedPlan.value) {
+      selectedPlan.value =
+        plans.find((p) => /premium/i.test(p.name)) ||
+        [...plans].sort((a, b) => b.price - a.price)[0];
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
@@ -237,7 +253,10 @@ watch(
           v-for="item in washPlans"
           :key="item.mark"
           class="plan-card"
-          :class="{ 'plan-card--selected': selectedPlan?.mark === item.mark }"
+          :class="{
+            'plan-card--selected': selectedPlan?.mark === item.mark,
+            'plan-card--full': washPlans.length === 1,
+          }"
           @click="selectedPlan = item"
         >
           <div class="plan-card__name">
@@ -251,9 +270,6 @@ watch(
             currency-class="text-lg text-primary"
             integer-class="text-3xl font-bold text-primary"
           />
-          <div class="plan-card__desc" v-if="planDesc(item.name)">
-            {{ planDesc(item.name) }}
-          </div>
         </div>
       </div>
     </div>
@@ -364,12 +380,19 @@ watch(
   color: var(--text-primary);
 }
 
-.plan-card__desc {
-  margin-top: auto;
-  padding-top: 6px;
-  font-size: 12px;
-  line-height: 1.35;
-  color: var(--text-secondary);
+/* Plan único: ocupa todo el ancho, layout horizontal (nombre + precio) */
+.plan-card--full {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 0;
+  padding: 18px 22px;
+  text-align: left;
+}
+
+.plan-card--full .plan-card__name {
+  font-size: 20px;
 }
 
 .cash-offer {

@@ -96,13 +96,22 @@ const guestLogin = () => {
       </van-cell-group>
     </van-form>
 
-    <!-- Links secundarios: crear cuenta / olvidé contraseña / invitado.
-         Los tres como text link al mismo nivel — el único botón lleno de
-         la pantalla es "Ingresar". "Invitado" se oculta si el redirect es
-         a un flujo que necesita cuenta real (compra de pack, billetera). -->
+    <!-- Crear cuenta nueva — destacado como CTA secundario (outline).
+         La mayoría de los usuarios todavía no tiene cuenta, así que
+         queremos que el alta sea fácil de encontrar. Temporal: cuando la
+         base ya tenga cuenta, volver a degradarlo a text link. -->
+    <van-cell-group inset class="!mt-12px">
+      <router-link to="/register" class="block">
+        <van-button round block class="text-16px register-cta">
+          {{ t('routes.login.register') }}
+        </van-button>
+      </router-link>
+    </van-cell-group>
+
+    <!-- Links secundarios: olvidé contraseña / invitado.
+         "Invitado" se oculta si el redirect es a un flujo que necesita
+         cuenta real (compra de pack, billetera). -->
     <div class="flex flex-wrap justify-center items-center gap-x-4 gap-y-3 min-h-44px px-4 text-26 font-medium">
-      <router-link to="/register" class="!text-white">{{ t('routes.login.register') }}</router-link>
-      <div class="w-2 h-28 bg-white/30"></div>
       <router-link to="/forgot-password" class="!text-white">{{ t('routes.login.forgotPassword') }}</router-link>
       <template v-if="!isPurchaseFlow">
         <div class="w-2 h-28 bg-white/30"></div>
@@ -136,5 +145,14 @@ const guestLogin = () => {
   min-height: calc(100vh - 46px - env(safe-area-inset-top));
   min-height: calc(100dvh - 46px - env(safe-area-inset-top));
   justify-content: center;
+}
+
+/* CTA secundario "Crear cuenta nueva": outline azul, claramente un botón
+   pero subordinado al "Ingresar" lleno de arriba. */
+.register-cta {
+  background: rgba(0, 187, 252, 0.08);
+  border: 1px solid rgba(0, 187, 252, 0.55);
+  color: #00BBFC;
+  font-weight: 700;
 }
 </style>
