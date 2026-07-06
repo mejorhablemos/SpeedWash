@@ -76,9 +76,13 @@ const handleBackHome = () => {
 watch(
   status,
   (newVal) => {
+    // Solo las órdenes de lavado hacen polling que luego actualizará el estado;
+    // para el resto (VIP/recarga) un estado no-final ya es definitivo y debe
+    // disparar la cuenta regresiva/redirección, si no la pantalla queda colgada.
     if (
-      newVal === PAYMENT_STATUS.PROCESSING ||
-      newVal === PAYMENT_STATUS.PENDING
+      (newVal === PAYMENT_STATUS.PROCESSING ||
+        newVal === PAYMENT_STATUS.PENDING) &&
+      isWashOrder.value
     ) {
       return;
     }

@@ -1,5 +1,6 @@
 import { washApi } from "@/api";
 import { PAYMENT_CHECK, PAYMENT_FROM, PAYMENT_STATUS } from "@/constants";
+import { resolvePaymentStatus } from "@/utils/payment-status";
 
 
 export function usePaymentCheck() {
@@ -7,8 +8,9 @@ export function usePaymentCheck() {
   // 暂不处理 cancel
   const { cancel, timeout, oid, from } = route.query;
 
-  // 状态
-  const status = ref(route.query.status || PAYMENT_STATUS.PENDING);
+  // 状态: normaliza el estado que devuelve Mercado Pago (approved/pending/...)
+  // al vocabulario interno de la app (success/pending/...).
+  const status = ref(resolvePaymentStatus(route.query));
 
   // 有订单id(来自洗车订单)，即为洗车订单
   const isWashOrder = ref(

@@ -7,7 +7,7 @@ defineProps({
   status: {
     type: String,
     default: PAYMENT_STATUS.SUCCESS,
-    validator: (value) => [PAYMENT_STATUS.SUCCESS, PAYMENT_STATUS.FAILURE, PAYMENT_STATUS.TIMEOUT, PAYMENT_STATUS.CANCELLED].includes(value)
+    validator: (value) => Object.values(PAYMENT_STATUS).includes(value)
   }
 })
 
