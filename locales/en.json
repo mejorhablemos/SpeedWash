@@ -713,6 +713,7 @@
       "passwordMismatch": "Passwords do not match.",
       "sessionExpired": "Your session expired. Please sign in again.",
       "smsCodeInvalid": "The verification code is not valid.",
+      "smsSendFail": "We couldn't send the SMS. Please check the number or try again in a few minutes.",
       "passwordIncorrect": "Incorrect password. Please try again.",
       "insufficientBalance": "Insufficient balance for this operation.",
       "forbidden": "You do not have permission for this action.",

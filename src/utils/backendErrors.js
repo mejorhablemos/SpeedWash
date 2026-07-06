@@ -36,6 +36,12 @@ const BACKEND_ERROR_MAP = [
     match: /sms.*code.*invalid|verification code.*invalid|invalid.*verification|sms.*expired|code.*expired/i,
     key: "errors.backend.smsCodeInvalid",
   },
+  // Falla al enviar el SMS (pasarela del backend). El proveedor devuelve
+  // "SMS send fail" genérico; mostramos algo accionable en vez del genérico.
+  {
+    match: /sms send fail|send.*sms.*fail|fail.*send.*sms/i,
+    key: "errors.backend.smsSendFail",
+  },
   // Sesión expirada (chino + posibles variantes en inglés)
   {
     match: /未登录|登录已失效|not logged in|session expired|please login/i,
@@ -89,6 +95,10 @@ export function translateBackendError(error, t) {
   // Si ya viene en español lo devolvemos tal cual (mensajes del propio
   // frontend que se rethrowan, validaciones de yup/zod, etc).
   if (looksLikeSpanish(raw)) return raw;
+
+  // Dejamos el msg crudo del backend en consola para poder diagnosticar
+  // desde el campo (el usuario solo ve el genérico, pero el dev lo ve acá).
+  console.warn("[backendError] mensaje del backend sin mapear:", raw);
 
   // Fallback: genérico, NO el original (evita exponer inglés/chino).
   return translate("errors.backend.unknown");

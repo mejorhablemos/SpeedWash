@@ -753,6 +753,7 @@
       "passwordMismatch": "Las contraseñas no coinciden.",
       "sessionExpired": "Tu sesión expiró. Iniciá sesión de nuevo.",
       "smsCodeInvalid": "El código de verificación no es válido.",
+      "smsSendFail": "No pudimos enviarte el SMS. Revisá que el número sea correcto o probá de nuevo en unos minutos.",
       "passwordIncorrect": "Contraseña incorrecta. Probá de nuevo.",
       "insufficientBalance": "No tenés saldo suficiente para esta operación.",
       "forbidden": "No tenés permisos para realizar esta acción.",

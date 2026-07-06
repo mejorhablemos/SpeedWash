@@ -10,6 +10,47 @@ Fecha: 2026-06-09
 
 ---
 
+## 🚨 Caída del envío de SMS — pasarela del proveedor (2026-07-06)
+
+Desde ~2026-07-05 el envío de códigos por SMS **falla para todos los números
+argentinos**, bloqueando **registro de nuevos usuarios Y recuperación de
+contraseña** (60+ usuarios afectados). Venía andando normal el día anterior.
+
+**Diagnóstico (verificado, es 100% del backend):**
+
+- `curl` directo al backend (sin frontend de por medio):
+  `POST /api/user/sms/resetPwd` y `/regedit` → **HTTP 200** con cuerpo
+  `{"code":1,"msg":"SMS send fail"}`, en ~1s. Reproducido con número real y
+  válido (`543413312197`, formato `54`+10 díg. — el mismo que funcionó hasta ayer).
+- **No es formato del teléfono**: los 60 usuarios se registraron con ese mismo
+  formato; el "9" de móvil argentino no es la causa (y cambiarlo rompería el
+  login de los 60 existentes → descartado).
+- **No es el frontend**: `git log --since="8 days ago"` está vacío; último commit
+  2026-06-16 (~3 semanas antes). El error es un JSON aplicativo bien formado
+  `{code,msg}` del backend correcto (`argentina-user.cheyoudaren.com`) — un
+  misruteo daría 404/405/HTML/CORS, no esto. El POST llega bien; falla la
+  pasarela de SMS del proveedor.
+- **No es ruteo/proxy**: `smsApi` usa el mismo `createApi`/`baseUrl "/api"`/proxy
+  que `storeList` (que funciona). Si fuera ruteo, `storeList` también caería.
+
+**⏳ Acción del proveedor (backend) — URGENTE:**
+
+- Revisar la pasarela de SMS: **saldo/crédito** (causa más probable),
+  **API key/credenciales** (vencidas o rotadas), **routing/allowlist para
+  Argentina (+54)**, y los **logs del proveedor** con el motivo exacto del fallo.
+- Endpoints: `POST /api/user/sms/resetPwd`, `POST /api/user/sms/regedit`
+  (`argentina-user.cheyoudaren.com`).
+
+**Mitigación aplicada en el frontend (cosmética, no levanta el bloqueo):**
+
+- Mapeo del `msg` "SMS send fail" a un mensaje claro (*"No pudimos enviarte el
+  SMS. Revisá que el número sea correcto o probá de nuevo en unos minutos."*) en
+  lugar del genérico "Algo no salió bien". — [backendErrors.js](src/utils/backendErrors.js),
+  [es-AR.json](locales/es-AR.json), [en.json](locales/en.json)
+- Log del `msg` crudo del backend en consola para diagnosticar desde el campo.
+
+---
+
 ## 🎨 Ronda UX — packs, máquina, mi cuenta y rename del lavado (2026-06-16)
 
 Lote de ajustes de copy, naming y conversión. **Casi todo es frontend; hay
