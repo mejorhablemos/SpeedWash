@@ -101,15 +101,41 @@ body {
   border-radius: 16px;
 }
 
-/* @media screen and (max-width: 320px) {
-  :root {
-    --vw: calc(100vw/750);
-    font-size: calc(14 * var(--vw));
-  }
-}
-
-@media screen and (min-width: 540px) {
-  :root {
+/* ── Desktop / pantallas anchas ──────────────────────────────────────────
+   La app es mobile-first (Vant) y su tamaño escala con el ancho de la
+   ventana (--vw = 100vw/750 → font-size crece con el viewport). En una PC
+   eso agranda y estira todos los componentes a lo ancho. Acá congelamos el
+   escalado al de un teléfono (~540px de diseño) y centramos la app en una
+   columna, con la nav-bar y el tabbar/submit-bar fijos alineados a ella. */
+@media screen and (min-width: 560px) {
+  :root:root {
     --vw: calc(540px / 750);
   }
-} */
+
+  html,
+  body {
+    background: #050506;
+  }
+
+  #app {
+    width: 540px;
+    max-width: 540px;
+    margin-inline: auto;
+    min-height: 100vh;
+    position: relative;
+    box-shadow: 0 0 80px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  }
+
+  /* Vant posiciona nav-bar, tabbar y submit-bar en position:fixed a todo el
+     ancho del viewport; los alineamos a la columna centrada de 540px. */
+  .van-nav-bar--fixed,
+  .van-tabbar,
+  .van-submit-bar,
+  .van-action-bar {
+    left: 50%;
+    right: auto;
+    width: 540px;
+    max-width: 540px;
+    transform: translateX(-50%);
+  }
+}
