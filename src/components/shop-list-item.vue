@@ -1,5 +1,6 @@
 <script setup>
 import StoreThumb from "@/assets/store/store-thumb.png";
+import { PRE_LAUNCH } from "@/constants";
 
 const { t } = useI18n();
 const props = defineProps({
@@ -14,9 +15,13 @@ const emit = defineEmits(["view"]);
 // Imagen de la sucursal — usamos el render de marca (el backend manda una imagen genérica)
 const shopImage = computed(() => StoreThumb);
 
+// En pre-apertura ignoramos el "Abierto" del backend y mostramos "Próximamente"
+// (ver PRE_LAUNCH). Cuando abramos, el badge vuelve a reflejar el estado real.
+const badgeState = computed(() => (PRE_LAUNCH ? "soon" : props.shop.status));
+
 // Texto de estado
 const statusText = computed(() =>
-  t(`components.shopListItem.status.${props.shop.status}`)
+  t(`components.shopListItem.status.${badgeState.value}`)
 );
 
 const handleView = () => {
@@ -46,7 +51,7 @@ const handleView = () => {
     <!-- Estado (esquina superior derecha) -->
     <div
       class="status-badge status-badge--corner"
-      :class="shop.status === 'open' ? 'status-badge--open' : 'status-badge--closed'"
+      :class="`status-badge--${badgeState === 'open' ? 'open' : badgeState === 'soon' ? 'soon' : 'closed'}`"
     >
       <span class="status-badge__dot"></span>
       {{ statusText }}
@@ -207,6 +212,17 @@ const handleView = () => {
 
 .status-badge--closed .status-badge__dot {
   background: var(--text-dim);
+}
+
+/* Pre-apertura: ámbar, sin pulso (no invita a ir todavía) */
+.status-badge--soon {
+  color: #FF9416;
+  background: rgba(255, 148, 22, 0.12);
+  border: 1px solid rgba(255, 148, 22, 0.35);
+}
+
+.status-badge--soon .status-badge__dot {
+  background: #FF9416;
 }
 
 @keyframes badge-pulse {

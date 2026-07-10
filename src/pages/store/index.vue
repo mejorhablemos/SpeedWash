@@ -1,5 +1,6 @@
 <script setup>
 import { getImageUrl } from "@/utils";
+import { PRE_LAUNCH } from "@/constants";
 import IconNav from "@/assets/store/icon_nav.png";
 import DefaultBanner from "@/assets/store/store-banner-default.png";
 
@@ -11,6 +12,27 @@ const { coords, locatedAt, error, resume, pause } = useGeolocation();
 
 // 获取店铺详情
 const { data } = storeApi.detail(route.params.id);
+
+// Orden físico real: al entrar al lavadero, la máquina Sin Contacto queda a la
+// izquierda y la de Rodillos a la derecha. La API no garantiza el orden, así que
+// lo forzamos poniendo Sin Contacto (touchless) primero.
+const isTouchless = (m) => /sin\s*contacto|touchless/i.test(m?.name || "");
+const orderedMachines = computed(() =>
+  [...(data.value?.iotList || [])].sort(
+    (a, b) => Number(isTouchless(b)) - Number(isTouchless(a))
+  )
+);
+
+// Badge de estado: en pre-apertura mostramos "Próximamente" en vez del estado
+// real del backend (ver PRE_LAUNCH).
+const badgeState = computed(() =>
+  PRE_LAUNCH ? "soon" : Number(data.value?.opening) === 1 ? "open" : "closed"
+);
+const statusLabel = computed(() =>
+  PRE_LAUNCH
+    ? t("routes.store.status.soon")
+    : t(`routes.store.status.${Number(data.value?.opening)}`)
+);
 
 const { distanceFormatted } = useLocation(computed(() => ({
   lat1: coords.value?.latitude,
@@ -66,10 +88,10 @@ const handleBuyVip = () => {
             <span class="text-3xl font-medium">{{ data?.storeName }}</span>
             <div
               class="status-badge"
-              :class="Number(data?.opening) === 1 ? 'status-badge--open' : 'status-badge--closed'"
+              :class="`status-badge--${badgeState}`"
             >
               <span class="status-badge__dot"></span>
-              {{ t(`routes.store.status.${Number(data?.opening)}`) }}
+              {{ statusLabel }}
             </div>
           </div>
         </template>
@@ -109,9 +131,9 @@ const handleBuyVip = () => {
     </div>
 
     <!-- 洗车机列表 -->
-    <div v-if="data?.iotList?.length" class="grid grid-cols-2 gap-3 px-4">
+    <div v-if="orderedMachines.length" class="grid grid-cols-2 gap-3 px-4">
       <machine-item
-        v-for="machine in data?.iotList"
+        v-for="machine in orderedMachines"
         :key="machine.iotId"
         :machine="machine"
       />
@@ -270,6 +292,17 @@ const handleBuyVip = () => {
 
 .status-badge--closed .status-badge__dot {
   background: var(--text-dim);
+}
+
+/* Pre-apertura: ámbar, sin pulso (no invita a ir todavía) */
+.status-badge--soon {
+  color: #FF9416;
+  background: rgba(255, 148, 22, 0.12);
+  border: 1px solid rgba(255, 148, 22, 0.35);
+}
+
+.status-badge--soon .status-badge__dot {
+  background: #FF9416;
 }
 
 @keyframes badge-pulse {

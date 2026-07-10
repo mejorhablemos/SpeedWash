@@ -1,6 +1,7 @@
 <script setup>
 import { indexApi } from "@/api";
 import { getImageUrl } from "@/utils";
+import { PRE_LAUNCH } from "@/constants";
 import logoUrl from "@/assets/speedwash-wordmark.png";
 
 const { t } = useI18n();
@@ -97,6 +98,15 @@ function viewShop(id) {
     <div class="px-4 pb-safe-100" style="margin-top: 50px">
       <h2 class="stores-title">{{ t("routes.home.stores.title") }}</h2>
 
+      <!-- Aviso de pre-apertura: la sucursal todavía no opera físicamente -->
+      <div v-if="PRE_LAUNCH" class="prelaunch-notice">
+        <van-icon name="info-o" size="18" class="prelaunch-notice__icon" />
+        <div class="prelaunch-notice__body">
+          <span class="prelaunch-notice__title">{{ t("routes.home.preLaunch.title") }}</span>
+          <span class="prelaunch-notice__msg">{{ t("routes.home.preLaunch.message") }}</span>
+        </div>
+      </div>
+
       <!-- Store from API -->
       <div v-if="shops?.length" class="flex flex-col gap-3">
         <shop-list-item
@@ -112,7 +122,9 @@ function viewShop(id) {
         <div class="store-card__left">
           <div class="store-card__top">
             <h3 class="store-card__name">SpeedWash Funes</h3>
-            <div class="store-card__status">Abierto</div>
+            <div class="store-card__status" :class="{ 'store-card__status--soon': PRE_LAUNCH }">
+              {{ PRE_LAUNCH ? t('components.shopListItem.status.soon') : 'Abierto' }}
+            </div>
           </div>
           <div class="store-card__address">
             <van-icon name="location-o" size="14" color="#ACACB6" />
@@ -452,6 +464,48 @@ function viewShop(id) {
   border-radius: 20px;
   background: rgba(var(--brand-success-rgb), 0.14);
   color: var(--brand-success);
+}
+
+.store-card__status--soon {
+  background: rgba(255, 148, 22, 0.14);
+  color: #FF9416;
+}
+
+/* Aviso de pre-apertura (arriba de las sucursales) */
+.prelaunch-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255, 148, 22, 0.08);
+  border: 1px solid rgba(255, 148, 22, 0.3);
+}
+
+.prelaunch-notice__icon {
+  color: #FF9416;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.prelaunch-notice__body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.prelaunch-notice__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.prelaunch-notice__msg {
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--text-secondary);
 }
 
 .store-card__address {

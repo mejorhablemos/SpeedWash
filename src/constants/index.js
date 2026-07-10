@@ -1,3 +1,10 @@
+// Modo pre-apertura: la sucursal todavía no opera físicamente aunque el backend
+// la marque como "abierta". Mientras esté en true, el badge muestra
+// "Próximamente" (en vez del verde "Abierto") y la home muestra un aviso para
+// que la gente que ya compró packs no caiga a lavar antes de tiempo.
+// Poner en false el día que abramos.
+export const PRE_LAUNCH = true;
+
 export const TIMEOUT = {
   API: 10000, // 10秒
   PAYMENT: 3600000, // 1小时

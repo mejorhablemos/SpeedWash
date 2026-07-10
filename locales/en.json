@@ -38,6 +38,10 @@
       },
       "stores": {
         "title": "Our locations"
+      },
+      "preLaunch": {
+        "title": "We're not open yet",
+        "message": "Opening very soon. Any packs you buy are saved and ready to use from day one."
       }
     },
     "mine": {
@@ -252,7 +256,8 @@
       },
       "status": {
         "0": "Closed",
-        "1": "Open"
+        "1": "Open",
+        "soon": "Coming soon"
       }
     },
     "washer": {
@@ -613,7 +618,8 @@
     "shopListItem": {
       "status": {
         "open": "Open",
-        "closed": "Closed"
+        "closed": "Closed",
+        "soon": "Coming soon"
       },
       "view": "View"
     },

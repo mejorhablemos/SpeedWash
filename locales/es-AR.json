@@ -40,6 +40,10 @@
       },
       "stores": {
         "title": "Sucursales"
+      },
+      "preLaunch": {
+        "title": "Todavía no abrimos",
+        "message": "Estamos por abrir, muy pronto. Los packs que compres quedan guardados y los usás desde el primer día."
       }
     },
     "mine": {
@@ -254,7 +258,8 @@
       },
       "status": {
         "0": "Cerrado",
-        "1": "Abierto"
+        "1": "Abierto",
+        "soon": "Próximamente"
       }
     },
     "washer": {
@@ -647,7 +652,8 @@
     "shopListItem": {
       "status": {
         "open": "Abierto",
-        "closed": "Cerrado"
+        "closed": "Cerrado",
+        "soon": "Próximamente"
       },
       "view": "Ver"
     },
