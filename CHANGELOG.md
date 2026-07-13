@@ -837,6 +837,42 @@ no lo conectamos más al frontend. Si en el futuro se quiere editar
 desde panel sin redeploy de la app, definir un endpoint nuevo
 (ej. `/sys/about`) con formato JSON estructurado en vez de HTML.
 
+### 2.9 Cancelar/reembolsar un lavado antes de que arranque el ciclo
+**Prioridad:** ALTA (afecta la confianza: un lavado iniciado por error
+—sobre todo pagado con un pack— no tiene forma de deshacerse).
+
+**Contexto:** con packs prepagos (Tarjetas VIP), el usuario puede iniciar
+un lavado por error. Hoy no existe un flujo de "cancelar lavado" real:
+- El endpoint de reembolso existente (`orderApi.washOrderApplyRefund`) es un
+  **reembolso de plata con aprobación** (estados en revisión → aprobado /
+  rechazado). Para un lavado pagado con pack el `finalPrice` es $0, así que
+  "reembolsar plata" no significa nada — hay que reintegrar el **lavado** al
+  pack.
+- No hay endpoint para **re-acreditar** el `remainWashCount` de la Tarjeta VIP
+  (el `vipCardId` solo se *consume* al crear la orden, no hay reversa).
+- No hay comando para **cancelar/detener la máquina** desde el frontend (solo
+  el backend habla con el IoT).
+
+**Regla de negocio (definida con el cliente):** la cancelación con reintegro
+solo aplica **si el ciclo de lavado todavía no arrancó**. Una vez que la
+máquina empezó a lavar, no se puede deshacer (no se puede "des-lavar").
+
+**Acción solicitada:** exponer un endpoint de cancelación de orden de lavado
+(ej. `POST /user/wash/cancelOrder/{orderId}`) que, gateado por `washStatus`
+(o una ventana de tiempo desde la apertura de la máquina):
+1. Si el ciclo no arrancó: cancelar la orden, **mandar stop/cierre al IoT** y
+   **reintegrar** — si se pagó con pack, sumar +1 a `remainWashCount` de la
+   tarjeta usada; si se pagó con saldo/online, disparar el reembolso de plata.
+2. Devolver claramente si la cancelación fue posible o si el lavado ya arrancó
+   (para que el frontend muestre el mensaje correcto).
+3. Idealmente, que `isShowRefundBtn` (o un flag nuevo `isCancelable`) refleje
+   con precisión cuándo la cancelación está permitida.
+
+**Nota de frontend (pendiente, depende de lo anterior):** el botón "Solicitar
+reembolso" en `src/pages/order/detail.vue` está mal cableado a `onClickService`
+(intenta abrir el marcador telefónico `tel:` en vez de disparar un reembolso).
+Se corregirá cuando el backend defina el flujo de cancelación/reembolso real.
+
 ---
 
 ## 3. Auditoría de marca KIREI (grep -ri "kirei")
