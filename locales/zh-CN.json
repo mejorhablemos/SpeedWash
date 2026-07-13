@@ -14,7 +14,21 @@
       "vip": {
         "title": "洗车套餐",
         "subtitle": "购买预付洗车套餐，每次消费更省钱",
-        "buy": "查看方案"
+        "buy": "查看方案和价格"
+      },
+      "myPack": {
+        "title": "我的套餐",
+        "titleMany": "我的套餐",
+        "count": "还剩 {n} 次洗车",
+        "countOne": "还剩 1 次洗车",
+        "plateLinkedTitle": "车牌 {plate} 已就绪",
+        "platesLinkedTitle": "车牌已就绪",
+        "plateLinkedSub": "开进来即自动启动，无需掏手机。",
+        "plateEmptyTitle": "开启车牌自动启动",
+        "plateEmptySub": "现在绑定车牌，开业当天开进来即自动启动。",
+        "ctaBindPlate": "绑定车牌",
+        "ctaViewPreLaunch": "查看我的套餐",
+        "ctaViewPreLaunchMany": "查看我的套餐"
       },
       "invite": {
         "title": "邀请有礼"
@@ -267,7 +281,18 @@
       "vipCard": {
         "title": "VIP 卡",
         "count": "可用 VIP 卡: {count}张",
-        "empty": "暂无可用 VIP 卡"
+        "empty": "暂无可用 VIP 卡",
+        "usingPack": "正在使用套餐",
+        "usingPackSub": "免费洗车 · 还剩 {count} 次",
+        "usePack": "使用我的套餐",
+        "available": "套餐还剩 {count} 次洗车",
+        "change": "更换"
+      },
+      "usePackDialog": {
+        "title": "您有可用套餐",
+        "message": "使用套餐中的一次洗车，而不是支付 {price}？",
+        "usePack": "使用我的套餐",
+        "payAnyway": "仍然付款"
       },
       "topUp": {
         "title": "充值",
@@ -439,7 +464,7 @@
       "title": "地图"
     },
     "membership": {
-      "title": "购买 VIP 卡",
+      "title": "购买洗车套餐",
       "dialog": {
         "noPermission": "无购买权限，仅{types}可购买！",
         "cancel": "取消",

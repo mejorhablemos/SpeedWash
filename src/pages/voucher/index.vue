@@ -2,6 +2,7 @@
 import { vipCardApi } from "@/api";
 
 const router = useRouter();
+const route = useRoute();
 const { t } = useI18n()
 
 const activeTab = ref(1);
@@ -53,6 +54,16 @@ const bindLicenseNo = async (licenseNo) => {
   showSuccessToast(t("routes.voucher.licensePlate.success"));
   execute();
 }
+
+// Deep-link desde la home (?bind=1): abre directo la hoja de vincular patente
+// del primer abono activo sin patente. Se dispara una sola vez, al cargar la lista.
+const autoBindHandled = ref(false);
+watch(cards, (list) => {
+  if (autoBindHandled.value || !route.query.bind) return;
+  if (activeTab.value !== 1 || !list.length) return;
+  autoBindHandled.value = true;
+  inputLicenseNo(list.find((c) => !c.licenseNo) || list[0]);
+}, { immediate: true });
 </script>
 
 <template>

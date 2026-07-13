@@ -18,7 +18,21 @@
         "subtitle": "Comprá lavados prepagos y ahorrá.",
         "plateTitle": "Tu patente inicia el lavado.",
         "plateSub": "Sin sacar el celular, sin escanear, llegás y arranca.",
-        "buy": "Ver packs"
+        "buy": "Ver planes y precios"
+      },
+      "myPack": {
+        "title": "Mi pack",
+        "titleMany": "Mis packs",
+        "count": "Te quedan {n} lavados",
+        "countOne": "Te queda 1 lavado",
+        "plateLinkedTitle": "Patente {plate} lista",
+        "platesLinkedTitle": "Patentes vinculadas",
+        "plateLinkedSub": "Llegás y arranca solo. Sin sacar el celu.",
+        "plateEmptyTitle": "Activá el arranque por patente",
+        "plateEmptySub": "Vinculá tu patente y el día que abramos, llegás y arranca solo.",
+        "ctaBindPlate": "Vincular mi patente",
+        "ctaViewPreLaunch": "Ver mi abono",
+        "ctaViewPreLaunchMany": "Ver mis abonos"
       },
       "invite": {
         "title": "Invitá y ganá"
@@ -277,7 +291,18 @@
       "vipCard": {
         "title": "Tarjeta VIP",
         "count": "{count} tarjetas VIP disponibles",
-        "empty": "No tenés tarjetas VIP disponibles"
+        "empty": "No tenés tarjetas VIP disponibles",
+        "usingPack": "Usás tu pack",
+        "usingPackSub": "Lavado sin costo · te quedan {count}",
+        "usePack": "Usar mi pack",
+        "available": "Tenés {count} lavados en tu pack",
+        "change": "Cambiar"
+      },
+      "usePackDialog": {
+        "title": "Tenés un pack disponible",
+        "message": "¿Usar un lavado de tu pack en vez de pagar {price}?",
+        "usePack": "Usar mi pack",
+        "payAnyway": "Pagar igual"
       },
       "topUp": {
         "title": "Cargar saldo",
@@ -486,7 +511,7 @@
       "title": "Mapa"
     },
     "membership": {
-      "title": "Comprar tarjeta VIP",
+      "title": "Comprar pack de lavado",
       "dialog": {
         "noPermission": "No tenés permiso de compra. Solo {types} pueden comprar.",
         "cancel": "Cancelar",

@@ -63,6 +63,15 @@ const showVipCards = ref(false);
 // 订单金额
 const orderAmount = ref(0);
 
+// Tarjeta VIP (pack) aplicable al plan elegido: una tarjeta solo vale para su
+// mismo `mark`. Nada se consume hasta apretar "Iniciar lavado".
+const applicableCard = computed(
+  () => vipCards.value.find((c) => c.mark === selectedPlan.value?.mark) || null
+);
+
+const formatPrice = (cents) =>
+  "$" + Math.round((Number(cents) || 0) / 100).toLocaleString("es-AR");
+
 // 监听错误
 watch(washerError, (err) => {
   if (unref(err)) {
@@ -109,6 +118,26 @@ const createOrder = async () => {
     return;
   }
 
+  // Guard anti-doble-pago: hay un pack válido para este lavado pero el usuario
+  // no lo seleccionó → preguntamos antes de mandarlo a pagar con plata.
+  if (!selectedCard.value && applicableCard.value) {
+    try {
+      await showDialog({
+        title: t("routes.washer.usePackDialog.title"),
+        message: t("routes.washer.usePackDialog.message", {
+          price: formatPrice(orderAmount.value),
+        }),
+        showCancelButton: true,
+        confirmButtonText: t("routes.washer.usePackDialog.usePack"),
+        cancelButtonText: t("routes.washer.usePackDialog.payAnyway"),
+      });
+      // Confirmó usar el pack → lo aplicamos y seguimos: la orden sale $0.
+      selectedCard.value = applicableCard.value;
+    } catch {
+      // Canceló → paga con plata, seguimos sin tarjeta.
+    }
+  }
+
   const { data, error } = await washApi.newOrder({
     iotId: id,
     mark: selectedPlan.value?.mark,
@@ -132,6 +161,9 @@ const createOrder = async () => {
         price,
         balance,
         timeout,
+        // Sin este `from`, la pantalla de resultado no reconoce la orden de
+        // lavado y el "Redirigiendo" queda colgado sin destino.
+        from: PAYMENT_FROM.WASH_ORDER,
       },
     });
 
@@ -142,7 +174,9 @@ const createOrder = async () => {
     showToast(unref(balanceError));
     return;
   }
-  success({ oid, from: PAYMENT_FROM.WASHER, method: PAYMENT_METHOD.BALANCE });
+  // from: WASH_ORDER (antes PAYMENT_FROM.WASHER, que no existía → undefined y
+  // dejaba la pantalla de resultado sin acción de redirección).
+  success({ oid, from: PAYMENT_FROM.WASH_ORDER, method: PAYMENT_METHOD.BALANCE });
 };
 
 // 监听方案选择
@@ -154,26 +188,38 @@ watch(
   { immediate: true, deep: true }
 );
 
+// Al elegir/cambiar de plan, auto-vinculamos el pack: si hay una tarjeta VIP
+// válida para ese plan la usamos (total $0); si no, limpiamos la anterior (una
+// tarjeta no sirve para otro plan). Nada se consume hasta "Iniciar lavado".
 watch(
-    selectedPlan, newValue => {
-      if (!!newValue) {
-        unref(selectedCard) ? selectedCard.value = null : calculatePrice()
-      }
-    },
-    { immediate: true, deep: true }
+  selectedPlan,
+  (plan) => {
+    if (!plan) return;
+    const match = vipCards.value.find((c) => c.mark === plan.mark) || null;
+    if ((selectedCard.value?.cardId ?? null) !== (match?.cardId ?? null)) {
+      selectedCard.value = match; // dispara recalc vía el watcher de selectedCard
+    } else {
+      calculatePrice();
+    }
+  },
+  { immediate: true, deep: true }
 );
 
-// Preselección: al cargar los planes, dejamos elegido el "Lavado con Cera"
-// (premium) por defecto, así el usuario puede iniciar sin un tap extra.
-// Si no hubiera uno premium, cae al de mayor precio.
+// Preselección al cargar los planes:
+//  - Si hay un pack (VIP) válido para algún plan de esta máquina, elegimos ese
+//    plan → el pack se auto-usa (total $0), que es lo que quiere el founder.
+//  - Si no, "Lavado con Cera" (premium) por defecto, o el de mayor precio.
 watch(
   washPlans,
   (plans) => {
-    if (plans.length && !selectedPlan.value) {
-      selectedPlan.value =
-        plans.find((p) => /premium/i.test(p.name)) ||
-        [...plans].sort((a, b) => b.price - a.price)[0];
-    }
+    if (!plans.length || selectedPlan.value) return;
+    const planWithPack = vipCards.value.length
+      ? plans.find((p) => vipCards.value.some((c) => c.mark === p.mark))
+      : null;
+    selectedPlan.value =
+      planWithPack ||
+      plans.find((p) => /premium/i.test(p.name)) ||
+      [...plans].sort((a, b) => b.price - a.price)[0];
   },
   { immediate: true }
 );
@@ -274,24 +320,37 @@ watch(
       </div>
     </div>
 
-    <!-- VIP卡 -->
-    <group-card
-      :title="t('routes.washer.vipCard.title')"
-      :value="t('routes.washer.vipCard.count', { count: vipCards.length })"
-      @click="showVipCards = true"
-    >
-      <template #title>
-        <div class="flex items-center gap-2">
-          <van-icon name="vip-card-o" :size="24" class="text-primary" />
-          {{ t("routes.washer.vipCard.title") }}
+    <!-- Pack / Tarjeta VIP — prominente. El founder ya pagó su pack, así que
+         usarlo es el camino por defecto (se auto-selecciona) y bien visible. -->
+    <div class="px-4 py-3" v-if="selectedCard || applicableCard">
+      <!-- Usando el pack (estado por defecto cuando hay uno válido) -->
+      <div v-if="selectedCard" class="pack-row pack-row--using" @click="showVipCards = true">
+        <div class="pack-row__icon pack-row__icon--using">
+          <van-icon name="passed" size="22" />
         </div>
-      </template>
+        <div class="pack-row__text">
+          <div class="pack-row__title">{{ t("routes.washer.vipCard.usingPack") }}</div>
+          <div class="pack-row__sub">
+            {{ t("routes.washer.vipCard.usingPackSub", { count: selectedCard.remainWashCount }) }}
+          </div>
+        </div>
+        <span class="pack-row__action">{{ t("routes.washer.vipCard.change") }}</span>
+      </div>
 
-      <coupon-card v-if="selectedCard" :card-info="selectedCard" />
-      <!-- <div v-else class="text-gray-400 text-center py-4 text-2xl">
-        {{ t("routes.washer.vipCard.empty") }}
-      </div> -->
-    </group-card>
+      <!-- Pack disponible pero no seleccionado (si el usuario lo sacó) -->
+      <div v-else class="pack-row pack-row--available" @click="showVipCards = true">
+        <div class="pack-row__icon">
+          <van-icon name="vip-card-o" size="22" />
+        </div>
+        <div class="pack-row__text">
+          <div class="pack-row__title">{{ t("routes.washer.vipCard.usePack") }}</div>
+          <div class="pack-row__sub">
+            {{ t("routes.washer.vipCard.available", { count: applicableCard.remainWashCount }) }}
+          </div>
+        </div>
+        <van-icon name="arrow" class="pack-row__arrow" />
+      </div>
+    </div>
 
     <!-- Oferta de pago en efectivo (destacada).
          Oculta hasta confirmar % de descuento y disponibilidad real.
@@ -393,6 +452,76 @@ watch(
 
 .plan-card--full .plan-card__name {
   font-size: 20px;
+}
+
+/* Bloque de pack / Tarjeta VIP prominente */
+.pack-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.pack-row:active {
+  transform: scale(0.99);
+}
+
+.pack-row--using {
+  background: rgba(var(--brand-success-rgb), 0.1);
+  border: 1px solid rgba(var(--brand-success-rgb), 0.4);
+}
+
+.pack-row--available {
+  background: rgba(0, 187, 252, 0.08);
+  border: 1px solid rgba(0, 187, 252, 0.4);
+}
+
+.pack-row__icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-color) 100%);
+}
+
+.pack-row__icon--using {
+  background: var(--brand-success);
+}
+
+.pack-row__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.pack-row__title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.pack-row__sub {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.pack-row__action {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary-color);
+  flex-shrink: 0;
+}
+
+.pack-row__arrow {
+  color: var(--text-secondary);
+  flex-shrink: 0;
 }
 
 .cash-offer {

@@ -1,14 +1,82 @@
 <script setup>
-import { indexApi } from "@/api";
+import { indexApi, vipCardApi } from "@/api";
 import { getImageUrl } from "@/utils";
 import { PRE_LAUNCH } from "@/constants";
 import logoUrl from "@/assets/speedwash-wordmark.png";
 
 const { t } = useI18n();
 const router = useRouter();
+const userStore = useUserStore();
 
 // Banner
 const { data: banners } = indexApi.banner();
+
+// Mi pack — le da al que ya compró una puerta directa en la home (ver lavados
+// restantes / vincular patente), en vez de enterrarla en Mi cuenta.
+// canUseType: 1 = abonos activos.
+//
+// IMPORTANTE: la home es pública. myCardList (/user/vipCard/*) es un endpoint
+// estricto: sin token válido devuelve 999 y el factory hace redirect global a
+// /login. Por eso gateamos con getToken() —el token que realmente viaja en la
+// request (userInfo.token)— y NO con isRegistered (que mira otro storage y
+// puede estar desincronizado). Si no hay sesión real, no llamamos y la home
+// nunca patea a login.
+const myCards = ref([]);
+if (userStore.getToken()) {
+  const { data: cardData } = vipCardApi.myCardList({ canUseType: 1 });
+  watchEffect(() => {
+    myCards.value = Array.isArray(unref(cardData)) ? unref(cardData) : [];
+  });
+}
+
+const hasPack = computed(() => myCards.value.length > 0);
+const packCount = computed(() => myCards.value.length);
+const totalWashes = computed(() =>
+  myCards.value.reduce((sum, c) => sum + (Number(c.remainWashCount) || 0), 0)
+);
+
+// Un usuario puede tener varios abonos, cada uno con su patente. Regla de
+// correctitud: NO mostramos "todo listo" si algún abono sigue sin patente.
+// unboundCount = abonos sin patente; boundPlates = patentes distintas ya
+// vinculadas (Set, por si dos abonos comparten el mismo auto).
+const unboundCount = computed(() => myCards.value.filter((c) => !c.licenseNo).length);
+const needsPlate = computed(() => unboundCount.value > 0);
+const boundPlates = computed(() => [
+  ...new Set(myCards.value.map((c) => c.licenseNo).filter(Boolean)),
+]);
+
+const packTitle = computed(() =>
+  packCount.value > 1 ? t("routes.home.myPack.titleMany") : t("routes.home.myPack.title")
+);
+const washesLabel = computed(() =>
+  totalWashes.value === 1
+    ? t("routes.home.myPack.countOne")
+    : t("routes.home.myPack.count", { n: totalWashes.value })
+);
+const plateTitle = computed(() => {
+  if (needsPlate.value) return t("routes.home.myPack.plateEmptyTitle");
+  return boundPlates.value.length > 1
+    ? t("routes.home.myPack.platesLinkedTitle")
+    : t("routes.home.myPack.plateLinkedTitle", { plate: boundPlates.value[0] });
+});
+const plateSub = computed(() =>
+  needsPlate.value
+    ? t("routes.home.myPack.plateEmptySub")
+    : t("routes.home.myPack.plateLinkedSub")
+);
+const ctaLabel = computed(() => {
+  if (needsPlate.value) return t("routes.home.myPack.ctaBindPlate");
+  return packCount.value > 1
+    ? t("routes.home.myPack.ctaViewPreLaunchMany")
+    : t("routes.home.myPack.ctaViewPreLaunch");
+});
+
+// Si hay UN solo abono sin patente, abrimos directo la hoja de vincular; si hay
+// varios sin patente (o ya están todos vinculados), vamos a la lista de abonos.
+function goToMyPack() {
+  const openBind = needsPlate.value && unboundCount.value === 1;
+  router.push(openBind ? "/vouchers?bind=1" : "/vouchers");
+}
 
 // Shops. isFinished evita el "flash" del fallback hardcodeado mientras
 // la API responde: solo lo mostramos si la request terminó sin datos.
@@ -65,6 +133,34 @@ function viewShop(id) {
       </van-swipe>
     </div>
 
+    <!-- Mi pack (usuario con sesión real y abono activo) -->
+    <div v-if="hasPack" class="px-4 mt-4">
+      <div class="mypack-card">
+        <div class="mypack-card__head">
+          <div class="mypack-card__icon">
+            <van-icon name="vip-card-o" size="24" color="#fff" />
+          </div>
+          <div class="flex-1 min-w-0">
+            <h3 class="mypack-card__title">{{ packTitle }}</h3>
+            <p class="mypack-card__count">{{ washesLabel }}</p>
+          </div>
+        </div>
+
+        <div class="mypack-card__plate" :class="{ 'mypack-card__plate--ready': !needsPlate }">
+          <van-icon :name="needsPlate ? 'info-o' : 'passed'" size="18" />
+          <div class="mypack-card__plate-text">
+            <span class="mypack-card__plate-title">{{ plateTitle }}</span>
+            <span class="mypack-card__plate-sub">{{ plateSub }}</span>
+          </div>
+        </div>
+
+        <button class="mypack-card__cta" type="button" @click="goToMyPack">
+          <van-icon :name="needsPlate ? 'orders-o' : 'balance-o'" size="17" />
+          {{ ctaLabel }}
+        </button>
+      </div>
+    </div>
+
     <!-- Packs de lavado -->
     <div class="service-cards-section px-4">
       <div class="pack-card" @click="router.push('/vip')">
@@ -79,7 +175,10 @@ function viewShop(id) {
           </div>
         </div>
 
-        <div class="pack-card__feature">
+        <!-- Promo de la patente: solo para quien todavía NO tiene pack. Si ya
+             lo tiene, el bloque "Mi pack" de arriba ya comunica la patente y
+             acá quedaría repetido. -->
+        <div v-if="!hasPack" class="pack-card__feature">
           <van-icon name="scan" size="16" />
           <div class="pack-card__feature-text">
             <span class="pack-card__feature-title">{{ t("routes.home.vip.plateTitle") }}</span>
@@ -416,6 +515,120 @@ function viewShop(id) {
   font-weight: 700;
   color: #FF9416;
   margin-top: 12px;
+}
+
+/* Mi pack — bloque del que ya compró (azul LED, contrasta con el naranja de compra) */
+.mypack-card {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(130% 120% at 100% 0%, rgba(0, 187, 252, 0.16) 0%, transparent 55%),
+    var(--surface-color);
+  border: 1px solid rgba(0, 187, 252, 0.4);
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: 0 12px 30px -18px rgba(0, 187, 252, 0.5);
+}
+
+.mypack-card__head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.mypack-card__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-color) 55%, var(--primary-dark) 100%);
+  box-shadow: 0 8px 18px -6px rgba(0, 187, 252, 0.7);
+}
+
+.mypack-card__title {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.mypack-card__count {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary-light);
+  margin: 2px 0 0;
+}
+
+/* Estado de patente: ámbar cuando falta vincular (acción pendiente), verde cuando está lista */
+.mypack-card__plate {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 148, 22, 0.08);
+  border: 1px solid rgba(255, 148, 22, 0.28);
+  color: #FF9416;
+}
+
+.mypack-card__plate--ready {
+  background: rgba(var(--brand-success-rgb), 0.1);
+  border-color: rgba(var(--brand-success-rgb), 0.3);
+  color: var(--brand-success);
+}
+
+.mypack-card__plate .van-icon {
+  flex-shrink: 0;
+}
+
+.mypack-card__plate-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.mypack-card__plate-title {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.mypack-card__plate-sub {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  line-height: 1.35;
+}
+
+.mypack-card__cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  height: 44px;
+  margin-top: 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #001016;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-color) 55%, var(--primary-dark) 100%);
+  box-shadow: 0 8px 20px -8px rgba(0, 187, 252, 0.7);
+  transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+}
+
+.mypack-card__cta:active {
+  transform: scale(0.98);
+  filter: brightness(1.05);
+  box-shadow: 0 4px 12px -6px rgba(0, 187, 252, 0.6);
 }
 
 /* Stores Section */

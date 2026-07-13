@@ -27,7 +27,15 @@ const fetchAPI = createFetch({
     async afterFetch(ctx) {
       if (ctx.data && ctx.data.code !== 0) {
         if (ctx.data.code === 999) {
-          router.replace("/login");
+          // 999 = token inválido/expirado. En páginas PÚBLICAS el usuario tiene
+          // permitido estar deslogueado, así que un endpoint estricto que falle
+          // (p.ej. el widget opcional "Mi pack" de la home) NO debe patearlo a
+          // login. En páginas protegidas sí redirigimos (sesión expirada real).
+          // La lista espeja isVisiblePages de src/modules/router.js.
+          const publicPages = ["Home", "Scan", "Map", "Login", "Register", "Invite", "ForgotPassword"];
+          if (!publicPages.includes(router.currentRoute.value?.name)) {
+            router.replace("/login");
+          }
         }
         // Traducimos el msg del backend a español acá, en la capa
         // central, así todos los `showToast(error)` del repo muestran

@@ -16,7 +16,21 @@
       "vip": {
         "title": "Wash packs",
         "subtitle": "Buy prepaid wash packs and save on every visit",
-        "buy": "View plans"
+        "buy": "See plans & prices"
+      },
+      "myPack": {
+        "title": "My pack",
+        "titleMany": "My packs",
+        "count": "You have {n} washes left",
+        "countOne": "You have 1 wash left",
+        "plateLinkedTitle": "Plate {plate} is ready",
+        "platesLinkedTitle": "Plates linked",
+        "plateLinkedSub": "Just drive in and it starts. No phone needed.",
+        "plateEmptyTitle": "Turn on plate auto-start",
+        "plateEmptySub": "Link your plate now and the day we open, just drive in and it starts.",
+        "ctaBindPlate": "Link my plate",
+        "ctaViewPreLaunch": "View my pack",
+        "ctaViewPreLaunchMany": "View my packs"
       },
       "invite": {
         "title": "Invite Rewards"
@@ -275,7 +289,18 @@
       "vipCard": {
         "title": "VIP Card",
         "count": "{count} VIP Cards Available",
-        "empty": "No VIP Card Available"
+        "empty": "No VIP Card Available",
+        "usingPack": "Using your pack",
+        "usingPackSub": "Free wash · {count} left",
+        "usePack": "Use my pack",
+        "available": "You have {count} washes in your pack",
+        "change": "Change"
+      },
+      "usePackDialog": {
+        "title": "You have a pack available",
+        "message": "Use a wash from your pack instead of paying {price}?",
+        "usePack": "Use my pack",
+        "payAnyway": "Pay anyway"
       },
       "topUp": {
         "title": "Top-up",
@@ -452,7 +477,7 @@
       "title": "Map"
     },
     "membership": {
-      "title": "Buy VIP Card",
+      "title": "Buy a wash pack",
       "dialog": {
         "noPermission": "No purchase permission, only {types} can buy!",
         "cancel": "Cancel",

@@ -158,6 +158,17 @@ const routes = [
         meta: {
           titleKey: "routes.washer.title",
         },
+        // Redirección de IDs de QR ya impresos → ID real de la máquina.
+        // Los primeros QR se imprimieron con /washer/1 y /washer/2, pero las
+        // máquinas quedaron con iotId 3 y 4. Mapeamos para no reimprimir.
+        // Al reimprimir con el ID real, se puede sacar la entrada del mapa.
+        beforeEnter: (to) => {
+          const LEGACY_QR_IDS = { 1: "3", 2: "4" };
+          const realId = LEGACY_QR_IDS[to.params.id];
+          if (realId) {
+            return { name: "WasherDetail", params: { id: realId }, query: to.query };
+          }
+        },
       },
       // 登录相关页面
       {
