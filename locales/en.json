@@ -685,7 +685,7 @@
       "actions": {
         "goWash": "Select Wash Mode",
         "moreInfo": "More info",
-        "startWash": "Start wash",
+        "choosePlan": "Choose plan",
         "seeInUse": "See details",
         "seeMaintenance": "See details"
       },

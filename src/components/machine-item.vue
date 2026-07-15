@@ -92,7 +92,10 @@ const handleGoWash = () => {
     <div class="machine-card__name">{{ machine.name }}</div>
     <div class="machine-card__sub" v-if="machine.address">{{ machine.address }}</div>
 
-    <!-- CTA — texto cambia según estado para dar la señal correcta al usuario -->
+    <!-- CTA — el texto describe el destino real: al tocar la card se navega
+         al detalle de la máquina donde se elige plan/pack y recién ahí arranca
+         el lavado. NO decimos "Iniciar lavado" acá porque sería una promesa
+         rota (dos taps para arrancar). Ver CHANGELOG y análisis en scratchpad. -->
     <van-button
       round
       size="small"
@@ -100,7 +103,7 @@ const handleGoWash = () => {
       class="machine-card__btn"
       :type="statusKey === 'available' ? 'primary' : 'default'"
     >
-      {{ t(`components.machineItem.actions.${statusKey === 'available' ? 'startWash' : statusKey === 'inUse' ? 'seeInUse' : statusKey === 'maintenance' ? 'seeMaintenance' : 'moreInfo'}`) }}
+      {{ t(`components.machineItem.actions.${statusKey === 'available' ? 'choosePlan' : statusKey === 'inUse' ? 'seeInUse' : statusKey === 'maintenance' ? 'seeMaintenance' : 'moreInfo'}`) }}
     </van-button>
   </div>
 </template>

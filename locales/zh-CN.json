@@ -665,7 +665,7 @@
       "actions": {
         "goWash": "去洗车",
         "moreInfo": "更多信息",
-        "startWash": "开始洗车",
+        "choosePlan": "选择套餐",
         "seeInUse": "查看详情",
         "seeMaintenance": "查看详情"
       },
