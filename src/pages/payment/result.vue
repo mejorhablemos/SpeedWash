@@ -35,8 +35,11 @@ const action = computed(() => {
   }
 
   if (isWashOrder.value) {
+    // Redirect al detalle del pedido específico (no a la lista), así el
+    // usuario ve el estado del lavado en tiempo real y tiene a mano el botón
+    // de emergencia mientras la máquina está lavando (washStatus=2).
     return {
-      path: "/orders",
+      path: oid ? `/order/${oid}` : "/orders",
       title: t("routes.payment.result.actions.viewOrder"),
     };
   }

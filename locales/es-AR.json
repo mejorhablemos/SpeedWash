@@ -62,6 +62,8 @@
     },
     "mine": {
       "title": "Mi cuenta",
+      "greeting": "Hola, {name}",
+      "defaultUser": "Usuario",
       "wallet": {
         "title": "Mi billetera",
         "viewAll": "Ver todo",
@@ -158,6 +160,16 @@
         "order_status": "Estado del pedido",
         "balance_payment": "Pago con saldo",
         "contact_service": "Contactar al comercio",
+        "covered_by_pack": "Cubierto por pack",
+        "payment_methods": {
+          "unpaid": "No pagado",
+          "balance": "Pago con saldo",
+          "mercadoPago": "Mercado Pago",
+          "pack": "Pack: {cardName}",
+          "packGeneric": "Pack VIP"
+        },
+        "whatsapp_contact": "Contactar por WhatsApp",
+        "whatsapp_message": "Hola, tengo una consulta sobre este pedido:\n\nN°: {orderNo}\nFecha: {date}\nSucursal: {store}\nMáquina: {machine}\nLavado: {mode}\nPago: {payment}\nMonto: {amount}",
         "wash_status": {
           "1": "No iniciado",
           "2": "Lavando",
@@ -335,7 +347,12 @@
         "inUse": "Esta máquina está en uso en este momento."
       },
       "total": "Total",
-      "submit": "Iniciar lavado"
+      "submit": "Iniciar lavado",
+      "emergency": {
+        "button": "Emergencia — Llamar ahora",
+        "description": "Si te quedaste encerrado o hay un problema con la máquina, llamá a alguno de estos números.",
+        "cancel": "Cancelar"
+      }
     },
     "wallet": {
       "topUp": {
@@ -441,7 +458,7 @@
       },
       "aboutus": {
         "title": "Sobre nosotros",
-        "pitch": "Speed Wash es el primer lavadero automático digitalizado de la región. Tu auto listo en minutos, sin turnos, las 24 horas. Calmo Funes, Santa Fe.",
+        "pitch": "Speed Wash es el primer lavadero automático digitalizado de la región. Tu auto listo en minutos, sin turnos, las 24 horas. Barrio Calmo, Funes, Santa Fe.",
         "terms": "Términos y condiciones",
         "privacy": "Política de privacidad"
       },
@@ -751,7 +768,7 @@
     },
     "orderItem": {
       "actions": {
-        "contact": "Contactar comercio",
+        "contact": "WhatsApp",
         "refund": "Solicitar reembolso",
         "pay": "Pagar ahora"
       },

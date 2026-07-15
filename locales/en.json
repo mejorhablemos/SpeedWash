@@ -60,6 +60,8 @@
     },
     "mine": {
       "title": "Me",
+      "greeting": "Hi, {name}",
+      "defaultUser": "User",
       "wallet": {
         "title": "My Wallet",
         "viewAll": "View All",
@@ -156,6 +158,16 @@
         "order_status": "Order Status",
         "balance_payment": "Balance Payment",
         "contact_service": "Contact the merchant",
+        "covered_by_pack": "Covered by pack",
+        "payment_methods": {
+          "unpaid": "Unpaid",
+          "balance": "Balance",
+          "mercadoPago": "Mercado Pago",
+          "pack": "Pack: {cardName}",
+          "packGeneric": "VIP Pack"
+        },
+        "whatsapp_contact": "Contact via WhatsApp",
+        "whatsapp_message": "Hi, I have a question about this order:\n\nNo: {orderNo}\nDate: {date}\nStore: {store}\nMachine: {machine}\nWash: {mode}\nPayment: {payment}\nAmount: {amount}",
         "wash_status": {
           "1": "Not Started",
           "2": "Washing",
@@ -311,7 +323,12 @@
         "confirmButton": "Confirm Top-up"
       },
       "total": "Total",
-      "submit": "Wash Now"
+      "submit": "Wash Now",
+      "emergency": {
+        "button": "Emergency — Call Now",
+        "description": "If you're locked in or there's a problem with the machine, call one of these numbers.",
+        "cancel": "Cancel"
+      }
     },
     "wallet": {
       "topUp": {
@@ -408,7 +425,7 @@
       },
       "aboutus": {
         "title": "About Us",
-        "pitch": "Speed Wash is the first digitalized automatic car wash in the region. Your car ready in minutes, no bookings, 24/7. Calmo Funes, Santa Fe.",
+        "pitch": "Speed Wash is the first digitalized automatic car wash in the region. Your car ready in minutes, no bookings, 24/7. Barrio Calmo, Funes, Santa Fe.",
         "terms": "Terms & conditions",
         "privacy": "Privacy policy"
       },
@@ -711,7 +728,7 @@
     },
     "orderItem": {
       "actions": {
-        "contact": "Contact Merchant",
+        "contact": "WhatsApp",
         "refund": "Apply Refund",
         "pay": "Pay Now"
       },

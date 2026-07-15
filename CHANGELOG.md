@@ -837,6 +837,27 @@ no lo conectamos más al frontend. Si en el futuro se quiere editar
 desde panel sin redeploy de la app, definir un endpoint nuevo
 (ej. `/sys/about`) con formato JSON estructurado en vez de HTML.
 
+### 2.9 `washOrderPage` no devuelve `cardName` ni `originalPrice`
+**Prioridad:** MEDIA (UX: los pedidos cubiertos por pack VIP se ven como
+"$ 0.00" en la lista, cuando en el detalle sí se identifican como pack).
+**Endpoint involucrado:** `POST /api/user/order/washOrderPage`.
+
+**Contexto:** el endpoint del detalle `washOrderInfo` devuelve `cardName`
+(nombre del pack usado) y `originalPrice` (precio original antes del
+descuento del pack). El endpoint de la lista `washOrderPage` NO — solo
+manda `finalPrice`, que queda en `0` cuando el pack cubrió todo. El
+usuario ve `$ 0.00` sin contexto de por qué.
+
+**Workaround en frontend (ya aplicado):** si `finalPrice === 0 && showState
+=== 5` (Completado), asumimos que fue cubierto por pack y mostramos
+"Cubierto por pack" en verde. Si en el futuro hay otra vía por la que un
+pedido llega a Completado con $0 (cupón, gift, etc.), la etiqueta va a
+ser incorrecta. Ver [order-item.vue](src/components/order/order-item.vue),
+[order/index.vue](src/pages/order/index.vue).
+
+**Acción solicitada:** agregar `cardName` y `originalPrice` a la respuesta
+de `washOrderPage` (mismo formato que ya usa `washOrderInfo`).
+
 ---
 
 ## 3. Auditoría de marca KIREI (grep -ri "kirei")

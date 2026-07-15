@@ -71,10 +71,16 @@ const handleView = () => {
   display: flex;
   align-items: stretch;
   min-height: 96px;
+  /* isolation crea un stacking context propio → el badge absoluto interno
+     nunca puede quedar por encima de elementos externos (tabbar, etc.),
+     aunque su z-index sea alto. */
+  isolation: isolate;
   background: var(--surface-color);
   border: 1px solid var(--line-color);
   border-radius: 16px;
-  overflow: hidden;
+  /* `clip` es más estricto que `hidden` — evita casos raros de overflow con
+     transforms/hardware-acceleration donde `hidden` no recorta bien. */
+  overflow: clip;
   cursor: pointer;
   box-shadow: 0 10px 28px -18px rgba(0, 0, 0, 0.85);
   transition: transform 0.2s, border-color 0.2s;
@@ -181,9 +187,10 @@ const handleView = () => {
 
 .status-badge--corner {
   position: absolute;
-  top: 10px;
-  right: 12px;
-  z-index: 2;
+  top: 8px;
+  right: 10px;
+  /* z-index removido: no necesita elevarse dentro de la card, y evitar
+     stacking contexts arriba del tabbar (500) es lo más seguro. */
 }
 
 .status-badge__dot {

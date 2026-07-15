@@ -77,7 +77,7 @@ const legalLinks = [
     </div>
 
     <p class="aboutus__footer">
-      © {{ new Date().getFullYear() }} Speed Wash · Calmo Funes, Santa Fe
+      © {{ new Date().getFullYear() }} Speed Wash · Barrio Calmo, Funes, Santa Fe
     </p>
   </div>
 </template>

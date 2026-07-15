@@ -10,7 +10,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["contact", "refund", "pay", "detail", "click"]);
+const emit = defineEmits(["contact", "pay", "detail", "click"]);
 
 // 获取状态样式
 const getStatusStyle = (status) => {
@@ -25,7 +25,6 @@ const getStatusStyle = (status) => {
 
 // 操作事件处理
 const handleContact = () => emit("contact", props.order);
-const handleRefund = () => emit("refund", props.order);
 const handlePay = () => emit("pay", props.order);
 const handleDetail = () => emit("detail", props.order);
 const handleClick = () => emit("click", props.order);
@@ -35,10 +34,14 @@ const showPayButton = computed(() => {
   return props.order.status !== "refund" && props.order.showState === 1;
 });
 
-// 是否显示申请退款按钮
-const showRefundButton = computed(() => {
-  return props.order.status !== "refund" && props.order.isShowRefundBtn;
-});
+// El pack VIP cubrió el lavado → "$0" es confuso. Mostramos etiqueta en vez.
+// Nota: el backend `washOrderPage` NO devuelve `cardName` (sí lo hace en
+// `washOrderInfo`). Workaround: si un pedido está Completado (showState=5)
+// y price=0, la única forma de haber llegado ahí es con pack. Ver
+// CHANGELOG.md → pendientes backend.
+const coveredByPack = computed(
+  () => props.order.price === 0 && props.order.showState === 5
+);
 </script>
 
 <template>
@@ -60,7 +63,10 @@ const showRefundButton = computed(() => {
         <div class="store-name">{{ order.storeName }}</div>
       </template>
       <template #value>
-        <price-tag :price="order.price" />
+        <div v-if="coveredByPack" class="covered-by-pack">
+          {{ t('routes.order.detail.covered_by_pack') }}
+        </div>
+        <price-tag v-else :price="order.price" />
       </template>
 
       <template #label>
@@ -70,18 +76,17 @@ const showRefundButton = computed(() => {
     <van-cell :border="false">
       <template #value>
         <van-space align="center">
-          <van-button size="small" round plain @click.stop="handleContact">
-            {{ t('components.orderItem.actions.contact') }}
-          </van-button>
-          <!-- 申请退款 -->
+          <!-- Contacto por WhatsApp: reemplaza al viejo botón "Contactar"
+               que marcaba teléfono, y al de "Solicitar reembolso" que abría
+               un formulario que nadie procesa (modelo manual hasta apertura). -->
           <van-button
-            v-if="showRefundButton"
             size="small"
-            type="danger"
             round
-            @click.stop="handleRefund"
+            color="#25D366"
+            icon="chat-o"
+            @click.stop="handleContact"
           >
-            {{ t('components.orderItem.actions.refund') }}
+            {{ t('components.orderItem.actions.contact') }}
           </van-button>
 
           <!-- 去付款 -->
@@ -121,6 +126,13 @@ const showRefundButton = computed(() => {
   font-size: 16px;
   font-weight: 500;
   margin-bottom: 8px;
+}
+
+.covered-by-pack {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--brand-success);
+  text-align: right;
 }
 
 .service-type {

@@ -1,5 +1,6 @@
 <script setup>
 import { PAYMENT_FROM } from "@/constants";
+import { whatsappUrl } from "@/constants/contact";
 
 const router = useRouter();
 const { getOrderList } = useOrder();
@@ -77,15 +78,30 @@ const loadOrders = async () => {
   }
 };
 
-// 订单操作
+// Contacto por WhatsApp con el contexto del pedido pre-armado. El detalle
+// completo (sucursal/máquina/pago) lo tenemos en `washOrderInfo`; acá en la
+// lista solo tenemos lo básico, así lo llenamos con lo que hay y "-" el resto.
+// Workaround: el endpoint de lista no devuelve `cardName` — si es Completado
+// con price=0, asumimos pack (mismo criterio que la etiqueta visual).
 const handleContact = (order) => {
-  // 拨打客服电话
-  window.location.href = `tel:${order.storePhone}`;
-};
+  const coveredByPack = order.price === 0 && order.showState === 5;
+  const amount = coveredByPack
+    ? t("routes.order.detail.covered_by_pack")
+    : `$${Math.round((order.price || 0) / 100).toLocaleString("es-AR")}`;
+  const payment = coveredByPack
+    ? t("routes.order.detail.payment_methods.packGeneric")
+    : "-";
 
-const handleRefund = (order) => {
-  // 申请退款
-  router.push(`/order/refund/${order.orderId}`);
+  const msg = t("routes.order.detail.whatsapp_message", {
+    orderNo: order.orderNo || order.orderId,
+    date: order.createTime || "-",
+    store: order.storeName || "-",
+    machine: "-",
+    mode: order.serviceType || "-",
+    payment,
+    amount,
+  });
+  window.location.href = whatsappUrl(msg);
 };
 
 const handlePay = ({ orderId: oid}) => {
@@ -104,11 +120,7 @@ const handleDetail = (order) => {
 };
 
 function handleClick(order) {
-  if (order.status === "refund") {
-    router.push(`/order/refund-detail/${order.orderId}`);
-  } else {
-    router.push(`/order/${order.orderId}`);
-  }
+  router.push(`/order/${order.orderId}`);
 }
 
 // 切换标签时刷新
@@ -157,7 +169,6 @@ onMounted(() => {
               :key="order.orderNo"
               :order="order"
               @contact="handleContact"
-              @refund="handleRefund"
               @pay="handlePay"
               @detail="handleDetail"
               @click="handleClick"

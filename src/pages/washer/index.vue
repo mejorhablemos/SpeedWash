@@ -1,5 +1,6 @@
 <script setup>
 import { PAYMENT_FROM, PAYMENT_METHOD, IOT_STATUS } from "@/constants";
+import { EMERGENCY_CONTACTS } from "@/constants/contact";
 
 // Feature flag — pasar a true cuando RR.PP. confirme % de descuento
 // por pago en efectivo y la operatoria en sucursal. Default off al lanzamiento.
@@ -59,6 +60,20 @@ const splitPlanName = (name = "") => {
 const selectedPlan = ref(null);
 const selectedCard = ref(null);
 const showVipCards = ref(false);
+
+// Emergencia: action-sheet con los contactos que atienden llamadas físicas
+// (encargado + socios). Solo aparece en esta pantalla porque es donde el usuario
+// está físicamente en la máquina — si se queda encerrado o algo se rompe,
+// necesita marcar rápido a alguien humano.
+const showEmergency = ref(false);
+const emergencyActions = EMERGENCY_CONTACTS.map((c) => ({
+  name: `${c.name} — ${c.display}`,
+  phone: c.phone,
+}));
+const onEmergencySelect = (action) => {
+  window.location.href = `tel:${action.phone}`;
+  showEmergency.value = false;
+};
 
 // 订单金额
 const orderAmount = ref(0);
@@ -369,6 +384,16 @@ watch(
       </div>
     </div>
 
+    <!-- Botón de emergencia: solo visible en esta pantalla (usuario está
+         físicamente en la máquina). Al tocar → action-sheet con contactos que
+         atienden llamadas humanas (encargado + socios). -->
+    <div class="px-4 pt-2 pb-3">
+      <button type="button" class="emergency-btn" @click="showEmergency = true">
+        <van-icon name="phone-o" class="emergency-btn__icon" />
+        <span class="emergency-btn__text">{{ t("routes.washer.emergency.button") }}</span>
+      </button>
+    </div>
+
     <!-- 底部结算栏 -->
     <van-action-bar>
       <van-space :size="4" align="baseline">
@@ -398,6 +423,16 @@ watch(
       :list="vipCards"
       :wash-plans="washPlans"
       :mark="selectedPlan?.mark"
+    />
+
+    <!-- Action-sheet de emergencia (llamadas humanas) -->
+    <van-action-sheet
+      v-model:show="showEmergency"
+      :actions="emergencyActions"
+      :description="t('routes.washer.emergency.description')"
+      :cancel-text="t('routes.washer.emergency.cancel')"
+      close-on-click-action
+      @select="onEmergencySelect"
     />
   </div>
 </template>
@@ -598,6 +633,40 @@ watch(
   font-size: 13px;
   line-height: 1.35;
   color: var(--text-secondary);
+}
+
+/* Botón de emergencia — rojo intenso, grande y con contorno para que
+   destaque contra el resto de la UI. Debe verse en un pantallazo. */
+.emergency-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 20px;
+  border-radius: 14px;
+  border: 1.5px solid rgba(240, 68, 56, 0.55);
+  background: rgba(240, 68, 56, 0.14);
+  color: #ff6b60;
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: transform 0.15s, background 0.15s;
+}
+
+.emergency-btn:active {
+  transform: scale(0.98);
+  background: rgba(240, 68, 56, 0.22);
+}
+
+.emergency-btn__icon {
+  font-size: 20px;
+}
+
+.emergency-btn__text {
+  line-height: 1;
 }
 
 :deep(.van-empty__description) {

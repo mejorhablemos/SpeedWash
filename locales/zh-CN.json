@@ -58,6 +58,8 @@
     },
     "mine": {
       "title": "我的",
+      "greeting": "你好，{name}",
+      "defaultUser": "用户",
       "wallet": {
         "title": "我的钱包",
         "viewAll": "查看全部",
@@ -148,6 +150,16 @@
         "order_status": "订单状态",
         "balance_payment": "余额支付",
         "contact_service": "联系商家",
+        "covered_by_pack": "套餐已覆盖",
+        "payment_methods": {
+          "unpaid": "未支付",
+          "balance": "余额支付",
+          "mercadoPago": "Mercado Pago",
+          "pack": "套餐: {cardName}",
+          "packGeneric": "VIP 套餐"
+        },
+        "whatsapp_contact": "通过 WhatsApp 联系",
+        "whatsapp_message": "您好，我想咨询此订单：\n\n订单号: {orderNo}\n日期: {date}\n门店: {store}\n设备: {machine}\n洗车: {mode}\n支付: {payment}\n金额: {amount}",
         "wash_status": {
           "1": "未启动",
           "2": "洗车中",
@@ -303,7 +315,12 @@
         "confirmButton": "确认充值"
       },
       "total": "合计",
-      "submit": "去洗车"
+      "submit": "去洗车",
+      "emergency": {
+        "button": "紧急求助 — 立即拨打",
+        "description": "如果您被困或机器出现问题，请拨打以下任一号码。",
+        "cancel": "取消"
+      }
     },
     "wallet": {
       "topUp": {
@@ -691,7 +708,7 @@
     },
     "orderItem": {
       "actions": {
-        "contact": "联系商家",
+        "contact": "WhatsApp",
         "refund": "申请退款",
         "pay": "去付款"
       },
