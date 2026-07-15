@@ -307,8 +307,16 @@
         "usingPack": "Usás tu pack",
         "usingPackSub": "Lavado sin costo · te quedan {count}",
         "usePack": "Usar mi pack",
+        "use": "Usar",
         "available": "Tenés {count} lavados en tu pack",
         "change": "Cambiar"
+      },
+      "cost": {
+        "freeEyebrow": "Tu pack cubre este lavado",
+        "freeSub": "Te quedan {count} lavados en tu pack",
+        "availableEyebrow": "Tenés un pack disponible",
+        "availableSub": "Podés usar 1 de tus {count} lavados y este sale gratis",
+        "payEyebrow": "Total a pagar"
       },
       "usePackDialog": {
         "title": "Tenés un pack disponible",
@@ -348,6 +356,8 @@
       },
       "total": "Total",
       "submit": "Iniciar lavado",
+      "submitFree": "Iniciar lavado — Gratis",
+      "submitPay": "Pagar {price} e iniciar",
       "emergency": {
         "button": "Emergencia — Llamar ahora",
         "description": "Si te quedaste encerrado o hay un problema con la máquina, llamá a alguno de estos números.",
@@ -721,7 +731,7 @@
         "choosePrefix": "Elegir Máquina",
         "chooseGeneric": "Elegir máquina",
         "moreInfo": "Más información",
-        "choosePlan": "Elegir plan",
+        "wash": "Lavar",
         "seeInUse": "Ver detalles",
         "seeMaintenance": "Ver detalles"
       },

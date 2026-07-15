@@ -297,8 +297,16 @@
         "usingPack": "正在使用套餐",
         "usingPackSub": "免费洗车 · 还剩 {count} 次",
         "usePack": "使用我的套餐",
+        "use": "使用",
         "available": "套餐还剩 {count} 次洗车",
         "change": "更换"
+      },
+      "cost": {
+        "freeEyebrow": "套餐已覆盖此次洗车",
+        "freeSub": "您的套餐还剩 {count} 次洗车",
+        "availableEyebrow": "您有可用套餐",
+        "availableSub": "使用 {count} 次中的 1 次，本次免费",
+        "payEyebrow": "应付总额"
       },
       "usePackDialog": {
         "title": "您有可用套餐",
@@ -316,6 +324,8 @@
       },
       "total": "合计",
       "submit": "去洗车",
+      "submitFree": "开始洗车 — 免费",
+      "submitPay": "支付 {price} 并开始",
       "emergency": {
         "button": "紧急求助 — 立即拨打",
         "description": "如果您被困或机器出现问题，请拨打以下任一号码。",
@@ -665,7 +675,7 @@
       "actions": {
         "goWash": "去洗车",
         "moreInfo": "更多信息",
-        "choosePlan": "选择套餐",
+        "wash": "洗车",
         "seeInUse": "查看详情",
         "seeMaintenance": "查看详情"
       },

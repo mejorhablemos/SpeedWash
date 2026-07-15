@@ -305,8 +305,16 @@
         "usingPack": "Using your pack",
         "usingPackSub": "Free wash · {count} left",
         "usePack": "Use my pack",
+        "use": "Use",
         "available": "You have {count} washes in your pack",
         "change": "Change"
+      },
+      "cost": {
+        "freeEyebrow": "Your pack covers this wash",
+        "freeSub": "{count} washes left in your pack",
+        "availableEyebrow": "You have a pack available",
+        "availableSub": "Use 1 of your {count} washes and this one is free",
+        "payEyebrow": "Total to pay"
       },
       "usePackDialog": {
         "title": "You have a pack available",
@@ -324,6 +332,8 @@
       },
       "total": "Total",
       "submit": "Wash Now",
+      "submitFree": "Start wash — Free",
+      "submitPay": "Pay {price} and start",
       "emergency": {
         "button": "Emergency — Call Now",
         "description": "If you're locked in or there's a problem with the machine, call one of these numbers.",
@@ -685,7 +695,7 @@
       "actions": {
         "goWash": "Select Wash Mode",
         "moreInfo": "More info",
-        "choosePlan": "Choose plan",
+        "wash": "Wash",
         "seeInUse": "See details",
         "seeMaintenance": "See details"
       },
