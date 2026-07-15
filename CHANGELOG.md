@@ -858,6 +858,28 @@ ser incorrecta. Ver [order-item.vue](src/components/order/order-item.vue),
 **Acción solicitada:** agregar `cardName` y `originalPrice` a la respuesta
 de `washOrderPage` (mismo formato que ya usa `washOrderInfo`).
 
+### 2.10 `storeApi.detail` no devuelve `iotStatus` por máquina
+**Prioridad:** MEDIA (UX: sin esto, el usuario tiene que entrar máquina por
+máquina para saber cuál está libre — dos "clicks de frustración" comunes:
+elegir una y descubrir "En uso" o "Mantenimiento").
+**Endpoint involucrado:** `POST /api/user/store/info/{id}`.
+
+**Contexto:** el schema `StoreIot` que devuelve `iotList` solo tiene
+`iotId`, `name` y `lowestPrice`. El estado real (`iotStatus`: 0 disponible,
+1 en uso, 2 mantenimiento) sí lo devuelve `washApi.iotInfo(iotId)`, pero
+requiere una llamada por máquina.
+
+**Workaround en frontend (ya aplicado):** al cargar el detalle de sucursal,
+hacemos N llamadas paralelas a `washApi.iotInfo(iotId)` — una por máquina —
+para poder mostrar el badge Disponible/En uso/Mantenimiento antes de que
+el usuario entre a la máquina. Barato para 2-4 máquinas por sucursal; si
+crece a N sucursales grandes se vuelve caro. Ver
+[store/index.vue](src/pages/store/index.vue).
+
+**Acción solicitada:** agregar `iotStatus` al schema `StoreIot`, así
+`storeApi.detail` devuelve todo en una sola request y el frontend puede
+eliminar el workaround.
+
 ---
 
 ## 3. Auditoría de marca KIREI (grep -ri "kirei")

@@ -683,7 +683,16 @@
     },
     "machineItem": {
       "actions": {
-        "goWash": "Select Wash Mode"
+        "goWash": "Select Wash Mode",
+        "moreInfo": "More info",
+        "startWash": "Start wash",
+        "seeInUse": "See details",
+        "seeMaintenance": "See details"
+      },
+      "status": {
+        "available": "Available",
+        "inUse": "In use",
+        "maintenance": "Maintenance"
       }
     },
     "voucherCard": {

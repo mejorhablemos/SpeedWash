@@ -663,7 +663,16 @@
     },
     "machineItem": {
       "actions": {
-        "goWash": "去洗车"
+        "goWash": "去洗车",
+        "moreInfo": "更多信息",
+        "startWash": "开始洗车",
+        "seeInUse": "查看详情",
+        "seeMaintenance": "查看详情"
+      },
+      "status": {
+        "available": "可用",
+        "inUse": "使用中",
+        "maintenance": "维护中"
       }
     },
     "voucherCard": {

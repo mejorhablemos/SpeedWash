@@ -720,7 +720,15 @@
         "goWash": "Elegir modo de lavado",
         "choosePrefix": "Elegir Máquina",
         "chooseGeneric": "Elegir máquina",
-        "moreInfo": "Más información"
+        "moreInfo": "Más información",
+        "startWash": "Iniciar lavado",
+        "seeInUse": "Ver detalles",
+        "seeMaintenance": "Ver detalles"
+      },
+      "status": {
+        "available": "Disponible",
+        "inUse": "En uso",
+        "maintenance": "Mantenimiento"
       }
     },
     "voucherCard": {

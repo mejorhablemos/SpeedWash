@@ -1,6 +1,7 @@
 <script setup>
 import { getImageUrl } from "@/utils";
 import { PRE_LAUNCH } from "@/constants";
+import { washApi } from "@/api";
 import IconNav from "@/assets/store/icon_nav.png";
 import DefaultBanner from "@/assets/store/store-banner-default.png";
 
@@ -17,10 +18,38 @@ const { data } = storeApi.detail(route.params.id);
 // izquierda y la de Rodillos a la derecha. La API no garantiza el orden, así que
 // lo forzamos poniendo Sin Contacto (touchless) primero.
 const isTouchless = (m) => /sin\s*contacto|touchless/i.test(m?.name || "");
+
+// Workaround del backend: storeApi.detail devuelve `iotList` con `iotId`,
+// `name` y `lowestPrice`, PERO NO `iotStatus` (schema StoreIot). El estado
+// solo lo devuelve washApi.iotInfo(iotId). Para poder mostrar
+// Disponible/En uso/Mantenimiento antes de que el usuario entre a la máquina,
+// hacemos N llamadas paralelas — una por máquina — y mergeamos el estado.
+// Barato para 2-4 máquinas; si mañana escala a N sucursales grandes hay que
+// exigirle al proveedor que agregue iotStatus a StoreIot. Ver CHANGELOG 2.10.
+const machineStatuses = ref({}); // { [iotId]: iotStatus }
+// Usamos `watch` en la lista de IDs (string estable) en vez de watchEffect,
+// para NO re-disparar cuando escribimos machineStatuses.value (loop infinito).
+const iotIdsKey = computed(() =>
+  (data.value?.iotList || []).map((m) => m.iotId).join(",")
+);
+watch(iotIdsKey, async (key) => {
+  if (!key) return;
+  const list = data.value?.iotList || [];
+  const results = await Promise.all(
+    list.map(async (m) => {
+      // El composable devuelve `.json()` como promise; hay que awaitarla.
+      const { data: infoData, error: infoErr } = await washApi.iotInfo(m.iotId);
+      if (unref(infoErr)) return [m.iotId, undefined];
+      return [m.iotId, unref(infoData)?.iotStatus];
+    })
+  );
+  machineStatuses.value = Object.fromEntries(results);
+}, { immediate: true });
+
 const orderedMachines = computed(() =>
-  [...(data.value?.iotList || [])].sort(
-    (a, b) => Number(isTouchless(b)) - Number(isTouchless(a))
-  )
+  [...(data.value?.iotList || [])]
+    .map((m) => ({ ...m, iotStatus: machineStatuses.value[m.iotId] }))
+    .sort((a, b) => Number(isTouchless(b)) - Number(isTouchless(a)))
 );
 
 // Badge de estado: en pre-apertura mostramos "Próximamente" en vez del estado
