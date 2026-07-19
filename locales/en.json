@@ -14,9 +14,14 @@
         "subtitle": "Scan the QR, pay and go"
       },
       "vip": {
-        "title": "Wash packs",
-        "subtitle": "Buy prepaid wash packs and save on every visit",
-        "buy": "See plans & prices"
+        "title": "Buy your pack",
+        "subtitle": "Discounted prepaid washes.",
+        "buy": "See available packs"
+      },
+      "founder": {
+        "title": "You're a founding member",
+        "subtitle": "Top up more washes at your preferential price (until Oct 31)",
+        "cta": "See my founder packs"
       },
       "myPack": {
         "title": "My pack",
@@ -529,7 +534,12 @@
       },
       "buy": "Buy",
       "tapToBuy": "Tap a pack to buy it",
-      "empty": "No VIP cards available"
+      "empty": "No VIP cards available",
+      "founder": {
+        "eyebrow": "Founding member benefit",
+        "title": "Your preferential price",
+        "subtitle": "You see these packs because you're a founding member. Valid until October 31, 2026."
+      }
     },
     "vouchers": {
       "title": "My Vouchers"

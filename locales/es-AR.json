@@ -14,11 +14,16 @@
         "subtitle": "Escaneá el QR para iniciar"
       },
       "vip": {
-        "title": "Packs de lavado",
-        "subtitle": "Comprá lavados prepagos y ahorrá.",
+        "title": "Comprá tu pack",
+        "subtitle": "Lavados prepagos con descuento.",
         "plateTitle": "Tu patente inicia el lavado.",
         "plateSub": "Sin sacar el celular, sin escanear, llegás y arranca.",
-        "buy": "Ver planes y precios"
+        "buy": "Ver packs disponibles"
+      },
+      "founder": {
+        "title": "Sos socio fundador",
+        "subtitle": "Sumá más lavados con tu precio preferencial (hasta 31/oct)",
+        "cta": "Ver mis packs fundador"
       },
       "myPack": {
         "title": "Mi pack",
@@ -563,7 +568,12 @@
       },
       "buy": "Comprar",
       "tapToBuy": "Tocá un pack para comprarlo",
-      "empty": "No hay tarjetas VIP disponibles"
+      "empty": "No hay tarjetas VIP disponibles",
+      "founder": {
+        "eyebrow": "Beneficio de socio fundador",
+        "title": "Tu precio preferencial",
+        "subtitle": "Estos packs solo los ves porque sos fundador. Vigente hasta el 31 de octubre de 2026."
+      }
     },
     "vouchers": {
       "title": "Mi abono"
