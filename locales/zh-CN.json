@@ -160,6 +160,12 @@
         },
         "whatsapp_contact": "通过 WhatsApp 联系",
         "whatsapp_message": "您好，我想咨询此订单：\n\n订单号: {orderNo}\n日期: {date}\n门店: {store}\n设备: {machine}\n洗车: {mode}\n支付: {payment}\n金额: {amount}",
+        "washingSteps": {
+          "title": "机器洗车时",
+          "slow": "缓慢驶入（让底部的水充分清洗）",
+          "stops": "驶到橡胶挡块位置",
+          "engine": "关闭发动机并等待"
+        },
         "wash_status": {
           "1": "未启动",
           "2": "洗车中",
@@ -308,6 +314,13 @@
         "availableSub": "使用 {count} 次中的 1 次，本次免费",
         "payEyebrow": "应付总额"
       },
+      "prewash": {
+        "title": "开始前",
+        "windows": "关闭所有车窗",
+        "wipers": "关闭雨刷器",
+        "enter": "点击开始后，沿地面标线缓慢驶入",
+        "center": "将车轮对准蓝线，前进至挡块位置"
+      },
       "usePackDialog": {
         "title": "您有可用套餐",
         "message": "使用套餐中的一次洗车，而不是支付 {price}？",
@@ -324,7 +337,7 @@
       },
       "total": "合计",
       "submit": "去洗车",
-      "submitFree": "开始洗车 — 免费",
+      "submitFree": "使用我的套餐开始",
       "submitPay": "支付 {price} 并开始",
       "emergency": {
         "button": "紧急求助 — 立即拨打",

@@ -170,6 +170,12 @@
         },
         "whatsapp_contact": "Contactar por WhatsApp",
         "whatsapp_message": "Hola, tengo una consulta sobre este pedido:\n\nN°: {orderNo}\nFecha: {date}\nSucursal: {store}\nMáquina: {machine}\nLavado: {mode}\nPago: {payment}\nMonto: {amount}",
+        "washingSteps": {
+          "title": "Mientras la máquina lava",
+          "slow": "Avanzá lentamente al ingresar (así el agua limpia bien por debajo)",
+          "stops": "Avanzá hasta los topes de goma",
+          "engine": "Apagá el motor y esperá"
+        },
         "wash_status": {
           "1": "No iniciado",
           "2": "Lavando",
@@ -318,6 +324,13 @@
         "availableSub": "Podés usar 1 de tus {count} lavados y este sale gratis",
         "payEyebrow": "Total a pagar"
       },
+      "prewash": {
+        "title": "Antes de iniciar",
+        "windows": "Cerrá las ventanillas",
+        "wipers": "Desactivá el limpiaparabrisas",
+        "enter": "Al apretar Iniciar, entrá despacio siguiendo las líneas del piso",
+        "center": "Centrá las ruedas sobre la línea azul y avanzá hasta los topes"
+      },
       "usePackDialog": {
         "title": "Tenés un pack disponible",
         "message": "¿Usar un lavado de tu pack en vez de pagar {price}?",
@@ -356,7 +369,7 @@
       },
       "total": "Total",
       "submit": "Iniciar lavado",
-      "submitFree": "Iniciar lavado — Gratis",
+      "submitFree": "Iniciar con mi pack",
       "submitPay": "Pagar {price} e iniciar",
       "emergency": {
         "button": "Emergencia — Llamar ahora",

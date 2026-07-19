@@ -54,6 +54,11 @@ const washStatus = computed(() => {
 //     haber entrado igual y algo salió mal.
 const isWashActive = computed(() => [2, 3, 4].includes(data.value?.washStatus));
 
+// Checklist "Mientras la máquina lava" — solo aparece cuando el ciclo está
+// realmente corriendo (washStatus === 2). Cuando termina el ciclo (3) o hubo
+// timeout de arranque (4) ya no tiene sentido, pero el botón emergency sigue.
+const isWashing = computed(() => data.value?.washStatus === 2);
+
 const showEmergency = ref(false);
 const emergencyActions = EMERGENCY_CONTACTS.map((c) => ({
   name: `${c.name} — ${c.display}`,
@@ -166,6 +171,32 @@ onMounted(() => {
 
   </div>
 
+  <!-- Checklist "Mientras la máquina lava" — solo cuando washStatus === 2.
+       Son los 3 pasos DURANTE el lavado (avanzar, hasta topes, apagar motor).
+       Los pasos PREVIOS al arranque (cerrar ventanillas, desactivar wipers)
+       viven en /washer/{id} para que el usuario los lea ANTES de apretar. -->
+  <div v-if="isWashing" class="px-4 pt-3 pb-1">
+    <div class="washing-steps">
+      <div class="washing-steps__title">
+        {{ t("routes.order.detail.washingSteps.title") }}
+      </div>
+      <ol class="washing-steps__list">
+        <li class="washing-steps__item">
+          <span class="washing-steps__num">1</span>
+          <span>{{ t("routes.order.detail.washingSteps.slow") }}</span>
+        </li>
+        <li class="washing-steps__item">
+          <span class="washing-steps__num">2</span>
+          <span>{{ t("routes.order.detail.washingSteps.stops") }}</span>
+        </li>
+        <li class="washing-steps__item">
+          <span class="washing-steps__num">3</span>
+          <span>{{ t("routes.order.detail.washingSteps.engine") }}</span>
+        </li>
+      </ol>
+    </div>
+  </div>
+
   <!-- Botón de emergencia — visible mientras el lavado está "activo"
        (washStatus 2/3/4). Cubre desde que arranca el ciclo hasta que la
        cortina se abre y el auto sale, incluyendo el caso "cortina no abre"
@@ -219,6 +250,61 @@ onMounted(() => {
   color: var(--brand-success);
   line-height: 1.2;
   padding-top: 4px;
+}
+
+/* Pasos "Mientras la máquina lava" — 3 acciones que el usuario ejecuta AHORA
+   con el auto adentro. Cyan sutil para reforzar acción pero sin gritar
+   (el emergency-btn de abajo es el que grita si hay problema). */
+.washing-steps {
+  padding: 14px 16px 16px;
+  border-radius: 14px;
+  background: rgba(0, 187, 252, 0.06);
+  border: 1px solid rgba(0, 187, 252, 0.28);
+}
+
+.washing-steps__title {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+
+.washing-steps__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  counter-reset: step;
+}
+
+.washing-steps__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--text-primary);
+}
+
+.washing-steps__num {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 800;
+  color: #001016;
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-color) 100%);
+  box-shadow: 0 4px 10px -4px rgba(0, 187, 252, 0.6);
 }
 
 /* Botón de emergencia — mismo estilo que en la pantalla del washer

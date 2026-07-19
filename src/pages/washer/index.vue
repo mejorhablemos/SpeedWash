@@ -1,12 +1,11 @@
 <script setup>
 import { PAYMENT_FROM, PAYMENT_METHOD, IOT_STATUS } from "@/constants";
-import { EMERGENCY_CONTACTS } from "@/constants/contact";
 
 // Feature flag — pasar a true cuando RR.PP. confirme % de descuento
 // por pago en efectivo y la operatoria en sucursal. Default off al lanzamiento.
 const SHOW_CASH_OFFER = false;
 
-const { t, tm } = useI18n();
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const id = route.params.id;
@@ -31,16 +30,6 @@ const canWash = computed(
   () => washerData.value?.iotStatus === IOT_STATUS.AVAILABLE
 );
 
-// Ventajas según el tipo de máquina (heurística por nombre)
-const isTouchless = computed(() =>
-  /sin\s*contacto|touchless/i.test(washerData.value?.name || "")
-);
-const machineBenefits = computed(() => {
-  const key = isTouchless.value ? "touchless" : "rodillos";
-  const list = tm(`routes.washer.benefits.${key}`);
-  return Array.isArray(list) ? list : [];
-});
-
 // El vendor nombra el plan con cera como "Lavado Premium"; en la marca
 // SpeedWash se muestra como "Lavado SpeedWash con Cera". Override de display.
 const displayPlanName = (name = "") => {
@@ -60,20 +49,6 @@ const splitPlanName = (name = "") => {
 const selectedPlan = ref(null);
 const selectedCard = ref(null);
 const showVipCards = ref(false);
-
-// Emergencia: action-sheet con los contactos que atienden llamadas físicas
-// (encargado + socios). Solo aparece en esta pantalla porque es donde el usuario
-// está físicamente en la máquina — si se queda encerrado o algo se rompe,
-// necesita marcar rápido a alguien humano.
-const showEmergency = ref(false);
-const emergencyActions = EMERGENCY_CONTACTS.map((c) => ({
-  name: `${c.name} — ${c.display}`,
-  phone: c.phone,
-}));
-const onEmergencySelect = (action) => {
-  window.location.href = `tel:${action.phone}`;
-  showEmergency.value = false;
-};
 
 // 订单金额
 const orderAmount = ref(0);
@@ -288,54 +263,27 @@ watch(
       </template>
     </van-empty>
 
-    <!-- 设备信息 -->
+    <!-- Header compacto: el usuario acaba de escanear el QR, ya sabe dónde
+         está y qué máquina eligió. Solo confirmamos identidad de la máquina
+         (por si un QR estuviera mal pegado) y su estado en una línea. Los
+         bloques de "Sucursal / Dirección" y "Ventajas" se sacaron: nadie los
+         lee cuando está con el auto al lado esperando arrancar. Las
+         "Ventajas" viven mejor en el detalle de sucursal (/store/{id}). -->
     <div class="px-4 py-3">
-      <div class="card p-4">
-        <div class="flex items-center justify-between">
-          <div>
-            <h2 class="text-text-primary text-32 font-bold font-display">
-              {{ washerData?.name }}
-            </h2>
-            <p class="text-text-secondary text-26 mt-1">
-              {{ t("routes.washer.store") }}: {{ washerData?.storeName }}
-            </p>
-          </div>
-          <status-tag
-            :status="washerData?.iotStatus"
-            v-if="[0, 1, 2].includes(washerData?.iotStatus)"
-          />
-        </div>
-        <div
-          class="mt-3 bg-surface-2 p-3 rounded-lg h-72 text-text-secondary flex items-center text-28 font-medium"
-        >
-          <span>{{ washerData?.address }}</span>
-        </div>
+      <div class="washer-header">
+        <h2 class="washer-header__name">{{ washerData?.name }}</h2>
+        <status-tag
+          v-if="[0, 1, 2].includes(washerData?.iotStatus)"
+          :status="washerData?.iotStatus"
+        />
       </div>
     </div>
 
-    <!-- Ventajas de esta máquina -->
-    <div class="px-4 py-3" v-if="machineBenefits.length">
-      <div class="benefits-card">
-        <div class="benefits-card__title">
-          {{ t("routes.washer.benefits.title") }}
-        </div>
-        <div class="benefits-list">
-          <div
-            v-for="(benefit, i) in machineBenefits"
-            :key="i"
-            class="benefit-row"
-          >
-            <span class="benefit-check">
-              <van-icon name="success" />
-            </span>
-            <span class="benefit-text">{{ benefit }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 洗车方案 -->
-    <div class="px-4 py-3">
+    <!-- Selector de plan — oculto cuando la máquina tiene un único plan
+         (no hay nada que elegir; el nombre ya está en el header y el precio
+         en la banda de costo de abajo). Aparece cuando hay 2+ planes reales
+         donde el usuario sí decide entre opciones (ej: Simple vs Premium). -->
+    <div v-if="washPlans.length > 1" class="px-4 py-3">
       <div class="text-32 fw-bold text-text-primary font-display mb-30 text-center">
         {{ t("routes.washer.selectPlan") }}
       </div>
@@ -442,22 +390,50 @@ watch(
       </div>
     </div>
 
-    <!-- Botón de emergencia: solo visible en esta pantalla (usuario está
-         físicamente en la máquina). Al tocar → action-sheet con contactos que
-         atienden llamadas humanas (encargado + socios). -->
-    <div class="px-4 pt-2 pb-3">
-      <button type="button" class="emergency-btn" @click="showEmergency = true">
-        <van-icon name="phone-o" class="emergency-btn__icon" />
-        <span class="emergency-btn__text">{{ t("routes.washer.emergency.button") }}</span>
-      </button>
+    <!-- Checklist "Antes de iniciar" — solo lo mínimo que el usuario tiene
+         que hacer ANTES de apretar el botón (2 ítems que se leen en 3s).
+         Los pasos DURANTE el lavado (avanzar lento, hasta topes, apagar motor)
+         viven en /order/{id} cuando washStatus === 2, así aparecen cuando
+         realmente hay que ejecutarlos. -->
+    <div class="px-4 py-3">
+      <div class="prewash-checklist">
+        <div class="prewash-checklist__title">
+          {{ t("routes.washer.prewash.title") }}
+        </div>
+        <ul class="prewash-checklist__list">
+          <li class="prewash-checklist__item">
+            <van-icon name="checked" class="prewash-checklist__icon" />
+            <span>{{ t("routes.washer.prewash.windows") }}</span>
+          </li>
+          <li class="prewash-checklist__item">
+            <van-icon name="checked" class="prewash-checklist__icon" />
+            <span>{{ t("routes.washer.prewash.wipers") }}</span>
+          </li>
+          <li class="prewash-checklist__item">
+            <van-icon name="checked" class="prewash-checklist__icon" />
+            <span>{{ t("routes.washer.prewash.enter") }}</span>
+          </li>
+          <li class="prewash-checklist__item">
+            <van-icon name="checked" class="prewash-checklist__icon" />
+            <span>{{ t("routes.washer.prewash.center") }}</span>
+          </li>
+        </ul>
+      </div>
     </div>
+
+    <!-- Antes había un botón "Emergencia" acá, pero esta pantalla es la de
+         ELECCIÓN previa al inicio del lavado — el auto todavía está afuera,
+         no hay emergencia posible. El botón vive en /payment/result y en
+         /order/{id} (con washStatus 2/3/4), que es cuando el auto está
+         realmente adentro. Ver src/constants/contact.js y CHANGELOG. -->
 
     <!-- Action-bar: 100% CTA full-width. El precio ya está grande en la banda
          de costo de arriba; duplicarlo acá era ruido. El texto del botón
          cambia según el estado ("Iniciar lavado — Gratis" / "Pagar $X e
          iniciar" / "Iniciar lavado") para que el commitment sea explícito. -->
-    <van-action-bar>
+    <van-action-bar class="wash-action-bar">
       <van-action-bar-button
+        class="wash-action-bar__cta"
         :type="isFreeWithPack ? 'success' : 'danger'"
         :disabled="!canWash"
         :text="ctaLabel"
@@ -474,19 +450,106 @@ watch(
       :mark="selectedPlan?.mark"
     />
 
-    <!-- Action-sheet de emergencia (llamadas humanas) -->
-    <van-action-sheet
-      v-model:show="showEmergency"
-      :actions="emergencyActions"
-      :description="t('routes.washer.emergency.description')"
-      :cancel-text="t('routes.washer.emergency.cancel')"
-      close-on-click-action
-      @select="onEmergencySelect"
-    />
   </div>
 </template>
 
 <style scoped>
+/* Header compacto: nombre de la máquina + badge de estado en una sola fila,
+   sin marco de card. El usuario escaneó el QR y ya está frente a ella;
+   solo confirmamos identidad. Los datos de sucursal/dirección que estaban
+   antes son ruido en este momento (nadie los mira). */
+.washer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 4px;
+}
+
+.washer-header__name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  line-height: 1.15;
+  margin: 0;
+}
+
+/* Checklist "Antes de iniciar" — bloque chiquito y directo. NO cyan/verde
+   saturado para no competir con la cost-band de arriba (que es la que grita).
+   Estilo utility, tipo "info-tip", con ícono verde para reforzar acción OK. */
+.prewash-checklist {
+  padding: 12px 16px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line-color);
+}
+
+.prewash-checklist__title {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.prewash-checklist__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.prewash-checklist__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  line-height: 1.35;
+  color: var(--text-primary);
+}
+
+.prewash-checklist__icon {
+  color: var(--brand-success);
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+/* Action-bar del CTA principal — grande, imposible de no ver. Es LA acción
+   de la pantalla; el default de Vant (44px) queda chico contra el resto
+   de contenido. Subimos alto + tipografía + un pelín de shadow para
+   levantarlo del fondo. */
+.wash-action-bar {
+  --van-action-bar-height: 76px;
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+  background: var(--surface-color);
+  border-top: 1px solid var(--line-color);
+}
+
+.wash-action-bar__cta.van-button {
+  height: 56px;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  box-shadow: 0 8px 22px -10px rgba(0, 0, 0, 0.6);
+}
+
+/* Sombra específica según el tipo (verde/rojo) para que se sienta "vivo". */
+.wash-action-bar__cta.van-button--success {
+  box-shadow: 0 8px 22px -10px rgba(var(--brand-success-rgb), 0.7);
+}
+
+.wash-action-bar__cta.van-button--danger {
+  box-shadow: 0 8px 22px -10px rgba(240, 68, 56, 0.6);
+}
+
 /* Tarjetas de plan de lavado */
 .plan-card {
   display: flex;
@@ -686,97 +749,6 @@ watch(
   color: #fff;
   background: rgba(255, 255, 255, 0.18);
   border: 2px solid rgba(255, 255, 255, 0.55);
-}
-
-/* Tarjeta de ventajas (premium, cyan) */
-.benefits-card {
-  position: relative;
-  overflow: hidden;
-  padding: 18px 16px;
-  border-radius: 18px;
-  background:
-    radial-gradient(120% 130% at 50% -20%, rgba(0, 187, 252, 0.12) 0%, transparent 60%),
-    var(--surface-color);
-  border: 1px solid var(--line-color);
-  box-shadow: 0 12px 30px -18px rgba(0, 0, 0, 0.85);
-}
-
-.benefits-card__title {
-  font-family: var(--font-display);
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: var(--text-primary);
-  text-align: center;
-  margin-bottom: 14px;
-}
-
-.benefits-list {
-  display: flex;
-  flex-direction: column;
-  gap: 11px;
-}
-
-.benefit-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  text-align: center;
-}
-
-.benefit-check {
-  flex-shrink: 0;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  color: #001016;
-  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-color) 100%);
-  box-shadow: 0 4px 12px -4px rgba(0, 187, 252, 0.75);
-}
-
-.benefit-text {
-  font-size: 13px;
-  line-height: 1.35;
-  color: var(--text-secondary);
-}
-
-/* Botón de emergencia — rojo intenso, grande y con contorno para que
-   destaque contra el resto de la UI. Debe verse en un pantallazo. */
-.emergency-btn {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 14px 20px;
-  border-radius: 14px;
-  border: 1.5px solid rgba(240, 68, 56, 0.55);
-  background: rgba(240, 68, 56, 0.14);
-  color: #ff6b60;
-  font-family: var(--font-display);
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  cursor: pointer;
-  transition: transform 0.15s, background 0.15s;
-}
-
-.emergency-btn:active {
-  transform: scale(0.98);
-  background: rgba(240, 68, 56, 0.22);
-}
-
-.emergency-btn__icon {
-  font-size: 20px;
-}
-
-.emergency-btn__text {
-  line-height: 1;
 }
 
 :deep(.van-empty__description) {

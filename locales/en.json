@@ -168,6 +168,12 @@
         },
         "whatsapp_contact": "Contact via WhatsApp",
         "whatsapp_message": "Hi, I have a question about this order:\n\nNo: {orderNo}\nDate: {date}\nStore: {store}\nMachine: {machine}\nWash: {mode}\nPayment: {payment}\nAmount: {amount}",
+        "washingSteps": {
+          "title": "While the machine washes",
+          "slow": "Drive in slowly (so water reaches underneath)",
+          "stops": "Drive forward until the rubber stops",
+          "engine": "Turn off the engine and wait"
+        },
         "wash_status": {
           "1": "Not Started",
           "2": "Washing",
@@ -316,6 +322,13 @@
         "availableSub": "Use 1 of your {count} washes and this one is free",
         "payEyebrow": "Total to pay"
       },
+      "prewash": {
+        "title": "Before you start",
+        "windows": "Close all windows",
+        "wipers": "Turn off the wipers",
+        "enter": "After tapping Start, drive in slowly following the floor lines",
+        "center": "Center your wheels on the blue line and drive forward to the stops"
+      },
       "usePackDialog": {
         "title": "You have a pack available",
         "message": "Use a wash from your pack instead of paying {price}?",
@@ -332,7 +345,7 @@
       },
       "total": "Total",
       "submit": "Wash Now",
-      "submitFree": "Start wash — Free",
+      "submitFree": "Start with my pack",
       "submitPay": "Pay {price} and start",
       "emergency": {
         "button": "Emergency — Call Now",
