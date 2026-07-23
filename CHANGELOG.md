@@ -10,6 +10,75 @@ Fecha: 2026-06-09
 
 ---
 
+## 📋 Mis pedidos — contadores, nombres claros y reclamo por WhatsApp (2026-07-23)
+
+### Qué significaba cada estado (auditoría)
+
+Disparado por una pregunta razonable: *"¿qué es En curso y qué es Pendientes?"*.
+Resultó que **hay tres enums de "estado" distintos, y dos usan los mismos
+números para cosas diferentes**:
+
+**A — `state`: el filtro de la pestaña** (lo que se le manda a la API)
+`1` todos · `2` en curso · `3` **esperando pago** · `4` completados
+
+**B — `showState`: el estado de cada pedido** (lo que devuelve el backend)
+`1` pendiente de pago · `2` pago vencido · `3` timeout de arranque ·
+`4` **lavando** · `5` completado
+
+**C — `washStatus`: el ciclo de lavado** (solo en el detalle)
+`1` no iniciado · `2` lavando · `3` finalizado · `4` timeout de arranque
+
+Ojo con la colisión: **`4` como filtro es "Completados", pero `4` como estado
+de pedido es "Lavando"**. Son enums independientes que comparten numeración —
+viene así del white-label original.
+
+La confusión de fondo: leídas juntas, "En curso" y "Pendientes" parecían dos
+etapas del lavado, cuando **"Pendientes" era de la plata, no del lavado**.
+
+### Cambios
+
+- **"Pendientes"/"Pendiente" → "A pagar"** en los tres lugares donde aparecía
+  (pestaña, acceso directo de Mi cuenta, y el estado del detalle). En inglés
+  "To pay". El chino ya decía 待付款 ("esperando pago") — siempre estuvo bien,
+  se perdió en la traducción al español. — [es-AR.json](locales/es-AR.json),
+  [en.json](locales/en.json)
+- **Contadores por pestaña** (`Todos (10)`, `A pagar (0)`, …) y **globito** en
+  los tres accesos directos de Mi cuenta. El backend no tiene endpoint de
+  conteo: pedimos una página de `pageSize: 1` por filtro y usamos el `total`.
+  La pestaña activa se mantiene al día gratis con el `total` que ya trae la
+  lista. — [useOrder.js](src/composables/useOrder.js),
+  [order/index.vue](src/pages/order/index.vue), [mine-page.vue](src/pages/mine-page.vue)
+  - En las pestañas el `(0)` se muestra (es información: no debés nada); en los
+    globitos no (un 0 flotando sobre un icono es ruido).
+  - Si la llamada falla **no se muestra número**, nunca un `0` por las dudas:
+    un "A pagar (0)" falso haría creer que no hay plata pendiente.
+  - En Mi cuenta el conteo **solo se pide con cuenta real**. Un invitado no
+    tiene token y `washOrderPage` le devolvería `999`, que en una página
+    protegida lo patea a `/login` (ver [useApi.js](src/composables/useApi.js)) —
+    o sea que abrir Mi cuenta lo habría expulsado. Mismo criterio que `myInfo`.
+- **Los dos estados de falla ahora se distinguen** — antes los dos se pintaban
+  del mismo azul que un pedido normal, porque `getStatusStyle` no tenía entrada
+  para ninguno: pasaban desapercibidos. — [order-item.vue](src/components/order/order-item.vue)
+  - **Pago vencido** (`showState 2`): **gris**. No se cobró nada, no hay nada
+    que reclamar — es un pedido muerto.
+  - **Timeout de arranque** (`showState 3`): **rojo**, y el botón de WhatsApp
+    pasa a decir **"Reclamar"**. Es plata cobrada sin servicio.
+- **Mensaje de reclamo propio**: *"Hola, necesito hacer un reclamo: pagué este
+  lavado y la máquina nunca arrancó"* + los datos del pedido, en vez del
+  genérico *"tengo una consulta sobre este pedido"*. En la lista y en el
+  detalle, en los tres idiomas. — [order/detail.vue](src/pages/order/detail.vue)
+  - En el detalle se chequean **los dos campos** (`showState === 3` o
+    `washStatus === 4`): describen el mismo evento, pero no está confirmado que
+    `washOrderInfo` devuelva `showState` (su `getOrderStatus` está definido y
+    no se usa en ningún lado). `washStatus` sí lo usa la página con certeza.
+- **No se agregó pestaña de reclamos**: el filtro `state` de la API no tiene
+  valor para los estados de falla. Filtrar del lado del cliente rompería la
+  paginación y el contador (ver pendiente **2.11**). El caso real es que se
+  reclama al toque, y recién ocurrido ese pedido está arriba de todo en "Todos".
+- Limpieza: se sacaron tres imports de PNG muertos en `mine-page.vue`.
+
+---
+
 ## 🐛 El escáner se colgaba después de leer el QR (2026-07-23)
 
 **Síntoma reportado:** al escanear el QR de una máquina la cámara leía bien
