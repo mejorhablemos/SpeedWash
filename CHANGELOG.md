@@ -10,6 +10,47 @@ Fecha: 2026-06-09
 
 ---
 
+## 🐛 El escáner se colgaba después de leer el QR (2026-07-23)
+
+**Síntoma reportado:** al escanear el QR de una máquina la cámara leía bien
+(se congelaba el último cuadro y aparecía el punto azul que marca el código
+detectado), pero **la app se quedaba ahí para siempre**. Pasaba igual con el
+QR viejo (`/washer/1`) y con el nuevo (`/washer/3`).
+
+**Causa:** en `onScanSuccess` la navegación estaba **dentro del `catch`** del
+`new URL(text)`. O sea que el único caso que navegaba era que el contenido
+del QR **no** fuera una URL válida. Como el QR de la máquina sí es una URL, el
+parseo nunca fallaba: se comparaba contra `VITE_BACKGROUND_URL` (que además no
+está definida), no matcheaba, se hacía un `console.log` y la función terminaba
+sin hacer nada. La lectura del QR nunca estuvo rota — el problema era qué se
+hacía con el texto leído.
+
+**Arreglo** — [scan-page.vue](src/pages/scan-page.vue): ahora todos los casos
+tienen salida.
+
+| QR contiene | Acción |
+|---|---|
+| URL nuestra (`/washer/:id`, `/store/:id`, `/invite/:code`) | navega dentro de la app |
+| URL de otro host de `speedwash.com.ar` | carga la URL (deja que el server redirija) |
+| URL de un tercero | pantalla de resultado con aviso de seguridad |
+| texto plano (`3`, `machine3`, `washer-3`) | navega a `/washer/<n>` |
+| cualquier otra cosa | pantalla de resultado |
+
+Dos detalles:
+
+- Se navega **con el router de Vue**, no con `window.location`: el mapeo de QR
+  viejos (`1→3`, `2→4`) vive en el `beforeEnter` de `/washer/:id`
+  ([router/index.js](src/router/index.js)), así que tiene que pasar por el
+  router para seguir aplicando.
+- Antes de navegar se valida con `router.resolve()` que la ruta **exista**. No
+  hay ruta catch-all en el proyecto: un `replace()` a un path sin match no
+  renderiza nada y dejaría la pantalla colgada igual que el bug original.
+
+El QR se matchea también por path aunque el host no sea el actual, por si
+quedó alguno impreso con otro dominio.
+
+---
+
 ## 🚨 Caída del envío de SMS — pasarela del proveedor (2026-07-06)
 
 Desde ~2026-07-05 el envío de códigos por SMS **falla para todos los números
@@ -879,6 +920,31 @@ crece a N sucursales grandes se vuelve caro. Ver
 **Acción solicitada:** agregar `iotStatus` al schema `StoreIot`, así
 `storeApi.detail` devuelve todo en una sola request y el frontend puede
 eliminar el workaround.
+
+### 2.11 `washOrderPage` no permite filtrar los pedidos fallidos
+**Prioridad:** MEDIA (bloquea una pestaña de "reclamos" en Mis pedidos).
+**Endpoint involucrado:** `POST /user/order/washOrderPage`, parámetro `state`.
+
+**Contexto:** el filtro `state` solo acepta `1` (todos), `2` (en curso),
+`3` (a pagar) y `4` (completados). Los dos estados de falla que sí existen
+a nivel de pedido — `showState 2` (pago vencido) y `showState 3` (timeout de
+arranque: pagó y la máquina nunca arrancó) — **no tienen valor de filtro**.
+Solo aparecen mezclados dentro de "Todos".
+
+El caso que importa es `showState 3`: es plata cobrada sin servicio, o sea
+un reclamo. Hoy el cliente tiene que encontrarlo scrolleando "Todos".
+
+**Workaround en frontend (ya aplicado):** no se agregó pestaña — filtrar del
+lado del cliente rompería la paginación (el `total` que devuelve la API es el
+de *todos* los pedidos, no el del subconjunto filtrado, así que el "cargar
+más" y el contador de esa pestaña mentirían). En su lugar, esos pedidos se
+destacan en rojo dentro de "Todos" y su botón de WhatsApp pasa a decir
+"Reclamar" con el mensaje ya redactado como reclamo. Ver
+[order-item.vue](src/components/order/order-item.vue).
+
+**Acción solicitada:** agregar un valor de `state` que devuelva los pedidos
+fallidos (`showState` 2 y 3), con su `total` correspondiente. Con eso la
+pestaña de reclamos sale paginada y con contador confiable.
 
 ---
 
