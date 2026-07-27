@@ -2,11 +2,17 @@
 import { indexApi, vipCardApi } from "@/api";
 import { getImageUrl } from "@/utils";
 import { PRE_LAUNCH } from "@/constants";
+import { useFounderStatus } from "@/composables/useFounderStatus";
 import logoUrl from "@/assets/speedwash-wordmark.png";
 
 const { t } = useI18n();
 const router = useRouter();
 const userStore = useUserStore();
+
+// Detección de fundador (ver composables/useFounderStatus.js). Cambia el
+// bloque de "Packs de lavado" a la variante dorada "Sos socio fundador"
+// con copy de renovación de beneficio.
+const { isFounder } = useFounderStatus();
 
 // Banner
 const { data: banners } = indexApi.banner();
@@ -161,8 +167,38 @@ function viewShop(id) {
       </div>
     </div>
 
-    <!-- Packs de lavado -->
-    <div class="service-cards-section px-4">
+    <!-- ─────────────────────────────────────────────────────────────────
+         Bloque "Packs de lavado" — 3 variantes según status del usuario:
+           - Fundador → variante dorada "Sos socio fundador" (siempre visible
+             según decisión B: querés que renueve antes de octubre).
+           - Usuario sin pack (no fundador) → variante naranja "Comprá tu
+             pack" con la promo de la patente.
+           - Usuario CON pack activo (no fundador) → bloque oculto (ya tiene
+             lo que comprar; el bloque "Mi pack" de arriba lo cubre).
+         ───────────────────────────────────────────────────────────────── -->
+
+    <!-- Variante fundador -->
+    <div v-if="isFounder" class="service-cards-section px-4">
+      <div class="pack-card pack-card--founder" @click="router.push('/vip')">
+        <div class="pack-card__glow pack-card__glow--founder"></div>
+        <div class="pack-card__head">
+          <div class="pack-card__icon pack-card__icon--founder">
+            <van-icon name="award" size="24" color="#fff" />
+          </div>
+          <div class="flex-1 min-w-0">
+            <h3 class="pack-card__title">{{ t("routes.home.founder.title") }}</h3>
+            <p class="pack-card__desc">{{ t("routes.home.founder.subtitle") }}</p>
+          </div>
+        </div>
+        <div class="pack-card__action pack-card__action--founder">
+          {{ t("routes.home.founder.cta") }}
+          <van-icon name="arrow" size="13" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Variante no-fundador, sin pack activo -->
+    <div v-else-if="!hasPack" class="service-cards-section px-4">
       <div class="pack-card" @click="router.push('/vip')">
         <div class="pack-card__glow"></div>
         <div class="pack-card__head">
@@ -175,10 +211,7 @@ function viewShop(id) {
           </div>
         </div>
 
-        <!-- Promo de la patente: solo para quien todavía NO tiene pack. Si ya
-             lo tiene, el bloque "Mi pack" de arriba ya comunica la patente y
-             acá quedaría repetido. -->
-        <div v-if="!hasPack" class="pack-card__feature">
+        <div class="pack-card__feature">
           <van-icon name="scan" size="16" />
           <div class="pack-card__feature-text">
             <span class="pack-card__feature-title">{{ t("routes.home.vip.plateTitle") }}</span>
@@ -192,6 +225,10 @@ function viewShop(id) {
         </div>
       </div>
     </div>
+
+    <!-- Cuando no-fundador YA tiene pack activo: no mostramos nada (el bloque
+         "Mi pack" de arriba ya cubre esa necesidad). -->
+
 
     <!-- Stores Section -->
     <div class="px-4 pb-safe-100" style="margin-top: 50px">
@@ -425,6 +462,19 @@ function viewShop(id) {
   transform: scale(0.98);
 }
 
+/* Variante fundador — dorado saturado + borde más intenso. Se distingue
+   claramente del naranja regular para que el fundador sienta que "esto es
+   distinto, es MI bloque". */
+.pack-card--founder {
+  background:
+    radial-gradient(130% 120% at 100% 0%, rgba(255, 210, 77, 0.22) 0%, transparent 55%),
+    linear-gradient(135deg, rgba(212, 160, 23, 0.10) 0%, var(--surface-color) 100%);
+  border: 1px solid rgba(255, 210, 77, 0.6);
+  box-shadow:
+    0 0 32px rgba(255, 210, 77, 0.15),
+    0 12px 30px -18px rgba(212, 160, 23, 0.5);
+}
+
 .pack-card__glow {
   position: absolute;
   top: -50px;
@@ -434,6 +484,10 @@ function viewShop(id) {
   border-radius: 50%;
   background: radial-gradient(circle, rgba(255, 148, 22, 0.2) 0%, transparent 70%);
   pointer-events: none;
+}
+
+.pack-card__glow--founder {
+  background: radial-gradient(circle, rgba(255, 210, 77, 0.28) 0%, transparent 70%);
 }
 
 .pack-card__head {
@@ -453,6 +507,11 @@ function viewShop(id) {
   justify-content: center;
   background: linear-gradient(135deg, #FF9416 0%, #FFB04D 100%);
   box-shadow: 0 8px 18px -6px rgba(255, 148, 22, 0.7);
+}
+
+.pack-card__icon--founder {
+  background: linear-gradient(135deg, #D4A017 0%, #FFD24D 100%);
+  box-shadow: 0 8px 18px -6px rgba(212, 160, 23, 0.7);
 }
 
 .pack-card__title {
@@ -515,6 +574,10 @@ function viewShop(id) {
   font-weight: 700;
   color: #FF9416;
   margin-top: 12px;
+}
+
+.pack-card__action--founder {
+  color: #FFD24D;
 }
 
 /* Mi pack — bloque del que ya compró (azul LED, contrasta con el naranja de compra) */

@@ -133,23 +133,23 @@ const routes = [
           titleKey: "routes.order.payment.title",
         },
       },
-      // 退款相关页面
-      {
-        path: "/order/refund/:id",
-        name: "OrderRefund",
-        component: () => import("@/pages/order/refund/index.vue"),
-        meta: {
-          titleKey: "routes.order.refund.title",
-        },
-      },
-      {
-        path: "/order/refund-detail/:id",
-        name: "OrderRefundDetail",
-        component: () => import("@/pages/order/refund/detail.vue"),
-        meta: {
-          titleKey: "routes.order.refund.detail.title",
-        },
-      },
+      // Rutas de reembolso desactivadas: el flujo se maneja por WhatsApp
+      // (modelo manual hasta apertura — nadie mira el panel de refunds del
+      // backend, y las fotos no llegan bien porque VITE_IMAGE_BASE_URL no
+      // está definido → path guardado como "undefined/file/..."). Dejamos
+      // los archivos por si el proveedor los actualiza en un update.
+      // {
+      //   path: "/order/refund/:id",
+      //   name: "OrderRefund",
+      //   component: () => import("@/pages/order/refund/index.vue"),
+      //   meta: { titleKey: "routes.order.refund.title" },
+      // },
+      // {
+      //   path: "/order/refund-detail/:id",
+      //   name: "OrderRefundDetail",
+      //   component: () => import("@/pages/order/refund/detail.vue"),
+      //   meta: { titleKey: "routes.order.refund.detail.title" },
+      // },
       // 洗车机详情
       {
         path: "/washer/:id",

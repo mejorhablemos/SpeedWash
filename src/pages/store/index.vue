@@ -1,6 +1,7 @@
 <script setup>
 import { getImageUrl } from "@/utils";
 import { PRE_LAUNCH } from "@/constants";
+import { washApi } from "@/api";
 import IconNav from "@/assets/store/icon_nav.png";
 import DefaultBanner from "@/assets/store/store-banner-default.png";
 
@@ -17,10 +18,44 @@ const { data } = storeApi.detail(route.params.id);
 // izquierda y la de Rodillos a la derecha. La API no garantiza el orden, así que
 // lo forzamos poniendo Sin Contacto (touchless) primero.
 const isTouchless = (m) => /sin\s*contacto|touchless/i.test(m?.name || "");
+
+// Workaround del backend: storeApi.detail devuelve `iotList` con `iotId`,
+// `name` y `lowestPrice`, PERO NO `iotStatus` (schema StoreIot). El estado
+// solo lo devuelve washApi.iotInfo(iotId). Para poder mostrar
+// Disponible/En uso/Mantenimiento antes de que el usuario entre a la máquina,
+// hacemos N llamadas paralelas — una por máquina — y mergeamos el estado.
+// Barato para 2-4 máquinas; si mañana escala a N sucursales grandes hay que
+// exigirle al proveedor que agregue iotStatus a StoreIot. Ver CHANGELOG 2.10.
+const machineStatuses = ref({}); // { [iotId]: iotStatus }
+// `statusesLoaded` gatea el render de las cards: mientras las llamadas
+// paralelas están en vuelo mostramos un skeleton, no las cards con estado
+// ambiguo. Evita el flash "Más información" → "Lavar" y "sin badge" → "Disponible".
+const statusesLoaded = ref(false);
+// Usamos `watch` en la lista de IDs (string estable) en vez de watchEffect,
+// para NO re-disparar cuando escribimos machineStatuses.value (loop infinito).
+const iotIdsKey = computed(() =>
+  (data.value?.iotList || []).map((m) => m.iotId).join(",")
+);
+watch(iotIdsKey, async (key) => {
+  if (!key) return;
+  statusesLoaded.value = false;
+  const list = data.value?.iotList || [];
+  const results = await Promise.all(
+    list.map(async (m) => {
+      // El composable devuelve `.json()` como promise; hay que awaitarla.
+      const { data: infoData, error: infoErr } = await washApi.iotInfo(m.iotId);
+      if (unref(infoErr)) return [m.iotId, undefined];
+      return [m.iotId, unref(infoData)?.iotStatus];
+    })
+  );
+  machineStatuses.value = Object.fromEntries(results);
+  statusesLoaded.value = true;
+}, { immediate: true });
+
 const orderedMachines = computed(() =>
-  [...(data.value?.iotList || [])].sort(
-    (a, b) => Number(isTouchless(b)) - Number(isTouchless(a))
-  )
+  [...(data.value?.iotList || [])]
+    .map((m) => ({ ...m, iotStatus: machineStatuses.value[m.iotId] }))
+    .sort((a, b) => Number(isTouchless(b)) - Number(isTouchless(a)))
 );
 
 // Badge de estado: en pre-apertura mostramos "Próximamente" en vez del estado
@@ -130,13 +165,30 @@ const handleBuyVip = () => {
       </div>
     </div>
 
-    <!-- 洗车机列表 -->
+    <!-- Lista de máquinas — mostramos skeleton mientras cargan las llamadas
+         paralelas a washApi.iotInfo (workaround del backend, ver arriba). Al
+         mostrar cards SIN estado y después re-pintarlas con badge/etiqueta,
+         el usuario ve un flash confuso. Con el skeleton la pantalla dice
+         claramente "esto se está cargando". -->
     <div v-if="orderedMachines.length" class="grid grid-cols-2 gap-3 px-4">
-      <machine-item
-        v-for="machine in orderedMachines"
-        :key="machine.iotId"
-        :machine="machine"
-      />
+      <template v-if="statusesLoaded">
+        <machine-item
+          v-for="machine in orderedMachines"
+          :key="machine.iotId"
+          :machine="machine"
+        />
+      </template>
+      <template v-else>
+        <div
+          v-for="machine in orderedMachines"
+          :key="machine.iotId"
+          class="machine-skeleton"
+        >
+          <div class="machine-skeleton__art"></div>
+          <div class="machine-skeleton__title"></div>
+          <div class="machine-skeleton__btn"></div>
+        </div>
+      </template>
     </div>
 
     <!-- 店铺介绍 -->
@@ -250,6 +302,63 @@ const handleBuyVip = () => {
   color: var(--accent-color);
   font-size: 18px;
   flex-shrink: 0;
+}
+
+/* Skeleton de card de máquina — se muestra mientras las llamadas paralelas
+   a washApi.iotInfo aún no resolvieron. Match aproximado del tamaño de
+   machine-item para evitar layout shift al pintar la card real. */
+.machine-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 12px 12px;
+  border-radius: 18px;
+  background: var(--surface-color);
+  border: 1px solid var(--line-color);
+  min-height: 168px;
+}
+
+.machine-skeleton__art,
+.machine-skeleton__title,
+.machine-skeleton__btn {
+  border-radius: 8px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.09) 50%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+.machine-skeleton__art {
+  height: 78px;
+}
+
+.machine-skeleton__title {
+  height: 18px;
+  width: 70%;
+  margin: 6px auto 0;
+}
+
+.machine-skeleton__btn {
+  height: 34px;
+  border-radius: 999px;
+  margin-top: auto;
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .machine-skeleton__art,
+  .machine-skeleton__title,
+  .machine-skeleton__btn {
+    animation: none;
+  }
 }
 
 /* Badge de estado */

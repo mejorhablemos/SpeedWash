@@ -14,9 +14,14 @@
         "subtitle": "Scan the QR, pay and go"
       },
       "vip": {
-        "title": "Wash packs",
-        "subtitle": "Buy prepaid wash packs and save on every visit",
-        "buy": "See plans & prices"
+        "title": "Buy your pack",
+        "subtitle": "Discounted prepaid washes.",
+        "buy": "See available packs"
+      },
+      "founder": {
+        "title": "You're a founding member",
+        "subtitle": "Top up more washes at your preferential price (until Oct 31)",
+        "cta": "See my founder packs"
       },
       "myPack": {
         "title": "My pack",
@@ -60,6 +65,8 @@
     },
     "mine": {
       "title": "Me",
+      "greeting": "Hi, {name}",
+      "defaultUser": "User",
       "wallet": {
         "title": "My Wallet",
         "viewAll": "View All",
@@ -70,7 +77,7 @@
         "viewAll": "View All",
         "status": {
           "inProgress": "In Progress",
-          "pending": "Pending",
+          "pending": "To pay",
           "completed": "Completed",
           "refund": "Refund/After-sale"
         }
@@ -139,7 +146,7 @@
         "tabs": {
           "1": "All",
           "2": "Processing",
-          "3": "Pending",
+          "3": "To pay",
           "4": "Completed",
           "5": "Refund"
         },
@@ -156,6 +163,22 @@
         "order_status": "Order Status",
         "balance_payment": "Balance Payment",
         "contact_service": "Contact the merchant",
+        "covered_by_pack": "Covered by pack",
+        "payment_methods": {
+          "unpaid": "Unpaid",
+          "balance": "Balance",
+          "mercadoPago": "Mercado Pago",
+          "pack": "Pack: {cardName}",
+          "packGeneric": "VIP Pack"
+        },
+        "whatsapp_contact": "Contact via WhatsApp",
+        "whatsapp_message": "Hi, I have a question about this order:\n\nNo: {orderNo}\nDate: {date}\nStore: {store}\nMachine: {machine}\nWash: {mode}\nPayment: {payment}\nAmount: {amount}",
+        "washingSteps": {
+          "title": "While the machine washes",
+          "slow": "Drive in slowly (so water reaches underneath)",
+          "stops": "Drive forward until the rubber stops",
+          "engine": "Turn off the engine and wait"
+        },
         "wash_status": {
           "1": "Not Started",
           "2": "Washing",
@@ -179,7 +202,8 @@
         "store": "Store",
         "device": "Device Name",
         "washMode": "Wash Mode",
-        "refund": "Apply Refund"
+        "refund": "Apply Refund",
+        "whatsapp_claim_message": "Hi, I need to file a claim: I paid for this wash and the machine never started.\n\nNo: {orderNo}\nDate: {date}\nStore: {store}\nMachine: {machine}\nWash: {mode}\nPayment: {payment}\nAmount: {amount}"
       },
       "payment": {
         "title": "Payment",
@@ -293,8 +317,23 @@
         "usingPack": "Using your pack",
         "usingPackSub": "Free wash · {count} left",
         "usePack": "Use my pack",
+        "use": "Use",
         "available": "You have {count} washes in your pack",
         "change": "Change"
+      },
+      "cost": {
+        "freeEyebrow": "Your pack covers this wash",
+        "freeSub": "{count} washes left in your pack",
+        "availableEyebrow": "You have a pack available",
+        "availableSub": "Use 1 of your {count} washes and this one is free",
+        "payEyebrow": "Total to pay"
+      },
+      "prewash": {
+        "title": "Before you start",
+        "windows": "Close all windows",
+        "wipers": "Turn off the wipers",
+        "enter": "After tapping Start, drive in slowly following the floor lines",
+        "center": "Center your wheels on the blue line and drive forward to the stops"
       },
       "usePackDialog": {
         "title": "You have a pack available",
@@ -311,7 +350,14 @@
         "confirmButton": "Confirm Top-up"
       },
       "total": "Total",
-      "submit": "Wash Now"
+      "submit": "Wash Now",
+      "submitFree": "Start with my pack",
+      "submitPay": "Pay {price} and start",
+      "emergency": {
+        "button": "Emergency — Call Now",
+        "description": "If you're locked in or there's a problem with the machine, call one of these numbers.",
+        "cancel": "Cancel"
+      }
     },
     "wallet": {
       "topUp": {
@@ -408,7 +454,7 @@
       },
       "aboutus": {
         "title": "About Us",
-        "pitch": "Speed Wash is the first digitalized automatic car wash in the region. Your car ready in minutes, no bookings, 24/7. Calmo Funes, Santa Fe.",
+        "pitch": "Speed Wash is the first digitalized automatic car wash in the region. Your car ready in minutes, no bookings, 24/7. Barrio Calmo, Funes, Santa Fe.",
         "terms": "Terms & conditions",
         "privacy": "Privacy policy"
       },
@@ -489,7 +535,12 @@
       },
       "buy": "Buy",
       "tapToBuy": "Tap a pack to buy it",
-      "empty": "No VIP cards available"
+      "empty": "No VIP cards available",
+      "founder": {
+        "eyebrow": "Founding member benefit",
+        "title": "Your preferential price",
+        "subtitle": "You see these packs because you're a founding member. Valid until October 31, 2026."
+      }
     },
     "vouchers": {
       "title": "My Vouchers"
@@ -666,7 +717,16 @@
     },
     "machineItem": {
       "actions": {
-        "goWash": "Select Wash Mode"
+        "goWash": "Select Wash Mode",
+        "moreInfo": "More info",
+        "wash": "Wash",
+        "seeInUse": "See details",
+        "seeMaintenance": "See details"
+      },
+      "status": {
+        "available": "Available",
+        "inUse": "In use",
+        "maintenance": "Maintenance"
       }
     },
     "voucherCard": {
@@ -711,9 +771,10 @@
     },
     "orderItem": {
       "actions": {
-        "contact": "Contact Merchant",
+        "contact": "WhatsApp",
         "refund": "Apply Refund",
-        "pay": "Pay Now"
+        "pay": "Pay Now",
+        "claim": "File a claim"
       },
       "status": {
         "1": "Unpaid",

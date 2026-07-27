@@ -12,9 +12,14 @@
         "subtitle": "扫描二维码，付款即可"
       },
       "vip": {
-        "title": "洗车套餐",
-        "subtitle": "购买预付洗车套餐，每次消费更省钱",
-        "buy": "查看方案和价格"
+        "title": "购买套餐",
+        "subtitle": "预付洗车套餐，享受折扣。",
+        "buy": "查看可用套餐"
+      },
+      "founder": {
+        "title": "您是创始会员",
+        "subtitle": "以优惠价添加更多洗车（至 10 月 31 日）",
+        "cta": "查看我的创始套餐"
       },
       "myPack": {
         "title": "我的套餐",
@@ -58,6 +63,8 @@
     },
     "mine": {
       "title": "我的",
+      "greeting": "你好，{name}",
+      "defaultUser": "用户",
       "wallet": {
         "title": "我的钱包",
         "viewAll": "查看全部",
@@ -148,6 +155,22 @@
         "order_status": "订单状态",
         "balance_payment": "余额支付",
         "contact_service": "联系商家",
+        "covered_by_pack": "套餐已覆盖",
+        "payment_methods": {
+          "unpaid": "未支付",
+          "balance": "余额支付",
+          "mercadoPago": "Mercado Pago",
+          "pack": "套餐: {cardName}",
+          "packGeneric": "VIP 套餐"
+        },
+        "whatsapp_contact": "通过 WhatsApp 联系",
+        "whatsapp_message": "您好，我想咨询此订单：\n\n订单号: {orderNo}\n日期: {date}\n门店: {store}\n设备: {machine}\n洗车: {mode}\n支付: {payment}\n金额: {amount}",
+        "washingSteps": {
+          "title": "机器洗车时",
+          "slow": "缓慢驶入（让底部的水充分清洗）",
+          "stops": "驶到橡胶挡块位置",
+          "engine": "关闭发动机并等待"
+        },
         "wash_status": {
           "1": "未启动",
           "2": "洗车中",
@@ -171,7 +194,8 @@
         "store": "所属门店",
         "device": "设备名称",
         "washMode": "洗车模式",
-        "refund": "申请退款"
+        "refund": "申请退款",
+        "whatsapp_claim_message": "您好，我要投诉：我已支付此次洗车，但设备始终没有启动。\n\n订单号: {orderNo}\n日期: {date}\n门店: {store}\n设备: {machine}\n洗车: {mode}\n支付: {payment}\n金额: {amount}"
       },
       "payment": {
         "title": "支付",
@@ -285,8 +309,23 @@
         "usingPack": "正在使用套餐",
         "usingPackSub": "免费洗车 · 还剩 {count} 次",
         "usePack": "使用我的套餐",
+        "use": "使用",
         "available": "套餐还剩 {count} 次洗车",
         "change": "更换"
+      },
+      "cost": {
+        "freeEyebrow": "套餐已覆盖此次洗车",
+        "freeSub": "您的套餐还剩 {count} 次洗车",
+        "availableEyebrow": "您有可用套餐",
+        "availableSub": "使用 {count} 次中的 1 次，本次免费",
+        "payEyebrow": "应付总额"
+      },
+      "prewash": {
+        "title": "开始前",
+        "windows": "关闭所有车窗",
+        "wipers": "关闭雨刷器",
+        "enter": "点击开始后，沿地面标线缓慢驶入",
+        "center": "将车轮对准蓝线，前进至挡块位置"
       },
       "usePackDialog": {
         "title": "您有可用套餐",
@@ -303,7 +342,14 @@
         "confirmButton": "确认充值"
       },
       "total": "合计",
-      "submit": "去洗车"
+      "submit": "去洗车",
+      "submitFree": "使用我的套餐开始",
+      "submitPay": "支付 {price} 并开始",
+      "emergency": {
+        "button": "紧急求助 — 立即拨打",
+        "description": "如果您被困或机器出现问题，请拨打以下任一号码。",
+        "cancel": "取消"
+      }
     },
     "wallet": {
       "topUp": {
@@ -476,7 +522,12 @@
       },
       "buy": "购买",
       "tapToBuy": "点击套餐即可购买",
-      "empty": "暂无可购买的会员卡"
+      "empty": "暂无可购买的会员卡",
+      "founder": {
+        "eyebrow": "创始会员福利",
+        "title": "您的优惠价",
+        "subtitle": "这些套餐仅创始会员可见。有效期至 2026 年 10 月 31 日。"
+      }
     },
     "vouchers": {
       "title": "我的优惠券"
@@ -646,7 +697,16 @@
     },
     "machineItem": {
       "actions": {
-        "goWash": "去洗车"
+        "goWash": "去洗车",
+        "moreInfo": "更多信息",
+        "wash": "洗车",
+        "seeInUse": "查看详情",
+        "seeMaintenance": "查看详情"
+      },
+      "status": {
+        "available": "可用",
+        "inUse": "使用中",
+        "maintenance": "维护中"
       }
     },
     "voucherCard": {
@@ -691,9 +751,10 @@
     },
     "orderItem": {
       "actions": {
-        "contact": "联系商家",
+        "contact": "WhatsApp",
         "refund": "申请退款",
-        "pay": "去付款"
+        "pay": "去付款",
+        "claim": "投诉"
       },
       "status": {
         "1": "待付款",

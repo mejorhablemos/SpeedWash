@@ -1,4 +1,6 @@
 <script setup>
+import { IOT_STATUS } from "@/constants";
+
 const props = defineProps({
   machine: {
     type: Object,
@@ -23,15 +25,41 @@ const chooseType = computed(() => {
   return /\s/.test(base) ? base : `de ${base}`;
 });
 
+// Estado real de la máquina (viene en storeApi.detail → iotList[].iotStatus).
+// Mostrarlo ACÁ (antes de que el usuario entre) le ahorra tener que abrir
+// cada máquina para ver si está libre. Especialmente útil parado en el
+// lavadero con las dos máquinas a la vista.
+const statusKey = computed(() => {
+  const s = Number(props.machine?.iotStatus);
+  if (s === IOT_STATUS.AVAILABLE) return "available";
+  if (s === IOT_STATUS.IN_USE) return "inUse";
+  if (s === IOT_STATUS.MAINTENANCE) return "maintenance";
+  return null;
+});
+const statusLabel = computed(() =>
+  statusKey.value ? t(`components.machineItem.status.${statusKey.value}`) : ""
+);
+
 const handleGoWash = () => {
   router.push(`/washer/${props.machine.iotId}`);
 };
 </script>
 
 <template>
-  <div class="machine-card clickable" @click="handleGoWash">
+  <div
+    class="machine-card clickable"
+    :class="[`machine-card--${statusKey || 'unknown'}`]"
+    @click="handleGoWash"
+  >
     <!-- glow decorativo -->
     <div class="machine-card__glow"></div>
+
+    <!-- Badge de estado (esquina superior izquierda). Le dice al usuario si
+         la máquina está libre / en uso / en mantenimiento ANTES de entrar. -->
+    <div v-if="statusKey" class="mstatus" :class="`mstatus--${statusKey}`">
+      <span class="mstatus__dot"></span>
+      {{ statusLabel }}
+    </div>
 
     <!-- Ilustración -->
     <div class="machine-card__art">
@@ -64,9 +92,18 @@ const handleGoWash = () => {
     <div class="machine-card__name">{{ machine.name }}</div>
     <div class="machine-card__sub" v-if="machine.address">{{ machine.address }}</div>
 
-    <!-- CTA -->
-    <van-button type="primary" round size="small" block class="machine-card__btn">
-      {{ t('components.machineItem.actions.moreInfo') }}
+    <!-- CTA — texto cambia según estado real. La pantalla que renderiza esta
+         card (store/index.vue) NO muestra machine-item hasta que todas las
+         iotInfo() resolvieron, así que statusKey ya viene con el valor real
+         cuando esto se pinta. -->
+    <van-button
+      round
+      size="small"
+      block
+      class="machine-card__btn"
+      :type="statusKey === 'available' ? 'primary' : 'default'"
+    >
+      {{ t(`components.machineItem.actions.${statusKey === 'available' ? 'wash' : statusKey === 'inUse' ? 'seeInUse' : statusKey === 'maintenance' ? 'seeMaintenance' : 'moreInfo'}`) }}
     </van-button>
   </div>
 </template>
@@ -83,6 +120,32 @@ const handleGoWash = () => {
   border: 1px solid var(--line-color);
   box-shadow: 0 10px 28px -18px rgba(0, 0, 0, 0.85);
   overflow: hidden;
+  /* isolation → contiene el badge absoluto adentro (mismo fix que shop-card) */
+  isolation: isolate;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.machine-card:active {
+  transform: scale(0.99);
+}
+
+/* Tinte del borde/sombra según estado — refuerza la señal del badge sin
+   necesidad de leerlo. Disponible = celeste vivo (invita a apretar);
+   En uso = neutro atenuado; Mantenimiento = rojo suave (advertencia). */
+.machine-card--available {
+  border-color: rgba(0, 187, 252, 0.55);
+  box-shadow:
+    0 10px 28px -18px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgba(0, 187, 252, 0.15) inset;
+}
+
+.machine-card--inUse {
+  opacity: 0.92;
+}
+
+.machine-card--maintenance {
+  border-color: rgba(240, 68, 56, 0.35);
+  opacity: 0.85;
 }
 
 .machine-card__glow {
@@ -94,6 +157,72 @@ const handleGoWash = () => {
   border-radius: 50%;
   background: radial-gradient(circle, rgba(0, 187, 252, 0.22) 0%, transparent 70%);
   pointer-events: none;
+}
+
+/* Badge de estado de la máquina — píldora chica arriba a la izquierda.
+   Diseño espejo del status-badge del sitio y del detalle de sucursal para
+   coherencia visual en toda la app. */
+.mstatus {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px 3px 7px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.mstatus__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.mstatus--available {
+  color: var(--brand-success);
+  background: rgba(var(--brand-success-rgb), 0.16);
+  border: 1px solid rgba(var(--brand-success-rgb), 0.4);
+}
+
+.mstatus--available .mstatus__dot {
+  background: var(--brand-success);
+  animation: mstatus-pulse 2s ease-in-out infinite;
+  box-shadow: 0 0 6px rgba(var(--brand-success-rgb), 0.7);
+}
+
+.mstatus--inUse {
+  color: #FFB84D;
+  background: rgba(255, 184, 77, 0.14);
+  border: 1px solid rgba(255, 184, 77, 0.4);
+}
+
+.mstatus--inUse .mstatus__dot {
+  background: #FFB84D;
+}
+
+.mstatus--maintenance {
+  color: #FF6B60;
+  background: rgba(240, 68, 56, 0.14);
+  border: 1px solid rgba(240, 68, 56, 0.42);
+}
+
+.mstatus--maintenance .mstatus__dot {
+  background: #FF6B60;
+}
+
+@keyframes mstatus-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(var(--brand-success-rgb), 0.55), 0 0 6px rgba(var(--brand-success-rgb), 0.7); }
+  70% { box-shadow: 0 0 0 5px rgba(var(--brand-success-rgb), 0), 0 0 6px rgba(var(--brand-success-rgb), 0.7); }
+  100% { box-shadow: 0 0 0 0 rgba(var(--brand-success-rgb), 0), 0 0 6px rgba(var(--brand-success-rgb), 0.7); }
 }
 
 /* Ilustración */
@@ -230,5 +359,6 @@ const handleGoWash = () => {
 @media (prefers-reduced-motion: reduce) {
   .drop { animation: none; opacity: 0; }
   .brush { animation: none; }
+  .mstatus--available .mstatus__dot { animation: none; }
 }
 </style>
