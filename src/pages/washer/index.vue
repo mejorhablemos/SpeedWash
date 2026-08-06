@@ -81,6 +81,18 @@ const isFreeWithPack = computed(
 // "envío gratis"). En centavos, como todo lo demás.
 const retailPrice = computed(() => Number(selectedPlan.value?.price) || 0);
 
+// 优惠时段（HH:mm - HH:mm）
+const discountPeriod = computed(() => {
+  const { discountStartTime: start, discountEndTime: end } = washerData.value || {};
+  if (!start || !end) return "";
+  return `${start} - ${end}`;
+});
+
+// 优惠时段是否生效（同时满足开关开启 + 当前处于优惠时间窗口）
+const isDiscountActive = computed(
+  () => washerData.value?.discountEnable === 1 && washerData.value?.isDiscountTime === 1
+);
+
 // Texto del CTA — cambia según el estado para reforzar el commitment:
 //   - Pack cubre → "Iniciar lavado — Gratis"
 //   - Pagando → "Pagar $X e iniciar" (el precio en la CTA es el commitment)
@@ -253,11 +265,7 @@ watch(
     </div>
 
     <!-- 错误提示 -->
-    <van-empty
-      v-if="error"
-      :description="error"
-      class="absolute inset-0 flex-center bg-ink"
-    >
+    <van-empty v-if="error" :description="error" class="absolute inset-0 flex-center bg-ink">
       <template #image>
         <van-icon name="warning-o" size="48" class="text-text-dim" />
       </template>
@@ -272,10 +280,17 @@ watch(
     <div class="px-4 py-3">
       <div class="washer-header">
         <h2 class="washer-header__name">{{ washerData?.name }}</h2>
-        <status-tag
-          v-if="[0, 1, 2].includes(washerData?.iotStatus)"
-          :status="washerData?.iotStatus"
-        />
+        <status-tag v-if="[0, 1, 2].includes(washerData?.iotStatus)" :status="washerData?.iotStatus" />
+      </div>
+    </div>
+
+    <!-- 优惠时段 — 机器级别的折扣信息，与方案数量无关，始终显示。
+         放在 header 下方让用户在选择方案前就看到优惠时间。 -->
+    <div v-if="washerData?.discountEnable === 1" class="px-4">
+      <div class="discount-band">
+        <van-icon name="clock-o" size="16" class="discount-band__icon" />
+        <span class="discount-band__label">{{ t("routes.washer.discount.label") }}</span>
+        <span class="discount-band__time">{{ discountPeriod }}</span>
       </div>
     </div>
 
@@ -288,27 +303,24 @@ watch(
         {{ t("routes.washer.selectPlan") }}
       </div>
       <div class="grid grid-cols-2 gap-3">
-        <div
-          v-for="item in washPlans"
-          :key="item.mark"
-          class="plan-card"
-          :class="{
-            'plan-card--selected': selectedPlan?.mark === item.mark,
-            'plan-card--full': washPlans.length === 1,
-          }"
-          @click="selectedPlan = item"
-        >
+        <div v-for="item in washPlans" :key="item.mark" class="plan-card" :class="{
+          'plan-card--selected': selectedPlan?.mark === item.mark,
+          'plan-card--full': washPlans.length === 1,
+        }" @click="selectedPlan = item">
           <div class="plan-card__name">
             <span class="block">{{ splitPlanName(item.name).first }}</span>
             <span class="block" v-if="splitPlanName(item.name).rest">{{ splitPlanName(item.name).rest }}</span>
           </div>
-          <price-tag
-            :price="item.price"
-            :thousands="true"
-            :decimals="0"
-            currency-class="text-lg text-primary"
-            integer-class="text-3xl font-bold text-primary"
-          />
+          <!-- 优惠时段生效且有优惠价：原价划线 + 醒目优惠价（spark 橙） -->
+          <div v-if="isDiscountActive && item.discountPrice" class="plan-card__price-group">
+            <price-tag :price="item.price" :thousands="true" :decimals="0" class="plan-card__retail"
+              currency-class="text-lg text-text-dim" integer-class="text-3xl font-medium text-text-dim" />
+            <price-tag :price="item.discountPrice" :thousands="true" :decimals="0" currency-class="text-lg text-accent"
+              integer-class="text-3xl font-bold text-accent" />
+          </div>
+          <!-- 否则：只显示原价 -->
+          <price-tag v-else :price="item.price" :thousands="true" :decimals="0" currency-class="text-lg text-primary"
+            integer-class="text-3xl font-bold text-primary" />
         </div>
       </div>
     </div>
@@ -432,23 +444,13 @@ watch(
          cambia según el estado ("Iniciar lavado — Gratis" / "Pagar $X e
          iniciar" / "Iniciar lavado") para que el commitment sea explícito. -->
     <van-action-bar class="wash-action-bar">
-      <van-action-bar-button
-        class="wash-action-bar__cta"
-        :type="isFreeWithPack ? 'success' : 'danger'"
-        :disabled="!canWash"
-        :text="ctaLabel"
-        @click="createOrder"
-      />
+      <van-action-bar-button class="wash-action-bar__cta" :type="isFreeWithPack ? 'success' : 'danger'"
+        :disabled="!canWash" :text="ctaLabel" @click="createOrder" />
     </van-action-bar>
 
     <!-- VIP卡选择弹窗 -->
-    <vip-card-selector
-      v-model:show="showVipCards"
-      v-model:selectedCard="selectedCard"
-      :list="vipCards"
-      :wash-plans="washPlans"
-      :mark="selectedPlan?.mark"
-    />
+    <vip-card-selector v-model:show="showVipCards" v-model:selectedCard="selectedCard" :list="vipCards"
+      :wash-plans="washPlans" :mark="selectedPlan?.mark" />
 
   </div>
 </template>
@@ -474,6 +476,36 @@ watch(
   color: var(--text-primary);
   line-height: 1.15;
   margin: 0;
+}
+
+/* 优惠时段横幅 — 轻量 info 样式，琥珀色暗示"省钱机会"，
+   不与绿色 cost-band 竞争视觉焦点。 */
+.discount-band {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(255, 193, 7, 0.08);
+  border: 1px solid rgba(255, 193, 7, 0.25);
+}
+
+.discount-band__icon {
+  color: #ffc107;
+  flex-shrink: 0;
+}
+
+.discount-band__label {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.discount-band__time {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-left: auto;
 }
 
 /* Checklist "Antes de iniciar" — bloque chiquito y directo. NO cyan/verde
@@ -584,6 +616,20 @@ watch(
   letter-spacing: -0.01em;
   line-height: 1.12;
   color: var(--text-primary);
+}
+
+/* 价格组（优惠时段）：醒目优惠价 + 原价划线参考，同一行横向排列 */
+.plan-card__price-group {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 14px;
+}
+
+/* 原价划线 — text-decoration 穿透到 price-tag 内部的货币符号和数字 */
+.plan-card__retail {
+  text-decoration: line-through;
+  text-decoration-color: rgba(255, 255, 255, 0.35);
 }
 
 /* Plan único: ocupa todo el ancho, layout horizontal (nombre + precio) */
