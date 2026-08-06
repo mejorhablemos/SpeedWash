@@ -306,8 +306,14 @@
         "staffed": {
           "name": "With staff on site",
           "hours": "Mon to Fri {weekdays} · Sat {saturday}",
-          "drying": { "name": "Exterior drying", "badge": "Included" },
-          "interior": { "name": "Interior cleaning", "badge": "Charged separately" },
+          "drying": {
+            "name": "Exterior drying",
+            "badge": "Included"
+          },
+          "interior": {
+            "name": "Interior cleaning",
+            "badge": "Charged separately"
+          },
           "note": "Interior cleaning is not included in the app's packs — ask for the price at the store."
         }
       },
@@ -326,6 +332,9 @@
         "2": "Maintenance"
       },
       "selectPlan": "Select Wash Plan",
+      "discount": {
+        "label": "Discount Period"
+      },
       "planName": {
         "premium": "SpeedWash Wash with Wax"
       },
@@ -648,8 +657,8 @@
       "validation": {
         "phoneRequired": "Please enter phone number",
         "phoneFormat": "Invalid phone number format",
-      "phoneDigits": "Enter all {count} digits of your number",
-      "phoneDigitsRange": "The number has between {min} and {max} digits",
+        "phoneDigits": "Enter all {count} digits of your number",
+        "phoneDigitsRange": "The number has between {min} and {max} digits",
         "codeRequired": "Please enter verification code",
         "passwordRequired": "Please enter password",
         "passwordLength": "Password must be 6-20 characters",
@@ -731,7 +740,18 @@
     "couponCard": {
       "defaultTitle": "VIP Card",
       "availableTimes": "{count} Available",
-      "expiryDate": "Expires on"
+      "expiryDate": "Expires on",
+      "validTime": "Valid time",
+      "validWeekdays": "Valid on",
+      "weekdays": {
+        "mon": "Monday",
+        "tue": "Tuesday",
+        "wed": "Wednesday",
+        "thu": "Thursday",
+        "fri": "Friday",
+        "sat": "Saturday",
+        "sun": "Sunday"
+      }
     },
     "payment": {
       "title": "Payment",
@@ -762,6 +782,11 @@
     "membershipCard": {
       "maxWashCount": "Max Wash Times: {count}",
       "validPeriod": "Valid Period: {days} days",
+      "validDays": "Validity days",
+      "validTime": "Valid time",
+      "validWeekdays": "Valid on",
+      "washes": "Washes",
+      "perWash": "Per wash",
       "allUserCanBuy": "Available to All Users",
       "specialPrice": "Special Price: First {count} cards, {price}ARS",
       "specialStock": "Special Stock: {count}"

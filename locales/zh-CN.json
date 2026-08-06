@@ -298,8 +298,14 @@
         "staffed": {
           "name": "店内工作人员服务",
           "hours": "周一至周五 {weekdays} · 周六 {saturday}",
-          "drying": { "name": "车身擦干", "badge": "已包含" },
-          "interior": { "name": "内饰清洁", "badge": "单独收费" },
+          "drying": {
+            "name": "车身擦干",
+            "badge": "已包含"
+          },
+          "interior": {
+            "name": "内饰清洁",
+            "badge": "单独收费"
+          },
           "note": "内饰清洁不包含在 App 套餐内，价格请到店咨询。"
         }
       },
@@ -318,6 +324,9 @@
         "2": "维护"
       },
       "selectPlan": "选择洗车方案",
+      "discount": {
+        "label": "优惠时段"
+      },
       "planName": {
         "premium": "SpeedWash 镀膜洗"
       },
@@ -635,8 +644,8 @@
       "validation": {
         "phoneRequired": "请输入手机号",
         "phoneFormat": "手机号格式不正确",
-      "phoneDigits": "请输入完整的 {count} 位号码",
-      "phoneDigitsRange": "号码为 {min} 至 {max} 位",
+        "phoneDigits": "请输入完整的 {count} 位号码",
+        "phoneDigitsRange": "号码为 {min} 至 {max} 位",
         "codeRequired": "请输入验证码",
         "passwordRequired": "请输入密码",
         "passwordLength": "密码长度需在6-20位之间",
@@ -718,7 +727,18 @@
     "couponCard": {
       "defaultTitle": "VIP 卡",
       "availableTimes": "{count} 次可用",
-      "expiryDate": "有效期至"
+      "expiryDate": "有效期至",
+      "validTime": "有效时间",
+      "validWeekdays": "有效星期",
+      "weekdays": {
+        "mon": "星期一",
+        "tue": "星期二",
+        "wed": "星期三",
+        "thu": "星期四",
+        "fri": "星期五",
+        "sat": "星期六",
+        "sun": "星期日"
+      }
     },
     "payment": {
       "title": "支付",
@@ -749,6 +769,11 @@
     "membershipCard": {
       "maxWashCount": "最大洗车次数：{count}",
       "validPeriod": "有效期：{days}天",
+      "validDays": "有效天数",
+      "validTime": "有效时间",
+      "validWeekdays": "有效星期",
+      "washes": "洗车次数",
+      "perWash": "单次",
       "allUserCanBuy": "全部人员可购",
       "specialPrice": "特惠价格：前{count}张，{price}ARS",
       "specialStock": "特惠库存: {count}"

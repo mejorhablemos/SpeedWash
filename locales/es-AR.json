@@ -308,8 +308,14 @@
         "staffed": {
           "name": "Con personal en el local",
           "hours": "Lun a Vie {weekdays} · Sáb {saturday}",
-          "drying": { "name": "Secado exterior", "badge": "Incluido" },
-          "interior": { "name": "Limpieza interior", "badge": "Se abona aparte" },
+          "drying": {
+            "name": "Secado exterior",
+            "badge": "Incluido"
+          },
+          "interior": {
+            "name": "Limpieza interior",
+            "badge": "Se abona aparte"
+          },
           "note": "La limpieza interior no entra en los packs de la app — consultá el precio en la sucursal."
         }
       },
@@ -328,6 +334,9 @@
         "2": "En mantenimiento"
       },
       "selectPlan": "Elegí tu lavado",
+      "discount": {
+        "label": "Horario con descuento"
+      },
       "planName": {
         "premium": "Lavado SpeedWash con Cera"
       },
@@ -682,8 +691,8 @@
       "validation": {
         "phoneRequired": "Ingresá tu número de teléfono",
         "phoneFormat": "Formato de teléfono no válido",
-      "phoneDigits": "Completá los {count} dígitos de tu número",
-      "phoneDigitsRange": "El número tiene entre {min} y {max} dígitos",
+        "phoneDigits": "Completá los {count} dígitos de tu número",
+        "phoneDigitsRange": "El número tiene entre {min} y {max} dígitos",
         "codeRequired": "Ingresá el código de verificación",
         "passwordRequired": "Ingresá tu contraseña",
         "passwordLength": "La contraseña debe tener entre 6 y 20 caracteres",
@@ -765,7 +774,18 @@
     "couponCard": {
       "defaultTitle": "Tarjeta VIP",
       "availableTimes": "{count} usos disponibles",
-      "expiryDate": "Válida hasta"
+      "expiryDate": "Válida hasta",
+      "validTime": "Horario válido",
+      "validWeekdays": "Válido los",
+      "weekdays": {
+        "mon": "lunes",
+        "tue": "martes",
+        "wed": "miércoles",
+        "thu": "jueves",
+        "fri": "viernes",
+        "sat": "sábado",
+        "sun": "domingo"
+      }
     },
     "payment": {
       "title": "Pagar",
@@ -798,10 +818,15 @@
     "membershipCard": {
       "maxWashCount": "Lavados incluidos: {count}",
       "validPeriod": "Vigencia: {days} días",
+      "validDays": "Días de vigencia",
+      "validTime": "Horario válido",
+      "validWeekdays": "Válido los",
+      "washes": "Lavados",
+      "perWash": "Por lavado",
       "allUserCanBuy": "Disponible para todos",
       "specialPrice": "Precio especial: primeras {count} tarjetas, {price} ARS",
       "specialStock": "Stock promocional: {count}",
-      "perWash": "Te queda a ${price} por lavado",
+      "perWashPrice": "Te queda a ${price} por lavado",
       "savings": "Ahorrás {percent}%",
       "regularPrice": "Precio normal: ${price}"
     },

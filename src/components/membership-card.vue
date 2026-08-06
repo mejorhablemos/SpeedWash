@@ -48,17 +48,48 @@ const specialPrice = computed(() => {
   if (!props.card?.discountStock) return null;
   return Math.round(props.card.discountPrice / 100).toLocaleString("es-AR");
 });
+
+// 有效期信息：validRule=1 天数 / validRule=2 时间段 / validRule=3 星期
+const expiryInfo = computed(() => {
+  const rule = props.card?.validRule;
+  if (rule === 2) {
+    return {
+      label: t("components.membershipCard.validTime"),
+      value: `${props.card.validStartTime} - ${props.card.validEndTime}`,
+    };
+  }
+  if (rule === 3) {
+    const weekDayMap = {
+      1: t("components.couponCard.weekdays.mon"),
+      2: t("components.couponCard.weekdays.tue"),
+      3: t("components.couponCard.weekdays.wed"),
+      4: t("components.couponCard.weekdays.thu"),
+      5: t("components.couponCard.weekdays.fri"),
+      6: t("components.couponCard.weekdays.sat"),
+      7: t("components.couponCard.weekdays.sun"),
+    };
+    const days = props.card.validWeekDays || [];
+    return {
+      label: t("components.membershipCard.validWeekdays"),
+      value: days.map((d) => weekDayMap[d]).filter(Boolean).join(", "),
+    };
+  }
+  // 默认：天数 (validRule === 1 或未指定)
+  return {
+    label: t("components.membershipCard.validDays"),
+    value: props.card.expiryDays,
+  };
+});
+
+// 有效期是否为长文本（非天数）— 长文本时跨整行展示
+const expiryIsWide = computed(() => props.card?.validRule === 2 || props.card?.validRule === 3);
 </script>
 
 <template>
-  <div
-    class="vip-card"
-    :class="{
-      'vip-card--selected': selected,
-      'vip-card--special': card?.isOnlyMembership,
-    }"
-    @click="emit('click', card)"
-  >
+  <div class="vip-card" :class="{
+    'vip-card--selected': selected,
+    'vip-card--special': card?.isOnlyMembership,
+  }" @click="emit('click', card)">
     <div class="vip-card__glow"></div>
 
     <!-- Encabezado: nombre + precio -->
@@ -76,20 +107,20 @@ const specialPrice = computed(() => {
     </div>
 
     <!-- Estadísticas -->
-    <div class="vip-card__stats">
-      <div class="vip-stat">
+    <div class="vip-card__stats" :class="{ 'vip-card__stats--wide-expiry': expiryIsWide }">
+      <div class="vip-stat vip-stat--wash">
         <div class="vip-stat__value">{{ card.maxWashCount }}</div>
-        <div class="vip-stat__label">Lavados</div>
+        <div class="vip-stat__label">{{ t("components.membershipCard.washes") }}</div>
       </div>
-      <div class="vip-stat">
-        <div class="vip-stat__value">{{ card.expiryDays }}</div>
-        <div class="vip-stat__label">Días de vigencia</div>
+      <div class="vip-stat vip-stat--expiry" :class="{ 'vip-stat--wide': expiryIsWide }">
+        <div class="vip-stat__value" :class="{ 'vip-stat__value--compact': expiryIsWide }">{{ expiryInfo.value }}</div>
+        <div class="vip-stat__label">{{ expiryInfo.label }}</div>
       </div>
-      <div class="vip-stat">
+      <div class="vip-stat vip-stat--price">
         <div class="vip-stat__value vip-stat__value--accent">
           <span class="vip-stat__cur">$</span>{{ perWashPrice }}
         </div>
-        <div class="vip-stat__label">Por lavado</div>
+        <div class="vip-stat__label">{{ t("components.membershipCard.perWash") }}</div>
       </div>
     </div>
 
@@ -102,7 +133,9 @@ const specialPrice = computed(() => {
     <!-- Precio especial promocional -->
     <div class="vip-card__special-band" v-if="card.discountStock">
       <span>{{ t("components.membershipCard.specialPrice", { count: card.discountCount, price: specialPrice }) }}</span>
-      <span class="vip-card__special-stock">{{ t("components.membershipCard.specialStock", { count: card.discountStock }) }}</span>
+      <span class="vip-card__special-stock">{{ t("components.membershipCard.specialStock", {
+        count: card.discountStock
+      }) }}</span>
     </div>
   </div>
 </template>
@@ -213,8 +246,29 @@ const specialPrice = computed(() => {
 .vip-card__stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  grid-template-areas: "wash expiry price";
   gap: 8px;
   margin-top: 18px;
+}
+
+/* 有效期为长文本（时间段/星期）时：洗车次数 + 单次价格并排，有效期跨整行 */
+.vip-card__stats--wide-expiry {
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "wash price"
+    "expiry expiry";
+}
+
+.vip-stat--wash {
+  grid-area: wash;
+}
+
+.vip-stat--expiry {
+  grid-area: expiry;
+}
+
+.vip-stat--price {
+  grid-area: price;
 }
 
 .vip-stat {
@@ -225,12 +279,25 @@ const specialPrice = computed(() => {
   border: 1px solid var(--line-color);
 }
 
+.vip-stat--wide {
+  text-align: left;
+  padding: 10px 14px;
+}
+
 .vip-stat__value {
   font-family: var(--font-display);
   font-size: 19px;
   font-weight: 700;
   color: var(--text-primary);
   line-height: 1;
+}
+
+/* 长文本有效期：缩小字号、允许换行 */
+.vip-stat__value--compact {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  word-break: break-word;
 }
 
 .vip-stat__value--accent {

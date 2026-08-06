@@ -37,6 +37,38 @@ const tagText = computed(() => getCardFromText(props.cardInfo.cardFrom));
 
 const canUse = computed(() => props.cardInfo.state === 1);
 
+// 有效期信息：validRule=1 到期日 / validRule=2 时间段 / validRule=3 星期
+const expiryInfo = computed(() => {
+  const rule = props.cardInfo.validRule;
+  if (rule === 2) {
+    return {
+      label: t("components.couponCard.validTime"),
+      value: `${props.cardInfo.validStartTime} - ${props.cardInfo.validEndTime}`,
+    };
+  }
+  if (rule === 3) {
+    const weekDayMap = {
+      1: t("components.couponCard.weekdays.mon"),
+      2: t("components.couponCard.weekdays.tue"),
+      3: t("components.couponCard.weekdays.wed"),
+      4: t("components.couponCard.weekdays.thu"),
+      5: t("components.couponCard.weekdays.fri"),
+      6: t("components.couponCard.weekdays.sat"),
+      7: t("components.couponCard.weekdays.sun"),
+    };
+    const days = props.cardInfo.validWeekDays || [];
+    return {
+      label: t("components.couponCard.validWeekdays"),
+      value: days.map((d) => weekDayMap[d]).filter(Boolean).join(", "),
+    };
+  }
+  // 默认：到期日 (validRule === 1 或未指定)
+  return {
+    label: t("components.couponCard.expiryDate"),
+    value: props.cardInfo.expiryDate,
+  };
+});
+
 const slots = useSlots();
 </script>
 
@@ -64,17 +96,13 @@ const slots = useSlots();
       <div class="voucher-card__right">
         <div class="voucher-card__info">
           <div class="voucher-card__name">{{ cardInfo.cardName }}</div>
-          <div
-            class="voucher-card__plate"
-            :class="{ 'voucher-card__plate--empty': !cardInfo.licenseNo }"
-          >
+          <div class="voucher-card__plate" :class="{ 'voucher-card__plate--empty': !cardInfo.licenseNo }">
             <van-icon :name="cardInfo.licenseNo ? 'passed' : 'info-o'" />
             <span v-if="cardInfo.licenseNo">{{ cardInfo.licenseNo }}</span>
             <span v-else>{{ t("routes.voucher.licensePlate.none") }}</span>
           </div>
           <div class="voucher-card__expiry">
-            {{ t("components.couponCard.expiryDate") }}:
-            {{ cardInfo.expiryDate }}
+            {{ expiryInfo.label }}: {{ expiryInfo.value }}
           </div>
         </div>
       </div>
